@@ -7,6 +7,7 @@ import Root from './containers/root';
 import configureStore from './store';
 import configureRoutes from './routes';
 import registerServiceWorker from './registerServiceWorker';
+import { getLinks } from './actions';
 
 const browserHistory = createBrowserHistory();
 const store = configureStore(browserHistory);
@@ -15,3 +16,5 @@ const routes = configureRoutes(history);
 
 ReactDOM.render(<Root store={store} routes={routes} />, document.getElementById('root'));
 registerServiceWorker();
+
+store.dispatch(getLinks());
