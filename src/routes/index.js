@@ -1,6 +1,6 @@
 import React from 'react';
 import { Router, Route, NavLink } from 'react-router-dom';
-import { Links } from '../containers';
+import { LinksPage } from '../containers';
 
 const NavBar = () => (
   <div className="navbar navbar-inverse">
@@ -29,7 +29,7 @@ const configureRoutes = (history) => (
   <Router history={history}>
     <div>
       <NavBar />
-      <Route path="/" component={Links} />
+      <Route path="/" component={LinksPage} />
     </div>
   </Router>
 )

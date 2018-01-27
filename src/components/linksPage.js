@@ -4,7 +4,7 @@ import { Grid, Row, Col } from 'react-bootstrap'
 import { linksSelector } from '../selectors'
 
 
-const Link = ({ id, url, title, onClick }) => (
+const Link = ({ id, url, title }) => (
   <a href={`/api/links/${id}/redirect`} alt={url}>{title}</a>
 )
 

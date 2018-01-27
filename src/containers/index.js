@@ -1,4 +1,4 @@
 import Root from './root'
-import Links from './links'
+import LinksPage from './linksPage'
 
-export { Root, Links }
+export { Root, LinksPage }

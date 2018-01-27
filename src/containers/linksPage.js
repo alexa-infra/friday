@@ -1,15 +1,15 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Links } from '../components'
+import { LinksPage } from '../components'
 import { getLinks } from '../actions'
 
-class LinksContainer extends Component {
+class LinksPageContainer extends Component {
   componentDidMount() {
     this.props.dispatch(getLinks())
   }
   render() {
-    return <Links />
+    return <LinksPage />
   }
 }
 
-export default connect()(LinksContainer)
+export default connect()(LinksPageContainer)
