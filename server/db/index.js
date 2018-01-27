@@ -25,7 +25,7 @@ const promisify_sqlite = (db) => {
 }
 
 const openDb = (dbPath) => {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     const db = new sqlite3.Database(dbPath)
     promisify_sqlite(db)
     resolve(db)

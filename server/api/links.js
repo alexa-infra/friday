@@ -78,8 +78,8 @@ router.post('/', function (req, res) {
       return handleError(res, {code: 400})
     }
     return db.links.insert(conn, {title, url})
-      .then((data) => db.links.get(conn, data.lastID))
-      .then((data) => res.status(201).json(data))
+      .then(data => db.links.get(conn, data.lastID))
+      .then(data => res.status(201).json(data))
   })
   .catch(err => handleError(res, err))
 })
@@ -91,8 +91,8 @@ router.get('/add', function (req, res) {
       return handleError(res, {code: 400})
     }
     return db.links.insert(conn, {title, url})
-      .then((data) => db.links.get(conn, data.lastID))
-      .then((data) => res.redirect('/'))
+      .then(data => db.links.get(conn, data.lastID))
+      .then(data => res.redirect('/'))
   })
   .catch(err => handleError(res, err))
 })
@@ -101,8 +101,8 @@ router.get('/:id', function (req, res) {
   Promise.using(getConn(req), (conn) => {
     const id = req.params.id
     return db.links.get(conn, req.params.id)
-      .then((data) => checkExists404(data))
-      .then((data) => res.json(data))
+      .then(data => checkExists404(data))
+      .then(data => res.json(data))
   })
   .catch(err => handleError(res, err))
 })
@@ -118,14 +118,14 @@ router.put('/:id', function (req, res) {
       return handleError(res, {code: 400})
     }
     return db.links.get(conn, id)
-      .then((data) => checkExists404(data))
-      .then((data) => {
+      .then(data => checkExists404(data))
+      .then(data => {
         title = title || data.title
         url = url || data.url
         return db.links.update(conn, id, {title, url})
       })
-      .then((data) => db.links.get(conn, id))
-      .then((data) => res.json(data))
+      .then(data => db.links.get(conn, id))
+      .then(data => res.json(data))
   })
   .catch(err => handleError(res, err))
 })
@@ -134,10 +134,10 @@ router.delete('/:id', function (req, res) {
   Promise.using(getConn(req), (conn) => {
     const id = req.params.id
     return db.links.get(conn, id)
-      .then((data) => checkExists404(data))
-      .then((data) => db.links.delete(conn, id))
-      .then((data) => db.links.get(conn, id))
-      .then((data) => res.status(204).end())
+      .then(data => checkExists404(data))
+      .then(data => db.links.delete(conn, id))
+      .then(data => db.links.get(conn, id))
+      .then(data => res.status(204).end())
   })
   .catch(err => handleError(res, err))
 })
@@ -146,10 +146,10 @@ router.get('/:id/redirect', function (req, res) {
   Promise.using(getConn(req), (conn) => {
     const id = req.params.id
     return db.links.get(conn, id)
-      .then((data) => checkExists404(data))
-      .then((data) => db.links.update_usage(conn, id))
-      .then((data) => db.links.get(conn, id))
-      .then((data) => res.redirect(data.url))
+      .then(data => checkExists404(data))
+      .then(data => db.links.update_usage(conn, id))
+      .then(data => db.links.get(conn, id))
+      .then(data => res.redirect(data.url))
   })
   .catch(err => handleError(res, err))
 })

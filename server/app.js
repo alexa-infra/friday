@@ -2,7 +2,7 @@ const express = require('express')
 const path = require('path')
 const api = require('./api')
 
-const makeApp = (config) => {
+const makeApp = config => {
   const app = express()
 
   app.locals.config = config

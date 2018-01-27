@@ -20,36 +20,36 @@ const makeServer = () => {
 
 describe('database adapter', () => {
   it('should do basic CRUD', () => {
-    return Promise.using(db.openDb(':memory:'), (conn) => {
+    return Promise.using(db.openDb(':memory:'), conn => {
       let id = null
       return db.links.create(conn)
         .then(() => db.links.insert(conn, {title: 'lalala', url: 'a.com'}))
-        .then((data) => {
+        .then(data => {
           id = data.lastID
           return db.links.get(conn, id)
         })
-        .then((data) => {
+        .then(data => {
           assert.equal('lalala', data.title)
           assert.equal('a.com', data.url)
           assert.equal(0, data.usage_count)
         })
         .then(() => db.links.update(conn, id, {title: 'bbbb', url: 'b.com'}))
         .then(() => db.links.get(conn, id))
-        .then((data) => {
+        .then(data => {
           assert.equal('bbbb', data.title)
           assert.equal('b.com', data.url)
           assert.equal(0, data.usage_count)
         })
         .then(() => db.links.update_usage(conn, id))
         .then(() => db.links.get(conn, id))
-        .then((data) => {
+        .then(data => {
           assert.equal('bbbb', data.title)
           assert.equal('b.com', data.url)
           assert.equal(1, data.usage_count)
         })
         .then(() => db.links.delete(conn, id))
         .then(() => db.links.get(conn, id))
-        .then((data) => {
+        .then(data => {
           assert.equal(null, data)
         })
     })
@@ -65,17 +65,17 @@ describe('database adapter', () => {
           return Promise.all(items)
         })
         .then(() => db.links.getPage(conn, 0, 10))
-        .then((data) => {
+        .then(data => {
           assert.equal(100, data.count)
           assert.equal(10, data.rows.length)
         })
         .then(() => db.links.getPage(conn, 10, 10))
-        .then((data) => {
+        .then(data => {
           assert.equal(100, data.count)
           assert.equal(10, data.rows.length)
         })
         .then(() => db.links.getPage(conn, 100, 10))
-        .then((data) => {
+        .then(data => {
           assert.equal(100, data.count)
           assert.equal(0, data.rows.length)
         })
@@ -92,12 +92,12 @@ describe('database adapter', () => {
           return Promise.all(items)
         })
         .then(() => db.links.getPage2(conn, null, 10))
-        .then((data) => {
+        .then(data => {
           assert.equal(10, data.length)
           return data[data.length - 1].last_access
         })
-        .then((lastId) => db.links.getPage2(conn, lastId, 10))
-        .then((data) => {
+        .then(lastId => db.links.getPage2(conn, lastId, 10))
+        .then(data => {
           assert.equal(10, data.length)
         })
     })

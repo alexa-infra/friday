@@ -44,12 +44,12 @@ class LinkAdapter {
   {
     let count = 0;
     return db.get('select count(*) as count from links')
-      .then((row) => {
+      .then(row => {
         count = row.count
         return db.all('select * from links order by last_access desc limit ?, ?',
           [offset, limit])
       })
-      .then((rows) => {
+      .then(rows => {
         return {rows: rows, count: count}
       })
   }
