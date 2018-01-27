@@ -5,10 +5,10 @@ import { getLinks } from '../actions'
 
 class LinksContainer extends Component {
   componentDidMount() {
-  	this.props.dispatch(getLinks())
+    this.props.dispatch(getLinks())
   }
   render() {
-  	return <Links />
+    return <Links />
   }
 }
 
