@@ -1,10 +1,10 @@
 import React from 'react';
 import { Router, Route } from 'react-router-dom';
-import App from '../App';
+import { Links } from '../containers';
 
 const configureRoutes = (history) => (
   <Router history={history}>
-    <Route path="/" component={App} />
+    <Route path="/" component={Links} />
   </Router>
 )
 
