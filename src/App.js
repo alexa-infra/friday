@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import logo from './logo.svg';
 import './App.css';
 import { linksSelector } from './selectors';
+import { Grid, Row, Col } from 'react-bootstrap';
 
 
 const Link = ({ item }) => (
@@ -10,11 +11,15 @@ const Link = ({ item }) => (
 )
 
 const LinkList = ({ items }) => (
-  <ul>
+  <Grid>
+    <Row>
     {items.map(it => (
-      <li key={it.id}><Link item={it} /></li>
+      <Col xs={6} sm={4} md={3} lg={2} key={it.id}>
+        <Link item={it} />
+      </Col>
     ))}
-  </ul>
+    </Row>
+  </Grid>
 )
 
 class App extends Component {

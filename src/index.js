@@ -8,6 +8,8 @@ import configureStore from './store';
 import configureRoutes from './routes';
 import registerServiceWorker from './registerServiceWorker';
 import { getLinks } from './actions';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap-theme.min.css';
 
 const browserHistory = createBrowserHistory();
 const store = configureStore(browserHistory);
