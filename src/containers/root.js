@@ -1,18 +1,21 @@
 import React from 'react'
 import { Provider } from 'react-redux'
-import { Router, Route } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
+import { ConnectedRouter } from 'react-router-redux'
 import { NavBar, Calendar } from '../components'
 import LinksPageContainer from './linksPage'
 
 const Root = ({store, history}) => (
   <Provider store={store}>
-    <Router history={history}>
+    <ConnectedRouter history={history}>
       <div>
         <NavBar />
-        <Route path="/" exact component={LinksPageContainer} />
-        <Route path="/events" component={Calendar} />
+        <Switch>
+          <Route path="/events" component={Calendar} />
+          <Route path="/" component={LinksPageContainer} />
+        </Switch>
       </div>
-    </Router>
+    </ConnectedRouter>
   </Provider>
 )
 
