@@ -12,7 +12,7 @@ const LinkList = ({ links }) => (
   <Grid>
     <Row>
     {links.map(it => (
-      <Col xs={6} sm={4} md={3} lg={2} key={it.id}>
+      <Col className="link-cell" xs={6} sm={4} md={3} lg={2} key={it.id}>
         <Link {...it} />
       </Col>
     ))}

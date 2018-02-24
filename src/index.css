@@ -3,3 +3,8 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+
+.link-cell {
+  text-align: center;
+  height: 1.5em;
+}
