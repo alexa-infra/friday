@@ -1,7 +1,7 @@
 import React from 'react'
 import { Provider } from 'react-redux'
 import { Router, Route } from 'react-router-dom'
-import { NavBar } from '../components'
+import { NavBar, Calendar } from '../components'
 import LinksPageContainer from './linksPage'
 
 const Root = ({store, history}) => (
@@ -9,7 +9,8 @@ const Root = ({store, history}) => (
     <Router history={history}>
       <div>
         <NavBar />
-        <Route path="/" component={LinksPageContainer} />
+        <Route path="/" exact component={LinksPageContainer} />
+        <Route path="/events" component={Calendar} />
       </div>
     </Router>
   </Provider>
