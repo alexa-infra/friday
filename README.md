@@ -16,7 +16,9 @@ Plan
   	- filter
   	- add new
   * events
-  	- calendar view
+  	+ calendar view
+  	- merge events into view
+  	- icons
   	- month navigation
   	- add new
 * backend
@@ -39,14 +41,19 @@ Plan
  | Item            | Date           | Time |
  -------------------------------------------
  | 2018-24-02      |                |      |
+ -------------------------------------------
  | Calendar css    | 10:50-10:55    | 5m   |
- | Calendar js     | 11:05-11:10    |      |
- | Calendar js     | 11:20-11:50    |      |
- | Calendar js     | 11:55-12:00    |      |
- | Calendar js     | 12:20-12:45    |      |
- | Calendar js     | 13:00-13:10    |      |
- | Calendar css    | 13:10-13:20    |      |
- | Calendar js     | 13:20-13:25    |      |
- | Calendar js     | 13:55-14:15    |      |
- | Calendar css    | 14:15-14:20    |      |
- | Calendar css    | 14:25-15:00    |      |
+ | Calendar js     | 11:05-11:10    | 5m   |
+ | Calendar js     | 11:20-11:50    | 30m  |
+ | Calendar js     | 11:55-12:00    | 5m   |
+ | Calendar js     | 12:20-12:45    | 25m  |
+ | Calendar js     | 13:00-13:10    | 10m  |
+ | Calendar css    | 13:10-13:20    | 10m  |
+ | Calendar js     | 13:20-13:25    | 15m  |
+ | Calendar js     | 13:55-14:15    | 20m  |
+ | Calendar css    | 14:15-14:20    | 5m   |
+ | Calendar css    | 14:25-15:00    | 35m  |
+ -------------------------------------------
+ | Calendar js     |                | 110m |
+ | Calendar css    |                | 55m  |
+ -------------------------------------------
