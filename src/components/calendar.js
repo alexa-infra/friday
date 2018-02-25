@@ -6,7 +6,7 @@ import './calendar.css'
 
 function *iterDays(start, end) {
   let it = start.clone()
-  while (it.isSameOrBefore(end)) {
+  while (it.isSameOrBefore(end, 'day')) {
     yield it.clone()
     it.add(1, 'days')
   }
@@ -63,7 +63,7 @@ const DaysGrid = ({date}) => (
 
 const Caption = ({date}) => (
   <header>
-    {date.format('YYYY-MM')}
+    {date.format('MMMM YYYY')}
   </header>
 )
 

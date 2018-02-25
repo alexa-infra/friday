@@ -1,7 +1,7 @@
 
 .calendar ul {list-style: none; margin: 0; }
 
-.calendar {width: 540px; }
+.calendar {width: 525px; }
 .calendar ul {padding-left: 0px;}
 .calendar header {background: #349ACC; position: relative; height: 31px; text-align: center; line-height: 31px;}
 .calendar header .nav-month {top: 4px; position: relative; display: inline-block;}
