@@ -5,8 +5,6 @@ import './index.css';
 import { Root } from './containers';
 import configureStore from './store';
 import registerServiceWorker from './registerServiceWorker';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/css/bootstrap-theme.min.css';
 
 const history = createBrowserHistory();
 const store = configureStore(history);

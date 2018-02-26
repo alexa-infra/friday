@@ -1,24 +1,66 @@
-
-.calendar ul {list-style: none; margin: 0; }
-
-.calendar {width: 525px; }
-.calendar ul {padding-left: 0px;}
-.calendar header {background: #349ACC; position: relative; height: 31px; text-align: center; line-height: 31px;}
-.calendar header .nav-month {top: 4px; position: relative; display: inline-block;}
-
-.calendar .days-of-week { height: 1em; }
-.calendar .days-of-week li {border: 1px solid white; float: left; height: 30px; line-height:30px; text-align: center; width: 75px;}
-
-.calendar .days-grid {}
-.calendar .days-grid li {background: #E2F2FB; border: 1px solid white; float: left; position: relative; height: 4em; width: 75px;}
-.calendar .days-grid li .day {font-size: 11px; font-weight: bold; color: #333333; position: absolute; top: 3px; left: 7px;}
-.calendar .days-grid li.weekend {background: #FBEFE2;}
-.calendar .days-grid li.holiday {background-color: #FBEFE2;}
-.calendar .days-grid li.today {background: #EAFFB1;}
-.calendar .days-grid li:hover {background-color: #BBFFBB;}
+/* colors */
+.calendar header { background: #349ACC; }
+.calendar .days-grid li { background: #E2F2FB; }
+.calendar .days-grid li:hover { background: #BBFFBB; }
+.calendar .days-grid li.weekend { background: #FBEFE2; }
+.calendar .days-grid li.holiday { background: #FBEFE2; }
+.calendar .days-grid li.today { background: #EAFFB1; }
+.calendar .days-grid li .day { color: #333333; }
 .calendar .days-grid li.prevMonth,
-.calendar .days-grid li.nextMonth {background: #ECECEC;}
+.calendar .days-grid li.nextMonth { background: #ECECEC; }
 .calendar .days-grid li.prevMonth .day,
-.calendar .days-grid li.nextMonth .day {color: #8B8B8B;}
+.calendar .days-grid li.nextMonth .day { color: #8B8B8B; }
 
-.calendar .icons { margin-left: auto; margin-right: auto; }
+/* fonts */
+.calendar .days-grid li .day { font-size: 11px; font-weight: bold; }
+
+/* layout */
+.calendar {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.calendar > * {
+  flex: 1 0 100%;
+}
+
+.calendar .days-of-week,
+.calendar .days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-auto-flow: row;
+  grid-gap: 2px 2px;
+}
+
+.calendar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.calendar header {
+  text-align: center;
+  padding: 10px 0;
+}
+
+.calendar .days-of-week li {
+  text-align: center;
+  padding: 4px 0;
+}
+
+.calendar .days-grid li {
+  position: relative;
+  height: 100px;
+}
+
+.calendar .days-grid li .day {
+  position: absolute;
+  top: 3px;
+  left: 7px;
+}
+
+@media all and (max-width: 740px) {
+  .calendar .days-grid li {
+    height: calc(100vw / 7);
+  }
+}

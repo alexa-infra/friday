@@ -1,0 +1,36 @@
+/* colors */
+ul.navbar { background-color: #222; }
+ul.navbar a { color: #9d9d9d; }
+ul.navbar a:hover { color: #fff; }
+
+/* fonts */
+ul.navbar a { text-decoration: none; font-size: 14px; }
+ul.navbar a.brand { font-size: 18px; }
+
+/* layout */
+ul.navbar {
+  height: 100%;
+  width: 100%;
+}
+
+ul.navbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: left;
+}
+
+ul.navbar {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+ul.navbar li {
+  display: flex;
+  padding: 15px 0;
+  align-items: center;
+}
+
+ul.navbar a {
+  padding-left: 20px;
+}

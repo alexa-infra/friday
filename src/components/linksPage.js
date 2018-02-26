@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Grid, Row, Col } from 'react-bootstrap'
 import { linksSelector } from '../selectors'
+import './linksPage.css'
 
 
 const Link = ({ id, url, title }) => (
@@ -9,15 +9,13 @@ const Link = ({ id, url, title }) => (
 )
 
 const LinkList = ({ links }) => (
-  <Grid>
-    <Row>
+  <ul className="link-list">
     {links.map(it => (
-      <Col className="link-cell" xs={6} sm={4} md={3} lg={2} key={it.id}>
+      <li key={it.id}>
         <Link {...it} />
-      </Col>
+      </li>
     ))}
-    </Row>
-  </Grid>
+  </ul>
 )
 
 export default connect(linksSelector)(LinkList)
