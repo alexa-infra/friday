@@ -6,6 +6,7 @@
     "bootstrap": "^3.3.7",
     "classnames": "^2.2.5",
     "history": "^4.7.2",
+    "moment": "^2.20.1",
     "react": "^16.2.0",
     "react-bootstrap": "^0.32.0",
     "react-dom": "^16.2.0",
@@ -32,7 +33,6 @@
     "bluebird": "^3.5.1",
     "express": "^4.16.2",
     "mocha": "^4.1.0",
-    "moment": "^2.20.1",
     "sqlite3": "^3.1.13",
     "supertest": "^3.0.0"
   }
