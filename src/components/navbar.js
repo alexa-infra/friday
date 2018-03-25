@@ -4,7 +4,7 @@ import './navbar.css'
 
 
 const NavBar = () => (
-  <ul className="navbar">
+  <ul className="navbar theme-d5">
     <li>
       <NavLink className="brand" activeClassName="active" to="/">Reader</NavLink>
     </li>

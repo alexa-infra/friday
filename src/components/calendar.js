@@ -31,11 +31,29 @@ const genCalendar = (date) => {
   }))
 }
 
-const CalendarDay = ({dayNum, weekend, prevMonth, nextMonth, today}) => (
-  <li className={classNames({weekend, prevMonth, nextMonth, today})}>
-    <span className="day">{dayNum}</span>
-  </li>
-)
+const CalendarDay = ({dayNum, weekend, prevMonth, nextMonth, today}) => {
+  
+  const thisMonth = !prevMonth && !nextMonth;
+  const thisMonthNotToday = thisMonth && !today;
+  
+  const themeAnotherMonth = !thisMonth;
+  const themeToday = thisMonth && today;
+  const themeWeekend = thisMonthNotToday && weekend;
+  const themeThisMonth = thisMonthNotToday && !weekend;
+
+
+  return (
+    <li className={classNames({
+      'theme-l4': themeAnotherMonth,
+      'theme-l3': themeThisMonth,
+      'theme-l2': themeWeekend,
+      'theme': themeToday,
+      'hover-theme': true,
+      })}>
+      <span className="day">{dayNum}</span>
+    </li>
+  )
+}
 
 const getDaysOfWeek = () => {
   const today = moment()
@@ -48,7 +66,7 @@ const getDaysOfWeek = () => {
 const dayNames = getDaysOfWeek()
 
 const DaysOfWeek = () => (
-  <ul className="days-of-week">
+  <ul className="days-of-week theme-d3">
     {dayNames.map(day => <li key={day}>{day}</li>)}
   </ul>
 )
@@ -62,7 +80,7 @@ const DaysGrid = ({date}) => (
 )
 
 const Caption = ({date}) => (
-  <header>
+  <header className="theme-d4">
     {date.format('MMMM YYYY')}
   </header>
 )

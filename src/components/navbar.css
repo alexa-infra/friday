@@ -1,8 +1,3 @@
-/* colors */
-ul.navbar { background-color: #222; }
-ul.navbar a { color: #9d9d9d; }
-ul.navbar a:hover { color: #fff; }
-
 /* fonts */
 ul.navbar a { text-decoration: none; font-size: 14px; }
 ul.navbar a.brand { font-size: 18px; }

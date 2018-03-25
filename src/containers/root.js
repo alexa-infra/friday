@@ -9,7 +9,7 @@ import LinksPageContainer from './linksPage'
 const Root = ({store, history}) => (
   <Provider store={store}>
     <ConnectedRouter history={history}>
-      <content>
+      <content className="theme-l5">
         <header>
           <NavBar />
         </header>
