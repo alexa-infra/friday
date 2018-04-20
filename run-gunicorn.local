@@ -1,0 +1,10 @@
+#!/bin/bash
+
+export PORT=8001
+export GUNICORN=True
+gunicorn friday.app:app \
+--log-file - \
+--access-logfile - \
+--bind 0.0.0.0:$PORT \
+--timeout 120 \
+--workers 1
