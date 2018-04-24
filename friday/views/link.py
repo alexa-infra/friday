@@ -1,3 +1,4 @@
+from flask import redirect
 from webargs.flaskparser import use_args
 from . import api, BaseView
 from ..models import db
@@ -7,7 +8,6 @@ from ..schemas.link import Link as LinkSchema
 
 class LinkListView(BaseView):
     route_base = '/links'
-    methods = ['GET', 'POST',]
 
     def get(self):
         objects = LinkModel.query.all()
@@ -23,7 +23,6 @@ class LinkListView(BaseView):
 
 class LinkItemView(BaseView):
     route_base = '/links/<int:id>'
-    methods = ['GET', 'PUT', 'DELETE']
 
     def get(self, id):
         obj = LinkModel.query.get_or_404(id)
@@ -43,6 +42,17 @@ class LinkItemView(BaseView):
         db.session.commit()
         return '', 204
 
+class LinkRedirectView(BaseView):
+    route_base = '/links/<int:id>/redirect'
+
+    def get(self, id):
+        obj = LinkModel.query.get_or_404(id)
+        obj.touch()
+        db.session.add(obj)
+        db.session.commit()
+        return redirect(obj.url)
+
 
 LinkListView.register(api, 'link_list')
 LinkItemView.register(api, 'link_item')
+LinkRedirectView.register(api, 'link_redirect')
