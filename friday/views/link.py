@@ -1,17 +1,38 @@
 from flask import redirect
-from webargs.flaskparser import use_args
+from webargs import fields
+from webargs.flaskparser import use_args, use_kwargs
 from . import api, BaseView
 from ..models import db
 from ..models.link import Link as LinkModel
 from ..schemas.link import Link as LinkSchema
 
 
+def validate_per_page(val):
+    if val <= 0 or val > 100:
+        return False
+    return True
+
+def validate_page(val):
+    if val < 0:
+        return False
+    return True
+
+pagination_args = {
+    'page': fields.Int(missing=1, location='query',
+                       validate=validate_page),
+    'per_page': fields.Int(missing=10, location='query',
+                           validate=validate_per_page),
+}
+
 class LinkListView(BaseView):
     route_base = '/links'
 
-    def get(self):
-        objects = LinkModel.query.all()
-        return LinkSchema.jsonify(objects, many=True), 200
+    @use_kwargs(pagination_args)
+    def get(self, page, per_page):
+        pagination = (
+            LinkModel.query.order_by(LinkModel.last_access)
+            .paginate(page, per_page))
+        return LinkSchema.jsonify(pagination), 200
 
     @use_args(LinkSchema())
     def post(self, args):
