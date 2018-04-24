@@ -2,5 +2,6 @@ flask
 flask-sqlalchemy
 flask-migrate
 flask-jwt-extended
-flask-classful
+marshmallow
+webargs
 gunicorn

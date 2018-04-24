@@ -1,15 +1,14 @@
 from flask import Blueprint
+from flask.views import MethodView
 
 api = Blueprint('api', __name__)
 
-from flask import jsonify
-from flask_classful import FlaskView
+class BaseView(MethodView):
 
+    @classmethod
+    def register(cls, app, name):
+        view = cls.as_view(name)
+        route_base = cls.route_base
+        app.add_url_rule(route_base, view_func=view)
 
-class IndexView(FlaskView):
-    route_base = '/'
-
-    def index(self):
-        return jsonify(dict(message='Hello World')), 200
-
-IndexView.register(api, trailing_slash=False)
+from . import link
