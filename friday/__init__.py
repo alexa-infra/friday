@@ -4,13 +4,16 @@ from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
 from .errors import Errors
 
-migrate = Migrate()
+this_dir = os.path.dirname(os.path.abspath(__file__))
+migrations_path = os.path.join(this_dir, 'migrations')
+
+migrate = Migrate(directory=migrations_path)
 jwt = JWTManager()
 errors = Errors()
 
 def make_app(settings=None):
     app = Flask(__name__)
-    app.root_path = os.path.dirname(os.path.abspath(__file__))
+    app.root_path = this_dir
     app.config.from_object('friday.settings')
     if settings:
         app.config.update(settings)
