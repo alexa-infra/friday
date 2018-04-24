@@ -2,4 +2,5 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
-from . import link
+from .link import Link
+from .user import User

@@ -24,3 +24,4 @@ class BaseSchema(Schema):
         return jsonify(rv)
 
 from .link import Link
+from .user import User

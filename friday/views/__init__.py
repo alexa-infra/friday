@@ -11,4 +11,4 @@ class BaseView(MethodView):
         route_base = cls.route_base
         app.add_url_rule(route_base, view_func=view)
 
-from . import link
+from . import link, user
