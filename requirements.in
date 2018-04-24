@@ -5,3 +5,4 @@ flask-jwt-extended
 marshmallow
 webargs
 gunicorn
+bcrypt
