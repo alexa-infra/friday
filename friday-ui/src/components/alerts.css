@@ -1,0 +1,48 @@
+.alert-list {
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.alert {
+  display: flex;
+  flex-flow: row nowrap;
+  border-radius: .25rem;
+  padding: 0.75rem 1.25rem;
+  align-items: center;
+}
+
+.alert .message {
+  flex: 1;
+}
+
+.alert .close {
+  cursor: pointer;
+  color: #000;
+  background-color: transparent;
+  border: 0;
+  font-size: 1.5em;
+  font-weight: 700;
+  opacity: 0.5;
+  padding: 0;
+}
+
+.alert .close:hover {
+  opacity: 0.75;
+}
+
+.alert-success {
+  color: #fff;
+  background-color: #61b832;
+}
+.alert-info {
+  color: #fff;
+  background-color: #4ea5cd;
+}
+.alert-warning {
+  color: #fff;
+  background-color: #eaaf51;
+}
+.alert-error {
+  color: #fff;
+  background-color: #de4343;
+}

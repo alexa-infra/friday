@@ -5,6 +5,7 @@ import { ConnectedRouter } from 'react-router-redux'
 import './root.css'
 import { NavBar, Calendar } from '../components'
 import LinksPageContainer from './linksPage'
+import AlertsContainer from './alerts'
 
 const Root = ({store, history}) => (
   <Provider store={store}>
@@ -14,6 +15,7 @@ const Root = ({store, history}) => (
           <NavBar />
         </header>
         <main>
+          <AlertsContainer />
           <Switch>
             <Route path="/events" component={Calendar} />
             <Route path="/" component={LinksPageContainer} />
