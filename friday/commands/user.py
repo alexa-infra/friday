@@ -1,12 +1,10 @@
 import click
+from flask.cli import AppGroup
 from friday.models import db, User
 from friday.utils import get_random_string
 
 
-@click.group()
-def user():
-    '''User operations'''
-    pass
+user = AppGroup('user')
 
 @user.command('new')
 @click.argument('email')
