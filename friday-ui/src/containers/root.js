@@ -6,6 +6,7 @@ import './root.css'
 import { NavBar, Calendar } from '../components'
 import LinksPageContainer from './linksPage'
 import AlertsContainer from './alerts'
+import LoginPageContainer from './loginPage'
 
 const Root = ({store, history}) => (
   <Provider store={store}>
@@ -17,6 +18,7 @@ const Root = ({store, history}) => (
         <main>
           <AlertsContainer />
           <Switch>
+            <Route path="/login" component={LoginPageContainer} />
             <Route path="/events" component={Calendar} />
             <Route path="/" component={LinksPageContainer} />
           </Switch>
