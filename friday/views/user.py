@@ -3,7 +3,7 @@ from webargs.flaskparser import use_kwargs
 from . import api, BaseView
 from ..models import db
 from ..models.user import User as UserModel
-from ..schemas.user import User as UserSchema
+from ..schemas.user import User as UserSchema, UserAuth
 
 
 login_args = {
@@ -17,6 +17,7 @@ class LoginView(BaseView):
     @use_kwargs(login_args)
     def post(self, email, password):
         user = UserModel.authenticate(email, password)
-        return UserSchema.jsonify(user), 200
+        rv = dict(user=user, token=user.token)
+        return UserAuth.jsonify(rv), 200
 
 LoginView.register(api, 'user_login')
