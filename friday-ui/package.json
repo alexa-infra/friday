@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "classnames": "^2.2.5",
+    "font-awesome": "^4.7.0",
     "history": "^4.7.2",
     "moment": "^2.20.1",
     "react": "^16.2.0",

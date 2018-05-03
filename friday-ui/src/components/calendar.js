@@ -2,6 +2,7 @@ import React from 'react'
 import * as moment from 'moment'
 import classNames from 'classnames'
 import './calendar.css'
+import 'font-awesome/css/font-awesome.css'
 
 
 function *iterDays(start, end) {
@@ -12,26 +13,31 @@ function *iterDays(start, end) {
   }
 }
 
-const genCalendar = (date) => {
-  const today = moment().startOf('day')
-  const firstDay = date.clone().startOf('month')
-  const lastDay = date.clone().endOf('month')
-  const start = firstDay.clone().startOf('isoWeek')
-  const end = lastDay.clone().endOf('isoWeek')
-
-  const days = [...iterDays(start, end)]
+const genCalendar = (date, firstDay, lastDay) => {
+  const today = moment().startOf('day');
+  const days = [...iterDays(firstDay, lastDay)]
   return days.map(it => ({
     day: it.clone(),
     dayNum: it.date(),
     today: it.isSame(today, 'day'),
     weekend: it.isoWeekday() === 6 || it.isoWeekday() === 7,
-    prevMonth: it.isBefore(firstDay, 'day'),
-    thisMonth: it.isBetween(firstDay, lastDay, 'day', '[]'),
-    nextMonth: it.isAfter(lastDay, 'day'),
+    prevMonth: it.isBefore(date, 'month'),
+    thisMonth: it.isSame(date, 'month'),
+    nextMonth: it.isAfter(date, 'month'),
   }))
 }
 
-const CalendarDay = ({dayNum, weekend, prevMonth, nextMonth, today}) => {
+const Event = ({name, icon}) => (
+  <i className={classNames('fa', icon)} title={name} />
+)
+
+const EventList = ({events}) => (
+  <ul className='events'>
+    {events.map(({event}) => <Event key={event.id} {...event} />)}
+  </ul>
+)
+
+const CalendarDay = ({dayNum, weekend, prevMonth, nextMonth, today, events}) => {
   
   const thisMonth = !prevMonth && !nextMonth;
   const thisMonthNotToday = thisMonth && !today;
@@ -40,7 +46,6 @@ const CalendarDay = ({dayNum, weekend, prevMonth, nextMonth, today}) => {
   const themeToday = thisMonth && today;
   const themeWeekend = thisMonthNotToday && weekend;
   const themeThisMonth = thisMonthNotToday && !weekend;
-
 
   return (
     <li className={classNames({
@@ -51,6 +56,7 @@ const CalendarDay = ({dayNum, weekend, prevMonth, nextMonth, today}) => {
       'hover-theme': true,
       })}>
       <span className="day">{dayNum}</span>
+      <EventList events={events} />
     </li>
   )
 }
@@ -71,10 +77,10 @@ const DaysOfWeek = () => (
   </ul>
 )
 
-const DaysGrid = ({date}) => (
+const DaysGrid = ({date, firstDay, lastDay, events}) => (
   <ul className="days-grid">
-    {genCalendar(date).map(it => (
-      <CalendarDay key={it.day} {...it} />
+    {genCalendar(date, firstDay, lastDay).map(it => (
+      <CalendarDay key={it.day} {...it} events={events.filter(x => x.date.isSame(it.day, 'day'))} />
     ))}
   </ul>
 )
@@ -85,13 +91,12 @@ const Caption = ({date}) => (
   </header>
 )
 
-const Calendar = () => {
-  const today = moment()
+const Calendar = ({month, lastDay, firstDay, events}) => {
   return (
     <div className="calendar">
-      <Caption date={today} />
+      <Caption date={month} />
       <DaysOfWeek />
-      <DaysGrid date={today} />
+      <DaysGrid date={month} lastDay={lastDay} firstDay={firstDay} events={events} />
     </div>
   )
 }

@@ -3,10 +3,11 @@ import { Provider } from 'react-redux'
 import { Route, Switch } from 'react-router-dom'
 import { ConnectedRouter } from 'react-router-redux'
 import './root.css'
-import { NavBar, Calendar } from '../components'
+import { NavBar } from '../components'
 import LinksPageContainer from './linksPage'
 import AlertsContainer from './alerts'
 import LoginPageContainer from './loginPage'
+import EventsPageContainer from './eventsPage'
 
 const Root = ({store, history}) => (
   <Provider store={store}>
@@ -19,7 +20,7 @@ const Root = ({store, history}) => (
           <AlertsContainer />
           <Switch>
             <Route path="/login" component={LoginPageContainer} />
-            <Route path="/events" component={Calendar} />
+            <Route path="/events" component={EventsPageContainer} />
             <Route path="/" component={LinksPageContainer} />
           </Switch>
         </main>

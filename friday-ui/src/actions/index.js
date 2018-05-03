@@ -17,4 +17,15 @@ export const getLinks = (page = 1) => (dispatch, getState) => {
     });
 }
 
+export const getEvents = (fromdate, todate) => (dispatch, getState) => {
+  const { auth } = getState();
+  dispatch(createAction(Actions.EVENTS_REQUEST));
+  api.getEvents(auth, fromdate, todate)
+    .then(result => dispatch(createAction(Actions.EVENTS_SUCCESS, result)))
+    .catch(error => {
+      dispatch(createAction(Actions.EVENTS_FAILURE, { error }));
+      dispatch(handleErrors(error.status));
+    });
+}
+
 export { alerts, auth };
