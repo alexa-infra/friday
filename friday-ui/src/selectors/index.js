@@ -1,9 +1,10 @@
 import linksSelector from './links';
 import alertsSelector from './alerts';
-import eventsSelector from './events';
+import { mapEventList, mapEventEdit } from './events';
 
 export {
   linksSelector,
   alertsSelector,
-  eventsSelector,
+  mapEventEdit,
+  mapEventList,
 };

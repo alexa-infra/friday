@@ -28,4 +28,4 @@ export const getEvents = (fromdate, todate) => (dispatch, getState) => {
     });
 }
 
-export { alerts, auth };
+export { alerts, auth, createAction };

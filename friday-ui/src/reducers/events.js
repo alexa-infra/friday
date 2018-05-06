@@ -11,6 +11,7 @@ const today = moment().startOf('day');
 
 const initialState = {
   currentItem: null,
+  editDisabled: false,
   items: [],
   month: today,
   ...calendarRange(today),
@@ -35,6 +36,16 @@ export default function (state = initialState, action) {
       return { ...initialState, month: date, ...calendarRange(date) };
     case Actions.EVENTS_SUCCESS:
       return { ...state, currentItem: null, items: action.data.map(convertItem) };
+    case Actions.EVENTS_SHOW_EDIT:
+      return { ...state, currentItem: action.data, editDisabled: false };
+    case Actions.EVENTS_HIDE_EDIT:
+      return { ...state, currentItem: null, editDisabled: true };
+    case Actions.EVENTS_EDIT_REQUEST:
+      return { ...state, editDisabled: true };
+    case Actions.EVENTS_EDIT_SUCCESS:
+      return { ...state, currentItem: null, editDisabled: true };
+    case Actions.EVENTS_EDIT_FAILURE:
+      return { ...state, editDisabled: false };
     default:
       return state;
   }

@@ -13,6 +13,7 @@
     "react-router-dom": "^4.2.2",
     "react-router-redux": "^5.0.0-alpha.9",
     "react-scripts": "1.0.17",
+    "react-transition-group": "^2.3.1",
     "redux": "^3.7.2",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0"
@@ -32,6 +33,7 @@
     "bluebird": "^3.5.1",
     "express": "^4.16.2",
     "mocha": "^4.1.0",
+    "node-sass": "^4.9.0",
     "sqlite3": "^3.1.13",
     "supertest": "^3.0.0"
   }

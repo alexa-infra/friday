@@ -1,17 +1,42 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Calendar } from '../components';
-import { getEvents } from '../actions';
-import { eventsSelector } from '../selectors';
+import EditModal from '../components/eventEditor';
+import { getEvents, createAction } from '../actions';
+import { mapEventList, mapEventEdit } from '../selectors';
+import { Actions } from '../constants';
 
 
 class EventsPageContainer extends React.Component {
   componentDidMount() {
-    this.props.dispatch(getEvents(this.props.firstDay, this.props.lastDay));
+    this.props.initCalendar(this.props.firstDay, this.props.lastDay);
   }
   render() {
-    return <Calendar {...this.props} />
+    return (
+      <div>
+        <Calendar {...this.props} />
+        <EventsEditContainer />
+      </div>
+    );
   }
 }
 
-export default connect(eventsSelector)(EventsPageContainer);
+const mapDispatchList = dispatch => {
+  return {
+    showEdit: item => dispatch(createAction(Actions.EVENTS_SHOW_EDIT, item)),
+    initCalendar: (firstDay, lastDay) => dispatch(getEvents(firstDay, lastDay)),
+  }
+};
+
+const mapDispatchEdit = dispatch => {
+  return {
+    hideEdit: item => dispatch(createAction(Actions.EVENTS_HIDE_EDIT)),
+  }
+}
+
+let EventsEditContainer = props => (
+  <EditModal {...props} />
+)
+EventsEditContainer = connect(mapEventEdit, mapDispatchEdit)(EventsEditContainer);
+
+export default connect(mapEventList, mapDispatchList)(EventsPageContainer);

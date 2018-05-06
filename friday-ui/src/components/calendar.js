@@ -27,17 +27,17 @@ const genCalendar = (date, firstDay, lastDay) => {
   }))
 }
 
-const Event = ({name, icon}) => (
-  <i className={classNames('fa', icon)} title={name} />
+const Event = ({name, icon, onClick}) => (
+  <i className={classNames('fa', icon)} title={name} onClick={onClick} />
 )
 
-const EventList = ({events}) => (
+const EventList = ({events, onClick}) => (
   <ul className='events'>
-    {events.map(({event}) => <Event key={event.id} {...event} />)}
+    {events.map(({event}) => <Event key={event.id} {...event} onClick={() => onClick(event)} />)}
   </ul>
 )
 
-const CalendarDay = ({dayNum, weekend, prevMonth, nextMonth, today, events}) => {
+const CalendarDay = ({dayNum, weekend, prevMonth, nextMonth, today, events, onEventClick}) => {
   
   const thisMonth = !prevMonth && !nextMonth;
   const thisMonthNotToday = thisMonth && !today;
@@ -56,7 +56,7 @@ const CalendarDay = ({dayNum, weekend, prevMonth, nextMonth, today, events}) => 
       'hover-theme': true,
       })}>
       <span className="day">{dayNum}</span>
-      <EventList events={events} />
+      <EventList events={events} onClick={onEventClick} />
     </li>
   )
 }
@@ -77,10 +77,12 @@ const DaysOfWeek = () => (
   </ul>
 )
 
-const DaysGrid = ({date, firstDay, lastDay, events}) => (
+const DaysGrid = ({month, firstDay, lastDay, events, showEdit}) => (
   <ul className="days-grid">
-    {genCalendar(date, firstDay, lastDay).map(it => (
-      <CalendarDay key={it.day} {...it} events={events.filter(x => x.date.isSame(it.day, 'day'))} />
+    {genCalendar(month, firstDay, lastDay).map(it => (
+      <CalendarDay key={it.day} {...it}
+                   events={events.filter(x => x.date.isSame(it.day, 'day'))}
+                   onEventClick={showEdit}/>
     ))}
   </ul>
 )
@@ -91,12 +93,12 @@ const Caption = ({date}) => (
   </header>
 )
 
-const Calendar = ({month, lastDay, firstDay, events}) => {
+const Calendar = props => {
   return (
     <div className="calendar">
-      <Caption date={month} />
+      <Caption date={props.month} />
       <DaysOfWeek />
-      <DaysGrid date={month} lastDay={lastDay} firstDay={firstDay} events={events} />
+      <DaysGrid {...props}  />
     </div>
   )
 }
