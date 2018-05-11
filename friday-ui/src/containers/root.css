@@ -1,3 +1,6 @@
+#root { height: 100%; }
+#root content { height: 100%; }
+
 #root content {
   display: grid;
   grid-template-columns: 1fr minmax(320px, 740px) 1fr;
