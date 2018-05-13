@@ -37,7 +37,7 @@ const EventList = ({events, onClick}) => (
   </ul>
 )
 
-const CalendarDay = ({dayNum, weekend, prevMonth, nextMonth, today, events, onEventClick}) => {
+const CalendarDay = ({day, dayNum, weekend, prevMonth, nextMonth, today, events, onEventClick, onAddNew}) => {
   
   const thisMonth = !prevMonth && !nextMonth;
   const thisMonthNotToday = thisMonth && !today;
@@ -54,7 +54,7 @@ const CalendarDay = ({dayNum, weekend, prevMonth, nextMonth, today, events, onEv
       'theme-l2': themeWeekend,
       'theme': themeToday,
       'hover-theme': true,
-      })}>
+      })} onClick={e => onAddNew(day)}>
       <span className="day">{dayNum}</span>
       <EventList events={events} onClick={onEventClick} />
     </li>
@@ -77,12 +77,13 @@ const DaysOfWeek = () => (
   </ul>
 )
 
-const DaysGrid = ({month, firstDay, lastDay, events, showEdit}) => (
+const DaysGrid = ({month, firstDay, lastDay, events, showEdit, showEditNew}) => (
   <ul className="days-grid">
     {genCalendar(month, firstDay, lastDay).map(it => (
       <CalendarDay key={it.day} {...it}
                    events={events.filter(x => x.date.isSame(it.day, 'day'))}
-                   onEventClick={showEdit}/>
+                   onEventClick={showEdit}
+                   onAddNew={showEditNew}/>
     ))}
   </ul>
 )

@@ -16,6 +16,13 @@ const transitionStyles = {
 }
 
 class Modal extends React.Component {
+  handleSubmit = event => {
+    event.preventDefault()
+    this.props.onSubmit()
+  }
+  handleClose = event => {
+    this.props.onClose()
+  }
   renderModal(state){
     if (state === 'exited') {
       return null
@@ -27,11 +34,11 @@ class Modal extends React.Component {
           ...defaultStyle,
           ...transitionStyles[state],
         }} tabIndex="-1">
-        <div className="modal-dialog">
+        <form className="modal-dialog" onSubmit={this.handleSubmit}>
           <div className="modal-content">
             <div className="modal-header">
               {this.props.header}
-              <button type="button" className="close" onClick={e => this.props.onClose()}>
+              <button type="button" className="close" onClick={this.handleClose}>
                 <span>&times;</span>
               </button>
             </div>
@@ -39,13 +46,13 @@ class Modal extends React.Component {
               {this.props.body}
             </div>
             <div className="modal-footer">
-              <button type="button" onClick={e => this.props.onClose()}>
+              <button type="button" onClick={this.handleClose}>
                 Close
               </button>
               {this.props.footer}
             </div>
           </div>
-        </div>
+        </form>
       </div>
     )
   }

@@ -8,3 +8,8 @@ export const mapEventEdit = state => {
   const { currentItem, editDisabled } = state.events;
   return { currentItem, editDisabled };
 }
+
+export const mapEventNew = state => {
+  const { newEventDate, editDisabled } = state.events;
+  return { newEventDate, editDisabled };
+}

@@ -65,3 +65,27 @@ export const login = (name, password) => {
     });
   })
 }
+
+export const createEvent = (auth, data) => {
+  let headers = {};
+  if (auth.token) {
+    headers['Authorization'] = `Bearer ${auth.token}`;
+  }
+  return fetch('/api/events', {
+    method: 'POST',
+    body: JSON.stringify(data),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      ...headers,
+    }
+  }).then(result => {
+    if (result.ok)
+      return result.json();
+    return Promise.reject({
+      name: 'ResponseError',
+      message: '',
+      status: result.status,
+    });
+  })
+}

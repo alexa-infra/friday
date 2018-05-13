@@ -28,4 +28,15 @@ export const getEvents = (fromdate, todate) => (dispatch, getState) => {
     });
 }
 
+export const createEvent = data => (dispatch, getState) => {
+  const { auth } = getState();
+  dispatch(createAction(Actions.EVENTS_NEW_REQUEST));
+  api.createEvent(auth, data)
+    .then(result => dispatch(createAction(Actions.EVENTS_NEW_SUCCESS, result)))
+    .catch(error => {
+      dispatch(createAction(Actions.EVENTS_NEW_FAILURE, { error }));
+      dispatch(handleErrors(error.status));
+    });
+}
+
 export { alerts, auth, createAction };
