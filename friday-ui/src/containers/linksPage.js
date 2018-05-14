@@ -1,15 +1,24 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { LinksPage } from '../components'
-import { getLinks } from '../actions'
+import { linksSelector } from '../selectors'
+import { Actions } from '../constants'
+import { getLinks, createAction } from '../actions'
 
 class LinksPageContainer extends Component {
   componentDidMount() {
-    this.props.dispatch(getLinks())
+    this.props.onLoad();
   }
   render() {
-    return <LinksPage />
+    return <LinksPage {...this.props} />
   }
 }
 
-export default connect()(LinksPageContainer)
+const mapDispatch = dispatch => {
+  return {
+    doSearch: term => dispatch(createAction(Actions.LINKS_FILTER, term)),
+    onLoad: () => dispatch(getLinks()),
+  }
+}
+
+export default connect(linksSelector, mapDispatch)(LinksPageContainer)

@@ -1,8 +1,12 @@
+.links-page { text-align: center; }
+.links-page .search { margin-top: 10px; }
+
 ul.link-list {
   list-style: none;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  padding: 0;
 }
 ul.link-list li {
   text-align: center;
