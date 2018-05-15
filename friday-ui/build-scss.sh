@@ -5,4 +5,4 @@ SASS_ARGS="--output-style expanded"
 
 find src/ -name "*.scss" | \
   sed "s/.scss$//g" | \
-  xargs --replace bash -c "$SASS_BIN $SASS_ARGS {}.scss > {}.css"
+  xargs --replace bash -c "echo {}.scss && $SASS_BIN $SASS_ARGS {}.scss > {}.css"
