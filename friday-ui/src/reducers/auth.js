@@ -1,7 +1,7 @@
 import { Actions } from '../constants';
 
 const initialState = {
-  token: window.localStorage.getItem('jwt'),
+  token: null,
   user: null,
 }
 
@@ -19,6 +19,8 @@ export default (state = initialState, action) => {
       return {...state, token, user };
     case Actions.AUTH_LOGIN_FAILURE:
       return {...state, token: null, user: null};
+    case Actions.AUTH_PRELOAD:
+      return {...state, token: window.localStorage.getItem('jwt')};
     default:
       return state;
   }

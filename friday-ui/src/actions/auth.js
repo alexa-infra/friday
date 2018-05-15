@@ -4,9 +4,7 @@ import { Actions } from '../constants';
 import { createAction } from './utils';
 import * as alerts from './alerts';
 
-export const unauthorized = () => dispatch => {
-  dispatch(push('/login'));
-}
+export const unauthorized = () => dispatch => dispatch(push('/login'))
 
 export const login = (name, password) => dispatch => {
   dispatch(createAction(Actions.AUTH_LOGIN_REQUEST));
@@ -18,3 +16,5 @@ export const login = (name, password) => dispatch => {
     })
     .catch(error => dispatch(createAction(Actions.AUTH_LOGIN_FAILURE, { error })));
 }
+
+export const preLoad = () => dispatch => dispatch(createAction(Actions.AUTH_PRELOAD))
