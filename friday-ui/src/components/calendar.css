@@ -55,3 +55,15 @@
   bottom: 3px;
   font-size: 21px;
 }
+
+.calendar .days-grid li .add {
+  position: absolute;
+  top: 3px;
+  right: 7px;
+  font-size: 21px;
+  display: none;
+}
+
+.calendar .days-grid li:hover .add {
+  display: block;
+}

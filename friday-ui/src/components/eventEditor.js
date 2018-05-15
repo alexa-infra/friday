@@ -23,7 +23,7 @@ const RepeatOptions = {
   "Week": "weekly",
   "2 Weeks": "biweekly",
   "Month": "monthly",
-  "Year": "annualy",
+  "Year": "annually",
 }
 
 const FormSelect = ({name, value, values, onChange}) => (

@@ -49,6 +49,18 @@
         bottom: 3px;
         font-size: 21px;
       }
+      .add {
+        position: absolute;
+        top: 3px;
+        right: 7px;
+        font-size: 21px;
+        display: none;
+      }
+      &:hover {
+        .add {
+          display: block;
+        }
+      }
     }
   }
 }

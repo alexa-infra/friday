@@ -54,8 +54,9 @@ const CalendarDay = ({day, dayNum, weekend, prevMonth, nextMonth, today, events,
       'theme-l2': themeWeekend,
       'theme': themeToday,
       'hover-theme': true,
-      })} onClick={e => onAddNew(day)}>
+      })}>
       <span className="day">{dayNum}</span>
+      <i className={classNames('fa', 'fa-plus', 'add')} title="Add..." onClick={e => onAddNew(day)} />
       <EventList events={events} onClick={onEventClick} />
     </li>
   )
