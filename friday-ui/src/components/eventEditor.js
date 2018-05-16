@@ -107,6 +107,7 @@ class EditEventModal extends Component {
     icon: '',
     repeat: 'none',
     currentItem: null,
+    repeatIn: 24,
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -124,13 +125,32 @@ class EditEventModal extends Component {
   handleIconChange = event => {
     this.setState({icon: event.target.value})
   }
-  handleRepeatChange = event => {
-    this.setState({repeat: event.target.value})
+  handleRepeatInChange = event => {
+    this.setState({repeatIn: parseInt(event.target.value)})
   }
   getDate() {
     if (!this.state.date)
       return ''
     return this.state.date.format('YYYY-MM-DD')
+  }
+  renderRepeatIn() {
+    if (this.state.repeat !== null)
+      return null
+    return (
+      <div className="form-group">
+        <label>Repeat in:</label>
+        <div className="field">
+          <input type="number"
+                 value={this.state.repeatIn}
+                 onChange={this.handleRepeatInChange} />
+          <button type="button"
+                  onClick={() => this.props.repeatIn(this.state)}
+                  disabled={this.props.editDisabled}>
+            Repeat
+          </button>
+        </div>
+      </div>
+    )
   }
 
   renderModal() {
@@ -144,7 +164,8 @@ class EditEventModal extends Component {
                   onChange={this.handleIconChange} />
         <FormSelect name="Repeat" value={this.state.repeat || 'none'}
                     values={RepeatOptions}
-                    onChange={this.handleRepeatChange} />
+                    disabled={true} />
+        { this.renderRepeatIn() }
       </div>
     )
   }

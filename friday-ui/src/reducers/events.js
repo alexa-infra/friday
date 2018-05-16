@@ -44,14 +44,17 @@ export default function (state = initialState, action) {
     case Actions.EVENTS_NEW_REQUEST:
     case Actions.EVENTS_EDIT_REQUEST:
     case Actions.EVENTS_DELETE_REQUEST:
+    case Actions.EVENTS_REPEAT_REQUEST:
       return { ...state, editDisabled: true };
     case Actions.EVENTS_NEW_FAILURE:
     case Actions.EVENTS_EDIT_FAILURE:
     case Actions.EVENTS_DELETE_FAILURE:
+    case Actions.EVENTS_REPEAT_FAILURE:
       return { ...state, editDisabled: false };
     case Actions.EVENTS_NEW_SUCCESS:
     case Actions.EVENTS_EDIT_SUCCESS:
     case Actions.EVENTS_DELETE_SUCCESS:
+    case Actions.EVENTS_REPEAT_SUCCESS:
       return { ...state, newEventDate: null, currentItem: null, editDisabled: false };
     case Actions.EVENTS_SHOW_EDIT_NEW:
       return { ...state, newEventDate: action.data, editDisabled: false }

@@ -57,3 +57,17 @@ export const deleteEvent = data => (dispatch, getState) => {
       dispatch(handleErrors(error.status));
     });
 }
+
+export const repeatEvent = data => (dispatch, getState) => {
+  const { auth } = getState();
+  dispatch(createAction(Actions.EVENTS_REPEAT_REQUEST));
+  api.repeatEvent(auth, data)
+    .then(result => {
+      dispatch(createAction(Actions.EVENTS_REPEAT_SUCCESS, result));
+      dispatch(getEvents());
+    })
+    .catch(error => {
+      dispatch(createAction(Actions.EVENTS_REPEAT_FAILURE, { error }));
+      dispatch(handleErrors(error.status));
+    });
+}

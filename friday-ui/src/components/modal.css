@@ -85,6 +85,6 @@
   flex: 1;
 }
 
-.form-group input, .form-group textarea, .form-group select {
+.form-group input, .form-group textarea, .form-group select, .form-group .field {
   flex: 3;
 }

@@ -104,3 +104,15 @@ export const deleteEvent = (auth, data) => {
     }
   }).then(emptyOrReject)
 }
+
+export const repeatEvent = (auth, data) => {
+  return fetch(`/api/events/${data.id}/repeat`, {
+    method: 'POST',
+    body: JSON.stringify({days: data.repeatIn}),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      ...makeAuthHeader(auth),
+    }
+  }).then(jsonOrReject)
+}

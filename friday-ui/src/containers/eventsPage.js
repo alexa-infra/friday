@@ -36,6 +36,7 @@ const mapDispatchEdit = dispatch => {
     createNew: item => dispatch(events.createEvent(item)),
     update: item => dispatch(events.updateEvent(item)),
     delete: item => dispatch(events.deleteEvent(item)),
+    repeatIn: item => dispatch(events.repeatEvent(item)),
   }
 }
 
