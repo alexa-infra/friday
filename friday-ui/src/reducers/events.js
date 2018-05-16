@@ -41,14 +41,20 @@ export default function (state = initialState, action) {
       return { ...state, currentItem: action.data, editDisabled: false };
     case Actions.EVENTS_HIDE_EDIT:
       return { ...state, currentItem: null, editDisabled: true, newEventDate: null };
+    case Actions.EVENTS_NEW_REQUEST:
     case Actions.EVENTS_EDIT_REQUEST:
+    case Actions.EVENTS_DELETE_REQUEST:
       return { ...state, editDisabled: true };
-    case Actions.EVENTS_EDIT_SUCCESS:
-      return { ...state, currentItem: null, editDisabled: true };
+    case Actions.EVENTS_NEW_FAILURE:
     case Actions.EVENTS_EDIT_FAILURE:
+    case Actions.EVENTS_DELETE_FAILURE:
       return { ...state, editDisabled: false };
+    case Actions.EVENTS_NEW_SUCCESS:
+    case Actions.EVENTS_EDIT_SUCCESS:
+    case Actions.EVENTS_DELETE_SUCCESS:
+      return { ...state, newEventDate: null, currentItem: null, editDisabled: false };
     case Actions.EVENTS_SHOW_EDIT_NEW:
-      return { ...state, newEventDate: action.data }
+      return { ...state, newEventDate: action.data, editDisabled: false }
     default:
       return state;
   }

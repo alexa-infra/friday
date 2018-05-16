@@ -18,7 +18,6 @@ const transitionStyles = {
 class Modal extends React.Component {
   handleSubmit = event => {
     event.preventDefault()
-    this.props.onSubmit()
   }
   handleClose = event => {
     this.props.onClose()
@@ -38,7 +37,10 @@ class Modal extends React.Component {
           <div className="modal-content">
             <div className="modal-header">
               {this.props.header}
-              <button type="button" className="close" onClick={this.handleClose}>
+              <button type="button"
+                      className="close"
+                      onClick={this.handleClose}
+                      disabled={this.props.disabled || false}>
                 <span>&times;</span>
               </button>
             </div>
@@ -46,7 +48,9 @@ class Modal extends React.Component {
               {this.props.body}
             </div>
             <div className="modal-footer">
-              <button type="button" onClick={this.handleClose}>
+              <button type="button"
+                      onClick={this.handleClose}
+                      disabled={this.props.disabled || false}>
                 Close
               </button>
               {this.props.footer}

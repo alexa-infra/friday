@@ -4,6 +4,7 @@ import { createAction } from './utils';
 import * as alerts from './alerts';
 import { handleErrors } from './errors';
 import * as auth from './auth';
+import * as events from './events';
 
 
 export const getLinks = (page = 1) => (dispatch, getState) => {
@@ -17,26 +18,4 @@ export const getLinks = (page = 1) => (dispatch, getState) => {
     });
 }
 
-export const getEvents = (fromdate, todate) => (dispatch, getState) => {
-  const { auth } = getState();
-  dispatch(createAction(Actions.EVENTS_REQUEST));
-  api.getEvents(auth, fromdate, todate)
-    .then(result => dispatch(createAction(Actions.EVENTS_SUCCESS, result)))
-    .catch(error => {
-      dispatch(createAction(Actions.EVENTS_FAILURE, { error }));
-      dispatch(handleErrors(error.status));
-    });
-}
-
-export const createEvent = data => (dispatch, getState) => {
-  const { auth } = getState();
-  dispatch(createAction(Actions.EVENTS_NEW_REQUEST));
-  api.createEvent(auth, data)
-    .then(result => dispatch(createAction(Actions.EVENTS_NEW_SUCCESS, result)))
-    .catch(error => {
-      dispatch(createAction(Actions.EVENTS_NEW_FAILURE, { error }));
-      dispatch(handleErrors(error.status));
-    });
-}
-
-export { alerts, auth, createAction };
+export { alerts, auth, createAction, events };
