@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 
 this_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -11,3 +12,5 @@ SQLALCHEMY_ECHO = True
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 SERVER_NAME = os.environ.get('SERVER_NAME', None)
+
+JWT_ACCESS_TOKEN_EXPIRES = timedelta(days=90)
