@@ -1,3 +1,4 @@
+import * as moment from 'moment';
 import { Actions } from '../constants';
 import * as api from '../api';
 import { createAction } from './utils';
@@ -16,6 +17,12 @@ export const prevMonth = () => (dispatch, getState) => {
   const { events } = getState();
   const { month } = events;
   const date = month.subtract(1, 'month');
+  dispatch(createAction(Actions.EVENTS_SELECT_MONTH, date));
+  dispatch(getEvents());
+}
+
+export const currentMonth = () => dispatch => {
+  const date = moment().startOf('month');
   dispatch(createAction(Actions.EVENTS_SELECT_MONTH, date));
   dispatch(getEvents());
 }

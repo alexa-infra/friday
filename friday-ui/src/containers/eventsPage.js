@@ -9,7 +9,7 @@ import { Actions } from '../constants';
 
 class EventsPageContainer extends React.Component {
   componentDidMount() {
-    this.props.updateCalendar();
+    this.props.initCalendar();
   }
   render() {
     return (
@@ -25,6 +25,7 @@ class EventsPageContainer extends React.Component {
 const mapDispatchList = dispatch => {
   return {
     showEdit: item => dispatch(createAction(Actions.EVENTS_SHOW_EDIT, item)),
+    initCalendar: () => dispatch(events.currentMonth()),
     updateCalendar: () => dispatch(events.getEvents()),
     showEditNew: item => dispatch(createAction(Actions.EVENTS_SHOW_EDIT_NEW, item)),
     nextMonth: () => dispatch(events.nextMonth()),
