@@ -89,16 +89,24 @@ const DaysGrid = ({month, firstDay, lastDay, events, showEdit, showEditNew}) => 
   </ul>
 )
 
-const Caption = ({date}) => (
+const Caption = ({month, nextMonth, prevMonth}) => (
   <header className="theme-d4">
-    {date.format('MMMM YYYY')}
+    <button type="button"
+            onClick={() => prevMonth()}>
+      Prev
+    </button>
+    {month.format('MMMM YYYY')}
+    <button type="button"
+            onClick={() => nextMonth()}>
+      Next
+    </button>
   </header>
 )
 
 const Calendar = props => {
   return (
     <div className="calendar">
-      <Caption date={props.month} />
+      <Caption {...props} />
       <DaysOfWeek />
       <DaysGrid {...props}  />
     </div>

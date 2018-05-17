@@ -7,15 +7,15 @@ const calendarRange = (date) => {
   return { firstDay, lastDay }
 }
 
-const today = moment().startOf('day');
+const thisMonth = moment().startOf('month');
 
 const initialState = {
   currentItem: null,
   editDisabled: false,
   newEventDate: null,
   items: [],
-  month: today,
-  ...calendarRange(today),
+  month: thisMonth,
+  ...calendarRange(thisMonth),
 };
 
 const parseDate = str => moment(str, 'YYYY-MM-DD');

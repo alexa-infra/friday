@@ -4,6 +4,22 @@ import { createAction } from './utils';
 import { handleErrors } from './errors';
 
 
+export const nextMonth = () => (dispatch, getState) => {
+  const { events } = getState();
+  const { month } = events;
+  const date = month.add(1, 'month');
+  dispatch(createAction(Actions.EVENTS_SELECT_MONTH, date));
+  dispatch(getEvents());
+}
+
+export const prevMonth = () => (dispatch, getState) => {
+  const { events } = getState();
+  const { month } = events;
+  const date = month.subtract(1, 'month');
+  dispatch(createAction(Actions.EVENTS_SELECT_MONTH, date));
+  dispatch(getEvents());
+}
+
 export const getEvents = () => (dispatch, getState) => {
   const { auth, events } = getState();
   const { firstDay, lastDay } = events;

@@ -27,6 +27,8 @@ const mapDispatchList = dispatch => {
     showEdit: item => dispatch(createAction(Actions.EVENTS_SHOW_EDIT, item)),
     updateCalendar: () => dispatch(events.getEvents()),
     showEditNew: item => dispatch(createAction(Actions.EVENTS_SHOW_EDIT_NEW, item)),
+    nextMonth: () => dispatch(events.nextMonth()),
+    prevMonth: () => dispatch(events.prevMonth()),
   }
 };
 
