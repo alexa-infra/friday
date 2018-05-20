@@ -32,7 +32,7 @@ class LinkListView(BaseView):
     @use_kwargs(pagination_args)
     def get(self, page, per_page):
         pagination = (
-            LinkModel.query.order_by(LinkModel.last_access)
+            LinkModel.query.order_by(LinkModel.last_access.desc())
             .paginate(page, per_page))
         return LinkSchema.jsonify(pagination), 200
 
