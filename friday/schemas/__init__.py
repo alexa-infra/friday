@@ -26,3 +26,4 @@ class BaseSchema(Schema):
 from .link import Link
 from .user import User
 from .event import Event
+from .bookmark import Bookmark
