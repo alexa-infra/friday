@@ -1,4 +1,5 @@
 import React from 'react';
+import { FormText } from './form'
 import './loginPage.css';
 
 
@@ -26,16 +27,10 @@ class LoginForm extends React.Component {
         <div className="lead">
           Login to your account
         </div>
-        <div className="form-group">
-          <label>Name:</label>
-          <input type="text"
-                 value={this.state.name} onChange={this.handleNameChange} />
-        </div>
-        <div className="form-group">
-          <label>Password:</label>
-          <input type="password"
-                 value={this.state.password} onChange={this.handlePasswordChange} />
-        </div>
+        <FormText name="Name" value={this.state.name}
+                  onChange={this.handleNameChange} />
+        <FormText name="Password" value={this.state.password}
+                  onChange={this.handlePasswordChange} />
         <div className="messages">
         </div>
         <div className="buttons">
