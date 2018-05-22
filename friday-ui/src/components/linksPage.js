@@ -3,7 +3,7 @@ import './linksPage.css'
 
 
 const Link = ({ id, url, title }) => (
-  <a href={`/api/links/${id}/redirect`} alt={url}>{title}</a>
+  <a href={`/api/links/${id}/redirect`} title={url}>{title}</a>
 )
 
 const LinkList = ({ links, filter, doSearch }) => (
