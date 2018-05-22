@@ -150,10 +150,6 @@ class EditEventModal extends Component {
       </div>
     )
   }
-  onUpdateClick = e => {
-    e.preventDefault();
-    this.props.update(this.state);
-  }
   renderFooter() {
     return (
       <div className="buttons">
