@@ -68,7 +68,7 @@ class LinkItemView(BaseView):
 
 class LinkRedirectView(BaseView):
     route_base = '/links/<int:id>/redirect'
-    decorators = (jwt_required,)
+    #decorators = (jwt_required,)
 
     def get(self, id):
         obj = LinkModel.query.get_or_404(id)
