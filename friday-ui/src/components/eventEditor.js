@@ -1,15 +1,7 @@
 import React, { Component } from 'react'
 import Modal from './modal'
+import { FormText, FormSelect } from './form'
 
-const FormText = ({name, value, onChange, disabled}) => (
-  <div className="form-group">
-    <label>{name}:</label>
-    <input type="text"
-           value={value}
-           onChange={onChange}
-           disabled={disabled || false}/>
-  </div>
-)
 
 const RepeatOptions = {
   "No repeat": "none",
@@ -19,17 +11,6 @@ const RepeatOptions = {
   "Month": "monthly",
   "Year": "annually",
 }
-
-const FormSelect = ({name, value, values, onChange, disabled}) => (
-  <div className="form-group">
-    <label>{name}:</label>
-    <select value={value} onChange={onChange} disabled={disabled || false}>
-      {Object.entries(values).map(([key, val]) => (
-        <option key={val} value={val}>{key}</option>
-      ))}
-    </select>
-  </div>
-)
 
 class NewEventModal extends Component {
   state = {
