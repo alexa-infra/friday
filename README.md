@@ -2,10 +2,6 @@ Plan
 ----
 
 * frontend
-  * links page
-    - edit mode
-    - modal view edit
-    - add new
   * read later
     - basic view
     - pagination
