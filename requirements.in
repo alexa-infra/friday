@@ -6,3 +6,4 @@ marshmallow
 webargs
 gunicorn
 bcrypt
+python-slugify
