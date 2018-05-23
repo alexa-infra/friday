@@ -9,9 +9,6 @@ Plan
     - filter
     - add new
 * backend
-  - read later
-    + crud
-    - filter
   - docs
     - crud
     - markdown
