@@ -8,6 +8,7 @@ const initialState = {
   pages: 0,
   per_page: 10,
   total: 0,
+  search: null,
 }
 
 const parseDateTime = str => moment(str, moment.ISO_8601)
@@ -37,6 +38,9 @@ export default function (state = initialState, action) {
       if (per_page < 0 || per_page > 100)
         return state;
       return { ...state, per_page, page: 1 };
+    case Actions.BOOKMARKS_FILTER:
+      const search = action.data;
+      return { ...state, search: search, page: 1 };
     default:
       return state;
   }

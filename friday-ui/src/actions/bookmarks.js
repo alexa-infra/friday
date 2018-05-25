@@ -30,8 +30,12 @@ export const prevPage = () => (dispatch, getState) => {
   dispatch(getBookmarks());
 }
 
-export const perPage = per_page => (dispatch, getState) => {
-  const { bookmarks } = getState();
+export const perPage = per_page => dispatch => {
   dispatch(createAction(Actions.BOOKMARKS_SELECT_PER_PAGE, per_page));
+  dispatch(getBookmarks());
+}
+
+export const filterBookmarks = search => dispatch => {
+  dispatch(createAction(Actions.BOOKMARKS_FILTER, search));
   dispatch(getBookmarks());
 }

@@ -4,6 +4,7 @@
   .bookmarks {
     display: flex;
     flex-flow: column nowrap;
+    margin: 10px 0;
 
     .bookmark {
       display: flex;
@@ -48,5 +49,8 @@
       background: none;
       border: none;
     }
+  }
+  .search-box {
+    text-align: center;
   }
 }

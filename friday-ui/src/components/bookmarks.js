@@ -3,8 +3,8 @@ import classNames from 'classnames'
 import './bookmarks.css'
 
 
-const Bookmark = ({id, title, url, domain, created, readed}) => (
-  <div className="bookmark" key={id}>
+const Bookmark = ({title, url, domain, created, readed}) => (
+  <div className="bookmark">
     <div className="title">
       <a className={classNames({done: readed})} href={url}>{title}</a>
       <div className="site">
@@ -22,9 +22,10 @@ const Bookmark = ({id, title, url, domain, created, readed}) => (
 
 const BookmarksPage = props => (
   <div className="bookmarks-page">
+    <SearchBox {...props} />
     <div className="bookmarks">
       {props.items.map(it => (
-        <Bookmark {...it} />
+        <Bookmark key={it.id} {...it} />
       ))}
     </div>
     <Pagination {...props} />
@@ -58,5 +59,40 @@ const Pagination = ({page, pages, hasPrev, hasNext, prevPage, nextPage, per_page
     </div>
   </div>
 )
+
+class SearchBox extends Component {
+  state = {
+    search: null,
+  }
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.search !== prevState.search)
+      return {
+        search: nextProps.search,
+      }
+    return null;
+  }
+  handleChangeSearch = event => {
+    this.setState({search: event.target.value})
+  }
+  render() {
+    return (
+      <div className="search-box">
+        <input className="search"
+               type="text"
+               placeholder="Search..."
+               value={this.state.search || ''}
+               onChange={this.handleChangeSearch} />
+        <button type="button"
+                onClick={() => this.props.doSearch(this.state.search)}>
+          Search
+        </button>
+        <button type="button"
+                onClick={() => this.props.resetSearch()}>
+          Reset
+        </button>
+      </div>
+    )
+  }
+}
 
 export default BookmarksPage

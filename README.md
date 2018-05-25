@@ -6,7 +6,7 @@ Plan
     + basic view
     + pagination
     - read/delete controls
-    - filter
+    + filter
     - add new
 * backend
   - docs

@@ -5,6 +5,7 @@
 .bookmarks-page .bookmarks {
   display: flex;
   flex-flow: column nowrap;
+  margin: 10px 0;
 }
 
 .bookmarks-page .bookmarks .bookmark {
@@ -51,4 +52,8 @@
   font-size: 18px;
   background: none;
   border: none;
+}
+
+.bookmarks-page .search-box {
+  text-align: center;
 }

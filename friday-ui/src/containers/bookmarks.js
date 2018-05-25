@@ -29,6 +29,8 @@ const mapDispatch = dispatch => {
     nextPage: () => dispatch(bookmarks.nextPage()),
     prevPage: () => dispatch(bookmarks.prevPage()),
     changePerPage: val => dispatch(bookmarks.perPage(val)),
+    doSearch: val => dispatch(bookmarks.filterBookmarks(val)),
+    resetSearch: val => dispatch(bookmarks.filterBookmarks(null)),
   }
 }
 
