@@ -9,3 +9,4 @@ class Bookmark(BaseSchema):
     created = fields.DateTime(dump_only=True)
     updated = fields.DateTime(dump_only=True)
     readed = fields.Bool(required=False)
+    domain = fields.Str(dump_only=True)
