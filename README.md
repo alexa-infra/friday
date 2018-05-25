@@ -3,8 +3,8 @@ Plan
 
 * frontend
   * read later
-    - basic view
-    - pagination
+    + basic view
+    + pagination
     - read/delete controls
     - filter
     - add new

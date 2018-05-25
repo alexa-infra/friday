@@ -1,5 +1,5 @@
 .bookmarks-page {
-  margin-top: 10px;
+  margin: 20px 0;
 }
 
 .bookmarks-page .bookmarks {
@@ -41,4 +41,14 @@
 .bookmarks-page .bookmarks .bookmark .controls *:last-child:after {
   content: "";
   margin: 0;
+}
+
+.bookmarks-page .pagination {
+  text-align: center;
+}
+
+.bookmarks-page .pagination button {
+  font-size: 18px;
+  background: none;
+  border: none;
 }

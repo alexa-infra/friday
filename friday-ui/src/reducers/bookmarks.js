@@ -6,7 +6,7 @@ const initialState = {
   items: [],
   page: 1,
   pages: 0,
-  per_page: 20,
+  per_page: 10,
   total: 0,
 }
 
@@ -26,6 +26,17 @@ export default function (state = initialState, action) {
       let { items } = action.data
       items = items.map(convertItem)
       return { ...state, ...action.data, items };
+    case Actions.BOOKMARKS_SELECT_PAGE:
+      const page = action.data;
+      const { pages } = state;
+      if (page < 1 || page > pages)
+        return state;
+      return { ...state, page };
+    case Actions.BOOKMARKS_SELECT_PER_PAGE:
+      const per_page = action.data;
+      if (per_page < 0 || per_page > 100)
+        return state;
+      return { ...state, per_page, page: 1 };
     default:
       return state;
   }

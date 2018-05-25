@@ -13,11 +13,22 @@ class BookmarksPageContainer extends Component {
   }
 }
 
-const selector = state => state.bookmarks
+const selector = state => {
+  const { bookmarks } = state;
+  const { page, pages } = bookmarks;
+  return {
+    ...bookmarks,
+    hasNext: page < pages,
+    hasPrev: page > 1,
+  }
+}
 
 const mapDispatch = dispatch => {
   return {
     onLoad: () => dispatch(bookmarks.getBookmarks()),
+    nextPage: () => dispatch(bookmarks.nextPage()),
+    prevPage: () => dispatch(bookmarks.prevPage()),
+    changePerPage: val => dispatch(bookmarks.perPage(val)),
   }
 }
 

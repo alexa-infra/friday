@@ -15,3 +15,23 @@ export const getBookmarks = () => (dispatch, getState) => {
       dispatch(handleErrors(error.status));
     });
 }
+
+export const nextPage = () => (dispatch, getState) => {
+  const { bookmarks } = getState();
+  const { page } = bookmarks;
+  dispatch(createAction(Actions.BOOKMARKS_SELECT_PAGE, page + 1));
+  dispatch(getBookmarks());
+}
+
+export const prevPage = () => (dispatch, getState) => {
+  const { bookmarks } = getState();
+  const { page } = bookmarks;
+  dispatch(createAction(Actions.BOOKMARKS_SELECT_PAGE, page - 1));
+  dispatch(getBookmarks());
+}
+
+export const perPage = per_page => (dispatch, getState) => {
+  const { bookmarks } = getState();
+  dispatch(createAction(Actions.BOOKMARKS_SELECT_PER_PAGE, per_page));
+  dispatch(getBookmarks());
+}
