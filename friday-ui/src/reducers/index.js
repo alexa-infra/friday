@@ -4,6 +4,7 @@ import links from './links';
 import alerts from './alerts';
 import auth from './auth';
 import events from './events';
+import bookmarks from './bookmarks';
 
 const reducers = combineReducers({
   routing: routerReducer,
@@ -11,6 +12,7 @@ const reducers = combineReducers({
   alerts: alerts,
   auth: auth,
   events: events,
+  bookmarks: bookmarks,
 })
 
 export default reducers;

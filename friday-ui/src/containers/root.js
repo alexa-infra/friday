@@ -8,6 +8,7 @@ import LinksPageContainer from './linksPage'
 import AlertsContainer from './alerts'
 import LoginPageContainer from './loginPage'
 import EventsPageContainer from './eventsPage'
+import BookmarksPageContainer from './bookmarks.js'
 
 const Root = ({store, history}) => (
   <Provider store={store}>
@@ -21,6 +22,7 @@ const Root = ({store, history}) => (
           <Switch>
             <Route path="/login" component={LoginPageContainer} />
             <Route path="/events" component={EventsPageContainer} />
+            <Route path="/bookmarks" component={BookmarksPageContainer} />
             <Route path="/" component={LinksPageContainer} />
           </Switch>
         </main>
