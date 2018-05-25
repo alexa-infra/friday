@@ -22,3 +22,15 @@ export const FormSelect = ({name, value, values, onChange, disabled}) => (
     </select>
   </div>
 )
+
+export const FormCheckbox = ({name, value, onChange, disabled}) => (
+  <div className="form-group">
+    <label>{name}:</label>
+    <div className="field">
+      <input type="checkbox"
+             checked={value}
+             onChange={onChange}
+             disabled={disabled || false}/>
+    </div>
+  </div>
+)

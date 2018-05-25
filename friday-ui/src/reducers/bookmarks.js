@@ -9,6 +9,9 @@ const initialState = {
   per_page: 10,
   total: 0,
   search: null,
+  currentItem: null,
+  editDisabled: false,
+  newItem: false,
 }
 
 const parseDateTime = str => moment(str, moment.ISO_8601)
@@ -41,6 +44,24 @@ export default function (state = initialState, action) {
     case Actions.BOOKMARKS_FILTER:
       const search = action.data;
       return { ...state, search: search, page: 1 };
+    case Actions.BOOKMARKS_SHOW_EDIT:
+      return { ...state, currentItem: action.data };
+    case Actions.BOOKMARKS_SHOW_NEW:
+      return { ...state, currentItem: null, newItem: true };
+    case Actions.BOOKMARKS_HIDE_EDIT:
+      return { ...state, currentItem: null, newItem: false };
+    case Actions.BOOKMARKS_NEW_REQUEST:
+    case Actions.BOOKMARKS_EDIT_REQUEST:
+    case Actions.BOOKMARKS_DELETE_REQUEST:
+      return { ...state, editDisabled: true };
+    case Actions.BOOKMARKS_NEW_SUCCESS:
+    case Actions.BOOKMARKS_EDIT_SUCCESS:
+    case Actions.BOOKMARKS_DELETE_SUCCESS:
+      return { ...state, currentItem: null, newItem: false, editDisabled: false };
+    case Actions.BOOKMARKS_NEW_FAILURE:
+    case Actions.BOOKMARKS_EDIT_FAILURE:
+    case Actions.BOOKMARKS_DELETE_FAILURE:
+      return { ...state, editDisabled: false };
     default:
       return state;
   }

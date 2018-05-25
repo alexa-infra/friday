@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 import classNames from 'classnames'
+import Modal from './modal'
+import { FormText, FormCheckbox } from './form'
 import './bookmarks.css'
 
 
-const Bookmark = ({title, url, domain, created, readed}) => (
+const Bookmark = ({title, url, domain, created, readed, onEdit, onMarkRead, onDelete}) => (
   <div className="bookmark">
     <div className="title">
       <a className={classNames({done: readed})} href={url}>{title}</a>
@@ -13,9 +15,9 @@ const Bookmark = ({title, url, domain, created, readed}) => (
     </div>
     <div className="controls">
       <i title={created.toISOString(true)}>{created.fromNow()}</i>
-      <a>edit</a>
-      <a>mark as read</a>
-      <a>remove</a>
+      <a onClick={onEdit}>edit</a>
+      <a onClick={onMarkRead}>mark as read</a>
+      <a onClick={onDelete}>remove</a>
     </div>
   </div>
 )
@@ -25,10 +27,16 @@ const BookmarksPage = props => (
     <SearchBox {...props} />
     <div className="bookmarks">
       {props.items.map(it => (
-        <Bookmark key={it.id} {...it} />
+        <Bookmark key={it.id}
+                  {...it}
+                  onEdit={() => props.showEdit(it)}
+                  onMarkRead={() => props.markRead(it)}
+                  onDelete={() => props.delete(it)} />
       ))}
     </div>
     <Pagination {...props} />
+    <EditBookmarkModal {...props} />
+    <NewBookmarkModal {...props} />
   </div>
 )
 
@@ -90,8 +98,125 @@ class SearchBox extends Component {
                 onClick={() => this.props.resetSearch()}>
           Reset
         </button>
+        <button type="button"
+                onClick={() => this.props.showEditNew()}>
+          New
+        </button>
       </div>
     )
+  }
+}
+
+class EditBookmarkModal extends Component {
+  state = {
+    url: '',
+    title: '',
+    readed: false,
+    currentItem: null,
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (prevState.currentItem !== nextProps.currentItem)
+      return {
+        ...nextProps.currentItem,
+        currentItem: nextProps.currentItem,
+      }
+    return null;
+  }
+
+  handleUrlChange = event => {
+    this.setState({url: event.target.value})
+  }
+  handleTitleChange = event => {
+    this.setState({title: event.target.value})
+  }
+  handleReadedChange = event => {
+    this.setState({readed: event.target.checked})
+  }
+
+  renderForm(){
+    return (
+      <div className="edit-bookmark-form">
+        <FormText name="URL" value={this.state.url}
+                  onChange={this.handleUrlChange} />
+        <FormText name="Title" value={this.state.title}
+                  onChange={this.handleTitleChange} />
+        <FormCheckbox name="Read" value={this.state.readed}
+                      onChange={this.handleReadedChange} />
+      </div>
+    )
+  }
+  renderFooter(){
+    return (
+      <div className="buttons">
+        <button type="button"
+                disabled={this.props.editDisabled}
+                onClick={() => this.props.update(this.state)}>
+          Update
+        </button>
+        <button type="button"
+                disabled={this.props.editDisabled}
+                onClick={() => this.props.delete(this.state)}>
+          Delete
+        </button>
+      </div>
+    )
+  }
+  render() {
+    return <Modal in={this.props.currentItem !== null}
+                  header={<h1>Edit</h1>}
+                  body={this.renderForm()}
+                  footer={this.renderFooter()}
+                  onClose={this.props.hideEdit}
+                  disabled={false} />
+  }
+}
+
+class NewBookmarkModal extends Component {
+  state = {
+    url: '',
+    title: '',
+    readed: false,
+  }
+
+  handleUrlChange = event => {
+    this.setState({url: event.target.value})
+  }
+  handleTitleChange = event => {
+    this.setState({title: event.target.value})
+  }
+  handleReadedChange = event => {
+    this.setState({readed: event.target.checked})
+  }
+
+  renderForm(){
+    return (
+      <div className="new-bookmark-form">
+        <FormText name="URL" value={this.state.url}
+                  onChange={this.handleUrlChange} />
+        <FormText name="Title" value={this.state.title}
+                  onChange={this.handleTitleChange} />
+        <FormCheckbox name="Read" value={this.state.readed}
+                      onChange={this.handleReadedChange} />
+      </div>
+    )
+  }
+  renderFooter(){
+    return (
+      <button type="button"
+              disabled={this.props.editDisabled}
+              onClick={() => this.props.create(this.state)}>
+        Create
+      </button>
+    )
+  }
+  render() {
+    return <Modal in={this.props.newItem}
+                  header={<h1>New</h1>}
+                  body={this.renderForm()}
+                  footer={this.renderFooter()}
+                  onClose={this.props.hideEdit}
+                  disabled={this.props.editDisabled} />
   }
 }
 

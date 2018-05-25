@@ -39,3 +39,60 @@ export const filterBookmarks = search => dispatch => {
   dispatch(createAction(Actions.BOOKMARKS_FILTER, search));
   dispatch(getBookmarks());
 }
+
+export const createBookmark = data => (dispatch, getState) => {
+  const { auth } = getState();
+  dispatch(createAction(Actions.BOOKMARKS_NEW_REQUEST));
+  api.createBookmark(auth, data)
+    .then(result => {
+      dispatch(createAction(Actions.BOOKMARKS_NEW_SUCCESS, result));
+      dispatch(getBookmarks());
+    })
+    .catch(error => {
+      dispatch(createAction(Actions.BOOKMARKS_NEW_FAILURE, { error }));
+      dispatch(handleErrors(error.status));
+    });
+}
+
+export const updateBookmark = data => (dispatch, getState) => {
+  const { auth } = getState();
+  dispatch(createAction(Actions.BOOKMARKS_EDIT_REQUEST));
+  api.updateBookmark(auth, data)
+    .then(result => {
+      dispatch(createAction(Actions.BOOKMARKS_EDIT_SUCCESS, result));
+      dispatch(getBookmarks());
+    })
+    .catch(error => {
+      dispatch(createAction(Actions.BOOKMARKS_EDIT_FAILURE, { error }));
+      dispatch(handleErrors(error.status));
+    });
+}
+
+export const deleteBookmark = data => (dispatch, getState) => {
+  const { auth } = getState();
+  dispatch(createAction(Actions.BOOKMARKS_DELETE_REQUEST));
+  api.deleteBookmark(auth, data)
+    .then(result => {
+      dispatch(createAction(Actions.BOOKMARKS_DELETE_SUCCESS, result));
+      dispatch(getBookmarks());
+    })
+    .catch(error => {
+      dispatch(createAction(Actions.BOOKMARKS_DELETE_FAILURE, { error }));
+      dispatch(handleErrors(error.status));
+    });
+}
+
+export const markReadBookmark = data => (dispatch, getState) => {
+  const { auth } = getState();
+  const { readed } = data;
+  dispatch(createAction(Actions.BOOKMARKS_EDIT_REQUEST));
+  api.updateBookmark(auth, {...data, readed: !readed})
+    .then(result => {
+      dispatch(createAction(Actions.BOOKMARKS_EDIT_SUCCESS, result));
+      dispatch(getBookmarks());
+    })
+    .catch(error => {
+      dispatch(createAction(Actions.BOOKMARKS_EDIT_FAILURE, { error }));
+      dispatch(handleErrors(error.status));
+    });
+}
