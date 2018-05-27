@@ -33,6 +33,11 @@ class Errors:
         @app.errorhandler(405)
         def method_not_allowed(_):
             return jsonify(dict(errors=['Method is not allowed'])), 405
+
+        @app.errorhandler(415)
+        def wrong_content_type(_):
+            return jsonify(dict(errors=['Unsupported media type'])), 415
+
         @app.errorhandler(500)
         def server_error(_):
             return jsonify(dict(errors=['Internal server error'])), 500
