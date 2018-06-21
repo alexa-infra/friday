@@ -25,3 +25,13 @@ export const emptyOrReject = result => {
     status: result.status,
   })
 }
+
+export const textOrReject = result => {
+  if (result.ok)
+    return result.text();
+  return Promise.reject({
+    name: 'ResponseError',
+    message: '',
+    status: result.status,
+  })
+}
