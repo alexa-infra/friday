@@ -11,7 +11,9 @@ md = Markdown(extensions=['markdown.extensions.tables'])
 class Tag(db.Model):
     id = Column(Integer, primary_key=True)
     name = Column(Text, nullable=False, unique=True)
-    docs = relationship('DocTag', back_populates='tag')
+    docs = relationship('DocTag', back_populates='tag',
+                        cascade='all, delete-orphan',
+                        passive_deletes=True)
 
     @classmethod
     def new(cls, name, **kwargs):
@@ -46,7 +48,9 @@ class Doc(db.Model):
     created = Column(DateTime, nullable=False, default=utcnow)
     updated = Column(DateTime, nullable=False, default=utcnow,
                      onupdate=utcnow)
-    tags = relationship('DocTag', back_populates='doc')
+    tags = relationship('DocTag', back_populates='doc',
+                        cascade='all, delete-orphan',
+                        passive_deletes=True)
 
     @property
     def html(self):
