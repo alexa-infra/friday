@@ -25,20 +25,21 @@ const selector = state => {
 }
 
 const mapDispatch = dispatch => {
+  const reloadBookmarks = () => dispatch(bookmarks.getBookmarks());
   return {
-    onLoad: () => dispatch(bookmarks.getBookmarks()),
-    nextPage: () => dispatch(bookmarks.nextPage()),
-    prevPage: () => dispatch(bookmarks.prevPage()),
-    changePerPage: val => dispatch(bookmarks.perPage(val)),
-    doSearch: val => dispatch(bookmarks.filterBookmarks(val)),
-    resetSearch: val => dispatch(bookmarks.filterBookmarks(null)),
+    onLoad: reloadBookmarks,
+    nextPage: () => dispatch(bookmarks.nextPage()).then(reloadBookmarks),
+    prevPage: () => dispatch(bookmarks.prevPage()).then(reloadBookmarks),
+    changePerPage: val => dispatch(bookmarks.perPage(val)).then(reloadBookmarks),
+    doSearch: val => dispatch(bookmarks.filterBookmarks(val)).then(reloadBookmarks),
+    resetSearch: val => dispatch(bookmarks.filterBookmarks(null)).then(reloadBookmarks),
     showEdit: item => dispatch(createAction(Actions.BOOKMARKS_SHOW_EDIT, item)),
     hideEdit: () => dispatch(createAction(Actions.BOOKMARKS_HIDE_EDIT)),
     showEditNew: () => dispatch(createAction(Actions.BOOKMARKS_SHOW_NEW)),
-    update: item => dispatch(bookmarks.updateBookmark(item)),
-    delete: item => dispatch(bookmarks.deleteBookmark(item)),
-    create: item => dispatch(bookmarks.createBookmark(item)),
-    markRead: item => dispatch(bookmarks.markReadBookmark(item)),
+    update: item => dispatch(bookmarks.updateBookmark(item)).then(reloadBookmarks),
+    delete: item => dispatch(bookmarks.deleteBookmark(item)).then(reloadBookmarks),
+    create: item => dispatch(bookmarks.createBookmark(item)).then(reloadBookmarks),
+    markRead: item => dispatch(bookmarks.markReadBookmark(item)).then(reloadBookmarks),
   }
 }
 

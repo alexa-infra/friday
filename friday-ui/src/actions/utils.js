@@ -5,7 +5,7 @@ export const createAction = (type, data) => {
   return { type, data };
 }
 
-const _callApi = (method, actionName) => {
+export const _callApi = (method, actionName) => {
   const request = actionName + '_REQUEST';
   const success = actionName + '_SUCCESS';
   const failure = actionName + '_FAILURE';
