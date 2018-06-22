@@ -23,23 +23,25 @@ class EventsPageContainer extends React.Component {
 }
 
 const mapDispatchList = dispatch => {
+  const getEvents = () => dispatch(events.getEvents());
   return {
     showEdit: item => dispatch(createAction(Actions.EVENTS_SHOW_EDIT, item)),
-    initCalendar: () => dispatch(events.currentMonth()),
-    updateCalendar: () => dispatch(events.getEvents()),
     showEditNew: item => dispatch(createAction(Actions.EVENTS_SHOW_EDIT_NEW, item)),
-    nextMonth: () => dispatch(events.nextMonth()),
-    prevMonth: () => dispatch(events.prevMonth()),
+    initCalendar: () => dispatch(events.currentMonth()).then(getEvents),
+    updateCalendar: getEvents,
+    nextMonth: () => dispatch(events.nextMonth()).then(getEvents),
+    prevMonth: () => dispatch(events.prevMonth()).then(getEvents),
   }
 };
 
 const mapDispatchEdit = dispatch => {
+  const getEvents = () => dispatch(events.getEvents());
   return {
     hideEdit: item => dispatch(createAction(Actions.EVENTS_HIDE_EDIT)),
-    createNew: item => dispatch(events.createEvent(item)),
-    update: item => dispatch(events.updateEvent(item)),
-    delete: item => dispatch(events.deleteEvent(item)),
-    repeatIn: item => dispatch(events.repeatEvent(item)),
+    createNew: item => dispatch(events.createEvent(item)).then(getEvents),
+    update: item => dispatch(events.updateEvent(item)).then(getEvents),
+    delete: item => dispatch(events.deleteEvent(item)).then(getEvents),
+    repeatIn: item => dispatch(events.repeatEvent(item)).then(getEvents),
   }
 }
 

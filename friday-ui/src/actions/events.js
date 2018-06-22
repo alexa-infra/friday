@@ -1,96 +1,35 @@
 import * as moment from 'moment';
 import { Actions } from '../constants';
 import * as api from '../api';
-import { createAction } from './utils';
-import { handleErrors } from './errors';
+import { createAction, _callApi, callApiAuth } from './utils';
 
 
 export const nextMonth = () => (dispatch, getState) => {
   const { events } = getState();
   const { month } = events;
   const date = month.add(1, 'month');
-  dispatch(createAction(Actions.EVENTS_SELECT_MONTH, date));
-  dispatch(getEvents());
+  return Promise.resolve(dispatch(createAction(Actions.EVENTS_SELECT_MONTH, date)));
 }
 
 export const prevMonth = () => (dispatch, getState) => {
   const { events } = getState();
   const { month } = events;
   const date = month.subtract(1, 'month');
-  dispatch(createAction(Actions.EVENTS_SELECT_MONTH, date));
-  dispatch(getEvents());
+  return Promise.resolve(dispatch(createAction(Actions.EVENTS_SELECT_MONTH, date)));
 }
 
 export const currentMonth = () => dispatch => {
   const date = moment().startOf('month');
-  dispatch(createAction(Actions.EVENTS_SELECT_MONTH, date));
-  dispatch(getEvents());
+  return Promise.resolve(dispatch(createAction(Actions.EVENTS_SELECT_MONTH, date)));
 }
 
-export const getEvents = () => (dispatch, getState) => {
+export const getEvents = _callApi((getState, data) => {
   const { auth, events } = getState();
   const { firstDay, lastDay } = events;
-  dispatch(createAction(Actions.EVENTS_REQUEST));
-  api.getEvents(auth, firstDay, lastDay)
-    .then(result => dispatch(createAction(Actions.EVENTS_SUCCESS, result)))
-    .catch(error => {
-      dispatch(createAction(Actions.EVENTS_FAILURE, { error }));
-      dispatch(handleErrors(error.status));
-    });
-}
+  return api.getEvents(auth, firstDay, lastDay)
+}, 'EVENTS');
 
-export const createEvent = data => (dispatch, getState) => {
-  const { auth } = getState();
-  dispatch(createAction(Actions.EVENTS_NEW_REQUEST));
-  api.createEvent(auth, data)
-    .then(result => {
-      dispatch(createAction(Actions.EVENTS_NEW_SUCCESS, result));
-      dispatch(getEvents());
-    })
-    .catch(error => {
-      dispatch(createAction(Actions.EVENTS_NEW_FAILURE, { error }));
-      dispatch(handleErrors(error.status));
-    });
-}
-
-export const updateEvent = data => (dispatch, getState) => {
-  const { auth } = getState();
-  dispatch(createAction(Actions.EVENTS_EDIT_REQUEST));
-  api.updateEvent(auth, data)
-    .then(result => {
-      dispatch(createAction(Actions.EVENTS_EDIT_SUCCESS, result));
-      dispatch(getEvents());
-    })
-    .catch(error => {
-      dispatch(createAction(Actions.EVENTS_EDIT_FAILURE, { error }));
-      dispatch(handleErrors(error.status));
-    });
-}
-
-export const deleteEvent = data => (dispatch, getState) => {
-  const { auth } = getState();
-  dispatch(createAction(Actions.EVENTS_DELETE_REQUEST));
-  api.deleteEvent(auth, data)
-    .then(result => {
-      dispatch(createAction(Actions.EVENTS_DELETE_SUCCESS, result));
-      dispatch(getEvents());
-    })
-    .catch(error => {
-      dispatch(createAction(Actions.EVENTS_DELETE_FAILURE, { error }));
-      dispatch(handleErrors(error.status));
-    });
-}
-
-export const repeatEvent = data => (dispatch, getState) => {
-  const { auth } = getState();
-  dispatch(createAction(Actions.EVENTS_REPEAT_REQUEST));
-  api.repeatEvent(auth, data)
-    .then(result => {
-      dispatch(createAction(Actions.EVENTS_REPEAT_SUCCESS, result));
-      dispatch(getEvents());
-    })
-    .catch(error => {
-      dispatch(createAction(Actions.EVENTS_REPEAT_FAILURE, { error }));
-      dispatch(handleErrors(error.status));
-    });
-}
+export const createEvent = callApiAuth(api.createEvent, 'EVENTS_NEW');
+export const updateEvent = callApiAuth(api.updateEvent, 'EVENTS_EDIT');
+export const deleteEvent = callApiAuth(api.deleteEvent, 'EVENTS_DELETE');
+export const repeatEvent = callApiAuth(api.repeatEvent, 'EVENTS_REPEAT');

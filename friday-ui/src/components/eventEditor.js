@@ -107,7 +107,7 @@ class EditEventModal extends Component {
     this.setState({icon: event.target.value})
   }
   handleRepeatInChange = event => {
-    this.setState({repeatIn: parseInt(event.target.value)})
+    this.setState({repeatIn: parseInt(event.target.value, 10)})
   }
   getDate() {
     if (!this.state.date)
