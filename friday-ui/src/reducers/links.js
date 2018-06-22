@@ -19,8 +19,10 @@ const filterItems = term => item => {
 
 export default function (state = initialState, action) {
   switch (action.type) {
-    case Actions.LINKS_SUCCESS:
-      return { ...state, currentItem: null, items: action.data, allItems: action.data, filter: '' };
+    case Actions.LINKS_SUCCESS: {
+      const { items } = action.data;
+      return { ...state, currentItem: null, items: items, allItems: items, filter: '' };
+    }
     case Actions.LINKS_FILTER: {
       const query = action.data;
       const filtered = state.allItems.filter(filterItems(query));
