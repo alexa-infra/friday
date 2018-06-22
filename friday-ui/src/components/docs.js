@@ -100,7 +100,7 @@ class DocInfoEdit extends Component {
           <button onClick={() => this.props.delete(this.state)}>
             Delete
           </button>
-          <button onClick={() => this.props.save(this.state)}>
+          <button onClick={() => this.props.updateInfo(this.state)}>
             Save
           </button>
         </div>
@@ -193,7 +193,7 @@ class DocEdit extends Component {
           wrap="off"
           />
         <div className="controls">
-          <button onClick={() => this.props.save(this.state)}>
+          <button onClick={() => this.props.updateText(this.state)}>
             Save
           </button>
         </div>
