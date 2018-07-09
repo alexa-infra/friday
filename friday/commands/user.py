@@ -33,3 +33,9 @@ def change_password(user_id, password):
     user.update(password=password)
     db.session.add(user)
     db.session.commit()
+
+@user.command('list')
+def list_users():
+    users = User.query.all()
+    for user in users:
+        click.echo('User ID:{} Email:{}'.format(user.id, user.email))
