@@ -1,0 +1,59 @@
+.bookmarks-page {
+  margin: 20px 0;
+}
+
+.bookmarks-page .bookmarks {
+  display: flex;
+  flex-flow: column nowrap;
+  margin: 10px 0;
+}
+
+.bookmarks-page .bookmarks .bookmark {
+  display: flex;
+  flex-flow: column nowrap;
+  border-bottom: 1px solid #cccccc;
+  padding: 5px;
+}
+
+.bookmarks-page .bookmarks .bookmark:last-child {
+  border-bottom: none;
+}
+
+.bookmarks-page .bookmarks .bookmark .title {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.bookmarks-page .bookmarks .bookmark .title a.done {
+  color: #777777;
+  text-decoration: line-through;
+}
+
+.bookmarks-page .bookmarks .bookmark .title .site {
+  color: #777777;
+  margin-left: 5px;
+}
+
+.bookmarks-page .bookmarks .bookmark .controls *:after {
+  content: "|";
+  margin: 0 5px;
+}
+
+.bookmarks-page .bookmarks .bookmark .controls *:last-child:after {
+  content: "";
+  margin: 0;
+}
+
+.bookmarks-page .pagination {
+  text-align: center;
+}
+
+.bookmarks-page .pagination button {
+  font-size: 18px;
+  background: none;
+  border: none;
+}
+
+.bookmarks-page .search-box {
+  text-align: center;
+}
