@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, Text, DateTime, Boolean, ForeignKey
+from sqlalchemy import Column, Integer, Text, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 from slugify import slugify
 from markdown import Markdown
@@ -7,6 +7,7 @@ from . import db
 
 
 md = Markdown(extensions=['markdown.extensions.tables'])
+
 
 class Tag(db.Model):
     id = Column(Integer, primary_key=True)
@@ -27,7 +28,9 @@ class Tag(db.Model):
         if 'name' in kwargs:
             self.name = slugify(self.name)
 
+
 class DocTag(db.Model):
+    # pylint: disable=too-few-public-methods
     tag_id = Column(Integer, ForeignKey('tag.id', ondelete='cascade'),
                     primary_key=True)
     doc_id = Column(Integer, ForeignKey('doc.id', ondelete='cascade'),
@@ -40,6 +43,7 @@ class DocTag(db.Model):
     @property
     def name(self):
         return self.tag.name
+
 
 class Doc(db.Model):
     id = Column(Integer, primary_key=True)
@@ -62,7 +66,7 @@ class Doc(db.Model):
     def query_list(cls):
         return (
             cls.query.options(db.defer(Doc.text),
-                db.joinedload(Doc.tags).joinedload(DocTag.tag))
+                              db.joinedload(Doc.tags).joinedload(DocTag.tag))
         )
 
     @classmethod

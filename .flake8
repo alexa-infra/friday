@@ -1,0 +1,2 @@
+[flake8]
+exclude=.git,__pycache__,friday/migrations/,friday-ui,local/,site-packages/

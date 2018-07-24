@@ -20,7 +20,7 @@ class User(db.Model):
     @classmethod
     def authenticate(cls, email, password):
         user = (
-            db.session.query(cls).filter(User.email==email)
+            db.session.query(cls).filter(User.email == email)
             .first())
         if not user:
             raise Unauthorized
@@ -40,7 +40,7 @@ class User(db.Model):
                 raise Unauthorized
             return None
         user = (
-            db.session.query(cls).filter(User.id==user_id)
+            db.session.query(cls).filter(User.id == user_id)
             .first())
         if user is None and raise_exception:
             raise Unauthorized

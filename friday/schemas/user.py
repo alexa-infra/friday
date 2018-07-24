@@ -9,6 +9,7 @@ class User(BaseSchema):
     created = fields.Str(dump_only=True)
     updated = fields.Str(dump_only=True)
 
+
 class UserAuth(BaseSchema):
     user = fields.Nested(User)
     token = fields.Str()

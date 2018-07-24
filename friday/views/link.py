@@ -13,10 +13,12 @@ def validate_per_page(val):
         return False
     return True
 
+
 def validate_page(val):
     if val < 0:
         return False
     return True
+
 
 pagination_args = {
     'page': fields.Int(missing=1, location='query',
@@ -25,7 +27,10 @@ pagination_args = {
                            validate=validate_per_page),
 }
 
+
 class LinkListView(BaseView):
+    # pylint: disable=no-self-use
+
     route_base = '/links'
     decorators = (jwt_required,)
 
@@ -45,32 +50,37 @@ class LinkListView(BaseView):
 
 
 class LinkItemView(BaseView):
+    # pylint: disable=no-self-use
+
     route_base = '/links/<int:id>'
     decorators = (jwt_required,)
 
-    def get(self, id):
+    def get(self, id):  # pylint: disable=redefined-builtin
         obj = LinkModel.query.get_or_404(id)
         return LinkSchema.jsonify(obj), 200
 
     @use_args(LinkSchema())
-    def put(self, args, id):
+    def put(self, args, id):  # pylint: disable=redefined-builtin
         obj = LinkModel.query.get_or_404(id)
         obj.update(**args)
         db.session.add(obj)
         db.session.commit()
         return LinkSchema.jsonify(obj), 200
 
-    def delete(self, id):
+    def delete(self, id):  # pylint: disable=redefined-builtin
         obj = LinkModel.query.get_or_404(id)
         db.session.delete(obj)
         db.session.commit()
         return '', 204
 
-class LinkRedirectView(BaseView):
-    route_base = '/links/<int:id>/redirect'
-    #decorators = (jwt_required,)
 
-    def get(self, id):
+class LinkRedirectView(BaseView):
+    # pylint: disable=no-self-use
+
+    route_base = '/links/<int:id>/redirect'
+    # decorators = (jwt_required,)
+
+    def get(self, id):  # pylint: disable=redefined-builtin
         obj = LinkModel.query.get_or_404(id)
         obj.touch()
         db.session.add(obj)

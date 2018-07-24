@@ -1,7 +1,7 @@
 from marshmallow import fields
 from marshmallow.validate import OneOf
-from . import BaseSchema
 from friday.models import Repeat
+from . import BaseSchema
 
 
 class Event(BaseSchema):
@@ -9,7 +9,9 @@ class Event(BaseSchema):
     name = fields.Str(required=True)
     icon = fields.Str(required=True)
     date = fields.Date(required=True)
-    repeat = fields.Str(allow_none=True, missing=None, validate=OneOf(Repeat.names()))
+    repeat = fields.Str(allow_none=True, missing=None,
+                        validate=OneOf(Repeat.names()))
+
 
 class EventMatch(BaseSchema):
     date = fields.Date()

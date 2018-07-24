@@ -1,7 +1,6 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 import enum
 from sqlalchemy import Column, Integer, Text, Enum, Date
-from friday.utils import utcnow
 from . import db
 
 
@@ -11,10 +10,12 @@ def iter_days(a, b):
         yield a
         a += delta
 
+
 def get_week(a):
     if a.isoweekday() == 7:
         return a
     return a - timedelta(days=a.isoweekday())
+
 
 class Repeat(enum.Enum):
     daily = enum.auto()
@@ -29,6 +30,7 @@ class Repeat(enum.Enum):
 
     def __str__(self):
         return self.name
+
 
 class Event(db.Model):
     id = Column(Integer, primary_key=True)
@@ -57,8 +59,9 @@ class Event(db.Model):
 
     @classmethod
     def get_notrepeated_between(cls, a, b):
+        # pylint: disable=singleton-comparison
         query = (
-            db.session.query(cls).filter(Event.repeat == None)
+            db.session.query(cls).filter(Event.repeat == None)  # noqa: E711
             .filter(Event.date >= a)
             .filter(Event.date <= b)
         )
@@ -67,7 +70,7 @@ class Event(db.Model):
     @classmethod
     def get_repeated(cls):
         query = (
-            db.session.query(cls).filter(Event.repeat != None)
+            db.session.query(cls).filter(Event.repeat != None)  # noqa: E711
         )
         return query.all()
 

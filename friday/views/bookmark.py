@@ -13,7 +13,10 @@ filter_args = {
     'search': fields.Str(location='query'),
 }
 
+
 class BookmarkListView(BaseView):
+    # pylint: disable=no-self-use
+
     route_base = '/bookmarks'
     decorators = (jwt_required,)
 
@@ -39,22 +42,24 @@ class BookmarkListView(BaseView):
 
 
 class BookmarkItemView(BaseView):
+    # pylint: disable=no-self-use
+
     route_base = '/bookmarks/<int:id>'
     decorators = (jwt_required,)
 
-    def get(self, id):
+    def get(self, id):  # pylint: disable=redefined-builtin
         obj = BookmarkModel.query.get_or_404(id)
         return BookmarkSchema.jsonify(obj), 200
 
     @use_args(BookmarkSchema())
-    def put(self, args, id):
+    def put(self, args, id):  # pylint: disable=redefined-builtin
         obj = BookmarkModel.query.get_or_404(id)
         obj.update(**args)
         db.session.add(obj)
         db.session.commit()
         return BookmarkSchema.jsonify(obj), 200
 
-    def delete(self, id):
+    def delete(self, id):  # pylint: disable=redefined-builtin
         obj = BookmarkModel.query.get_or_404(id)
         db.session.delete(obj)
         db.session.commit()

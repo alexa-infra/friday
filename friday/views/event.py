@@ -13,7 +13,10 @@ eventlist_args = {
     'todate': fields.Date(missing=None, location='query'),
 }
 
+
 class EventListView(BaseView):
+    # pylint: disable=no-self-use
+
     route_base = '/events'
     decorators = (jwt_required,)
 
@@ -33,38 +36,45 @@ class EventListView(BaseView):
         db.session.commit()
         return EventSchema.jsonify(obj), 201
 
+
 class EventItemView(BaseView):
+    # pylint: disable=no-self-use
+
     route_base = '/events/<int:id>'
     decorators = (jwt_required,)
 
-    def get(self, id):
+    def get(self, id):  # pylint: disable=redefined-builtin
         obj = EventModel.query.get_or_404(id)
         return EventSchema.jsonify(obj), 200
 
     @use_args(EventSchema())
-    def put(self, args, id):
+    def put(self, args, id):  # pylint: disable=redefined-builtin
         obj = EventModel.query.get_or_404(id)
         obj.update(**args)
         db.session.add(obj)
         db.session.commit()
         return EventSchema.jsonify(obj), 200
 
-    def delete(self, id):
+    def delete(self, id):  # pylint: disable=redefined-builtin
         obj = EventModel.query.get_or_404(id)
         db.session.delete(obj)
         db.session.commit()
         return '', 204
 
+
 repeat_args = {
     'days': fields.Int(required=True),
 }
 
+
 class EventRepeatView(BaseView):
+    # pylint: disable=no-self-use
+
     route_base = '/events/<int:id>/repeat'
     decorators = (jwt_required,)
 
     @use_kwargs(repeat_args)
-    def post(self, id, days):
+    def post(self, id, days):  # pylint: disable=redefined-builtin
         obj = EventModel.query.get_or_404(id)
         if obj.repeat is not None:
             return '', 400
@@ -74,6 +84,7 @@ class EventRepeatView(BaseView):
         db.session.add(new_obj)
         db.session.commit()
         return EventSchema.jsonify(new_obj), 201
+
 
 EventListView.register(api, 'event_list')
 EventItemView.register(api, 'event_item')

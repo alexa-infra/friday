@@ -2,7 +2,8 @@ from flask import jsonify
 from .exceptions import NotFound, Unauthorized, Forbidden
 
 
-class Errors:
+class Errors:  # pylint: disable=too-few-public-methods
+
     def __init__(self, app=None):
         if app is not None:
             self.init_app(app)
@@ -11,6 +12,8 @@ class Errors:
         self._register_handlers(app)
 
     def _register_handlers(self, app):
+        # pylint: disable=unused-variable,no-self-use
+
         @app.errorhandler(404)
         @app.errorhandler(NotFound)
         def not_found(_):
