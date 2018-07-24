@@ -1,3 +1,4 @@
 ipython
 pylint
 flake8
+bandit
