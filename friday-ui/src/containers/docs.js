@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom'
-import { push } from 'react-router-redux';
+import { history } from '../store';
 import { docs } from '../actions';
 import { DocsList, DocNew, DocView, DocEdit, DocInfoEdit } from '../components/docs';
 
@@ -16,16 +16,16 @@ const mapDispatch = dispatch => ({
   ),
   loadInfo: data => dispatch(docs.getDoc(data)),
   create: data => dispatch(docs.createDoc(data)).then(
-    () => dispatch(push('/docs'))
+    () => history.push('/docs')
   ),
   updateInfo: data => dispatch(docs.updateDoc(data)).then(
-    () => dispatch(push(`/docs/${data.id}`))
+    () => history.push(`/docs/${data.id}`)
   ),
   updateText: data => dispatch(docs.updateDocText(data)).then(
-    () => dispatch(push(`/docs/${data.id}`))
+    () => history.push(`/docs/${data.id}`)
   ),
   delete: data => dispatch(docs.deleteDoc(data)).then(
-    () => dispatch(push('/docs'))
+    () => history.push('/docs')
   ),
 })
 

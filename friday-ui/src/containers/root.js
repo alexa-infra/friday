@@ -1,7 +1,6 @@
 import React from 'react'
 import { Provider } from 'react-redux'
-import { Route, Switch } from 'react-router-dom'
-import { ConnectedRouter } from 'react-router-redux'
+import { Router, Route, Switch } from 'react-router'
 import './root.css'
 import { NavBar } from '../components'
 import LinksPageContainer from './linksPage'
@@ -13,7 +12,7 @@ import DocsPageContainer from './docs.js'
 
 const Root = ({store, history}) => (
   <Provider store={store}>
-    <ConnectedRouter history={history}>
+    <Router history={history}>
       <content className="theme-l5">
         <header>
           <NavBar />
@@ -29,7 +28,7 @@ const Root = ({store, history}) => (
           </Switch>
         </main>
       </content>
-    </ConnectedRouter>
+    </Router>
   </Provider>
 )
 
