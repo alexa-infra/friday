@@ -91,7 +91,7 @@ class Doc(db.Model):
         to_create = new - current
         for d in to_delete:
             it = next(tag for tag in self.tags if tag.name == d)
-            db.session.delete(it)
+            self.tags.remove(it)
         for d in to_create:
             tag = Tag.query.filter(Tag.name == d).first()
             if not tag:
