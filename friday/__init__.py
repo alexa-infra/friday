@@ -46,6 +46,9 @@ def make_app(settings=None):
     def render_ui(filename):  # pylint: disable=unused-variable
         if filename not in static_files:
             filename = 'index.html'
-        return send_from_directory(ui_dir, filename)
+        response = send_from_directory(ui_dir, filename)
+        if filename == 'service-worker.js':
+            response.headers['Cache-Control'] = 'no-cache'
+        return response
 
     return app
