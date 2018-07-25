@@ -35,6 +35,7 @@ const BookmarksPage = props => (
       ))}
     </div>
     <Pagination {...props} />
+    <BrowserBookmark />
     <EditBookmarkModal {...props} />
     <NewBookmarkModal {...props} />
   </div>
@@ -227,6 +228,22 @@ class NewBookmarkModal extends Component {
                   footer={this.renderFooter()}
                   onClose={this.props.hideEdit}
                   disabled={this.props.editDisabled} />
+  }
+}
+
+class BrowserBookmark extends Component {
+  getBookmarkScript() {
+    return `javascript:(function(){
+      var redirect = '${document.location.origin}/bookmarks/add?';
+      var searchString = new URLSearchParams();
+      searchString.append('title', document.title);
+      searchString.append('url', document.location.href);
+      redirect += searchString.toString();
+      window.open(redirect, '_blank');
+    })()`
+  }
+  render() {
+    return <a href={this.getBookmarkScript()}>Bookmark</a>
   }
 }
 
