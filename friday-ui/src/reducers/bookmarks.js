@@ -11,7 +11,13 @@ const initialState = {
   search: null,
   currentItem: null,
   editDisabled: false,
-  newItem: false,
+  newItem: null,
+}
+
+const newItemInitial = {
+  title: '',
+  url: '',
+  readed: false,
 }
 
 const parseDateTime = str => moment(str, moment.ISO_8601)
@@ -47,9 +53,9 @@ export default function (state = initialState, action) {
     case Actions.BOOKMARKS_SHOW_EDIT:
       return { ...state, currentItem: action.data };
     case Actions.BOOKMARKS_SHOW_NEW:
-      return { ...state, currentItem: null, newItem: true };
+      return { ...state, currentItem: null, newItem: action.data || newItemInitial };
     case Actions.BOOKMARKS_HIDE_EDIT:
-      return { ...state, currentItem: null, newItem: false };
+      return { ...state, currentItem: null, newItem: null };
     case Actions.BOOKMARKS_NEW_REQUEST:
     case Actions.BOOKMARKS_EDIT_REQUEST:
     case Actions.BOOKMARKS_DELETE_REQUEST:
@@ -57,7 +63,7 @@ export default function (state = initialState, action) {
     case Actions.BOOKMARKS_NEW_SUCCESS:
     case Actions.BOOKMARKS_EDIT_SUCCESS:
     case Actions.BOOKMARKS_DELETE_SUCCESS:
-      return { ...state, currentItem: null, newItem: false, editDisabled: false };
+      return { ...state, currentItem: null, newItem: null, editDisabled: false };
     case Actions.BOOKMARKS_NEW_FAILURE:
     case Actions.BOOKMARKS_EDIT_FAILURE:
     case Actions.BOOKMARKS_DELETE_FAILURE:

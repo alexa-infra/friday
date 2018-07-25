@@ -177,6 +177,16 @@ class NewBookmarkModal extends Component {
     url: '',
     title: '',
     readed: false,
+    newItem: null,
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (prevState.newItem !== nextProps.newItem)
+      return {
+        ...nextProps.newItem,
+        newItem: nextProps.newItem,
+      }
+    return null;
   }
 
   handleUrlChange = event => {
@@ -211,7 +221,7 @@ class NewBookmarkModal extends Component {
     )
   }
   render() {
-    return <Modal in={this.props.newItem}
+    return <Modal in={this.props.newItem !== null}
                   header={<h1>New</h1>}
                   body={this.renderForm()}
                   footer={this.renderFooter()}

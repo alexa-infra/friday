@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { Switch, Route, Redirect } from 'react-router-dom'
 import { BookmarksPage } from '../components'
 import { bookmarks, createAction } from '../actions'
 import { Actions } from '../constants'
@@ -36,6 +37,7 @@ const mapDispatch = dispatch => {
     showEdit: item => dispatch(createAction(Actions.BOOKMARKS_SHOW_EDIT, item)),
     hideEdit: () => dispatch(createAction(Actions.BOOKMARKS_HIDE_EDIT)),
     showEditNew: () => dispatch(createAction(Actions.BOOKMARKS_SHOW_NEW)),
+    showEditNew2: val => dispatch(createAction(Actions.BOOKMARKS_SHOW_NEW, val)),
     update: item => dispatch(bookmarks.updateBookmark(item)).then(reloadBookmarks),
     delete: item => dispatch(bookmarks.deleteBookmark(item)).then(reloadBookmarks),
     create: item => dispatch(bookmarks.createBookmark(item)).then(reloadBookmarks),
@@ -43,4 +45,27 @@ const mapDispatch = dispatch => {
   }
 }
 
-export default connect(selector, mapDispatch)(BookmarksPageContainer)
+class BookmarksAddShortcut extends Component {
+  componentDidMount() {
+    const { location } = this.props;
+    const searchParams = new URLSearchParams(location.search);
+    const title = searchParams.get('title');
+    const url = searchParams.get('url');
+    this.props.showEditNew2({title, url});
+  }
+  render() {
+    return <Redirect to="/bookmarks" />
+  }
+}
+
+BookmarksPageContainer = connect(selector, mapDispatch)(BookmarksPageContainer);
+BookmarksAddShortcut = connect(selector, mapDispatch)(BookmarksAddShortcut);
+
+const RouteContainer = props => (
+  <Switch>
+    <Route path="/bookmarks/add" component={BookmarksAddShortcut} />
+    <Route path="/bookmarks" component={BookmarksPageContainer} />
+  </Switch>
+)
+
+export default RouteContainer
