@@ -21,6 +21,18 @@ static_files = list(walk_dir(ui_dir))
 migrate = Migrate(directory=migrations_path)
 jwt = JWTManager()
 errors = Errors()
+static_ext = [
+    '.js', '.json', '.css', '.svg', '.ttf', '.eot',
+    '.jpeg', '.jpg', '.png',
+    '.woff', '.woff2', '.css.map', '.js.map', '.ico',
+    '.html',
+]
+
+
+def is_static(filename):
+    if filename is None:
+        return False
+    return any(filename.endswith(ext) for ext in static_ext)
 
 
 def make_app(settings=None):
@@ -45,6 +57,8 @@ def make_app(settings=None):
     @app.route('/<path:filename>')
     def render_ui(filename):  # pylint: disable=unused-variable
         if filename not in static_files:
+            if is_static(filename):
+                return '', 404
             filename = 'index.html'
         response = send_from_directory(ui_dir, filename)
         if filename == 'service-worker.js':
