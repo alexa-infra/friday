@@ -19,7 +19,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && sw-precache --root='build/' --config config/sw.js",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
@@ -34,6 +34,7 @@
     "mocha": "^4.1.0",
     "node-sass": "^4.9.0",
     "sqlite3": "^3.1.13",
-    "supertest": "^3.0.0"
+    "supertest": "^3.0.0",
+    "sw-precache": "^5.2.1"
   }
 }
