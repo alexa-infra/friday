@@ -16,5 +16,3 @@ export const login = (name, password) => dispatch => {
     })
     .catch(error => dispatch(createAction(Actions.AUTH_LOGIN_FAILURE, { error })));
 }
-
-export const preLoad = () => dispatch => dispatch(createAction(Actions.AUTH_PRELOAD))
