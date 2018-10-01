@@ -1,8 +1,9 @@
 from webargs import fields
 from webargs.flaskparser import use_kwargs
+from flask_jwt_extended import set_access_cookies
 from . import api, BaseView
 from ..models.user import User as UserModel
-from ..schemas.user import UserAuth
+from ..schemas.user import User as UserSchema
 
 
 login_args = {
@@ -19,8 +20,9 @@ class LoginView(BaseView):
     @use_kwargs(login_args)
     def post(self, email, password):
         user = UserModel.authenticate(email, password)
-        rv = dict(user=user, token=user.token)
-        return UserAuth.jsonify(rv), 200
+        resp = UserSchema.jsonify(user)
+        set_access_cookies(resp, user.token)
+        return resp, 200
 
 
 LoginView.register(api, 'user_login')

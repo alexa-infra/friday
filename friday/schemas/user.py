@@ -8,8 +8,3 @@ class User(BaseSchema):
     password = fields.Str(load_only=True, required=True)
     created = fields.Str(dump_only=True)
     updated = fields.Str(dump_only=True)
-
-
-class UserAuth(BaseSchema):
-    user = fields.Nested(User)
-    token = fields.Str()
