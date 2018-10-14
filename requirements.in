@@ -8,3 +8,5 @@ gunicorn
 bcrypt
 python-slugify
 Markdown
+requests
+pytest

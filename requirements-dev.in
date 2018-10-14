@@ -2,3 +2,5 @@ ipython
 pylint
 flake8
 bandit
+pytest
+requests-mock
