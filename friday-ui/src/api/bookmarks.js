@@ -1,4 +1,4 @@
-import { makeAuthHeader, jsonOrReject, emptyOrReject } from './utils'
+import { jsonOrReject, emptyOrReject } from './utils'
 
 
 const formatData = data => {
@@ -6,7 +6,7 @@ const formatData = data => {
   return { url, title, readed };
 }
 
-export const getBookmarks = (auth, search, page, per_page) => {
+export const getBookmarks = (search, page, per_page) => {
   const params = new URLSearchParams();
   if (search)
     params.append('search', search);
@@ -16,41 +16,37 @@ export const getBookmarks = (auth, search, page, per_page) => {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
-      ...makeAuthHeader(auth),
     },
   }).then(jsonOrReject)
 }
 
-export const createBookmark = (auth, data) => {
+export const createBookmark = data => {
   return fetch('/api/bookmarks', {
     method: 'POST',
     body: JSON.stringify(formatData(data)),
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      ...makeAuthHeader(auth),
     }
   }).then(jsonOrReject)
 }
 
-export const updateBookmark = (auth, data) => {
+export const updateBookmark = data => {
   return fetch(`/api/bookmarks/${data.id}`, {
     method: 'PUT',
     body: JSON.stringify(formatData(data)),
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      ...makeAuthHeader(auth),
     }
   }).then(jsonOrReject)
 }
 
-export const deleteBookmark = (auth, data) => {
+export const deleteBookmark = data => {
   return fetch(`/api/bookmarks/${data.id}`, {
     method: 'DELETE',
     headers: {
       'Accept': 'application/json',
-      ...makeAuthHeader(auth),
     }
   }).then(emptyOrReject)
 }

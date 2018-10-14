@@ -1,4 +1,4 @@
-import { makeAuthHeader, jsonOrReject, textOrReject, emptyOrReject } from './utils'
+import { jsonOrReject, textOrReject, emptyOrReject } from './utils'
 
 
 const makeDoc = data => ({
@@ -6,90 +6,82 @@ const makeDoc = data => ({
   tags: data.tags,
 })
 
-export const getDocs = auth => {
+export const getDocs = () => {
   return fetch('/api/docs', {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
-      ...makeAuthHeader(auth),
     },
   }).then(jsonOrReject)
 }
 
-export const getDoc = (auth, data) => {
+export const getDoc = data => {
   return fetch(`/api/docs/${data.id}`, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
-      ...makeAuthHeader(auth),
     },
   }).then(jsonOrReject)
 }
 
-export const createDoc = (auth, data) => {
+export const createDoc = data => {
   return fetch('/api/docs', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      ...makeAuthHeader(auth),
     },
     body: JSON.stringify(makeDoc(data)),
   }).then(jsonOrReject)
 }
 
-export const updateDoc = (auth, data) => {
+export const updateDoc = data => {
   return fetch(`/api/docs/${data.id}`, {
     method: 'PUT',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      ...makeAuthHeader(auth),
     },
     body: JSON.stringify(makeDoc(data)),
   }).then(jsonOrReject)
 }
 
-export const deleteDoc = (auth, data) => {
+export const deleteDoc = data => {
   return fetch(`/api/docs/${data.id}`, {
     method: 'DELETE',
     headers: {
       'Accept': 'application/json',
-      ...makeAuthHeader(auth),
     }
   }).then(emptyOrReject)
 }
 
-export const getDocText = (auth, data) => {
+export const getDocText = data => {
   return fetch(`/api/docs/${data.id}/text`, {
     method: 'GET',
     headers: {
       'Accept': 'text/plain, application/json',
-      ...makeAuthHeader(auth),
     },
   }).then(textOrReject)
   .then(text => ({...data, text}));
 }
 
-export const putDocText = (auth, data) => {
+export const putDocText = data => {
   return fetch(`/api/docs/${data.id}/text`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'text/plain',
       'Accept': 'text/plain, application/json',
-      ...makeAuthHeader(auth),
     },
     body: data.text,
   }).then(textOrReject)
   .then(text => ({...data, text}));
 }
 
-export const getDocHtml = (auth, data) => {
+export const getDocHtml = data => {
   return fetch(`/api/docs/${data.id}/html`, {
     method: 'GET',
     headers: {
       'Accept': 'text/html, application/json',
-      ...makeAuthHeader(auth),
     },
   }).then(textOrReject)
   .then(html => ({...data, html}));

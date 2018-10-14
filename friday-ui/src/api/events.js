@@ -1,4 +1,4 @@
-import { makeAuthHeader, jsonOrReject, emptyOrReject } from './utils'
+import { jsonOrReject, emptyOrReject } from './utils'
 
 
 const formatDate = dt => dt.format('YYYY-MM-DD');
@@ -12,7 +12,7 @@ const formatEventData = ({name, icon, date, repeat}) => {
   }
 }
 
-export const getEvents = (auth, fromdate, todate) => {
+export const getEvents = (fromdate, todate) => {
   const params = new URLSearchParams();
   params.append('fromdate', formatDate(fromdate));
   params.append('todate', formatDate(todate));
@@ -20,53 +20,48 @@ export const getEvents = (auth, fromdate, todate) => {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
-      ...makeAuthHeader(auth),
     },
   }).then(jsonOrReject)
 }
 
-export const createEvent = (auth, data) => {
+export const createEvent = data => {
   return fetch('/api/events', {
     method: 'POST',
     body: JSON.stringify(formatEventData(data)),
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      ...makeAuthHeader(auth),
     }
   }).then(jsonOrReject)
 }
 
-export const updateEvent = (auth, data) => {
+export const updateEvent = data => {
   return fetch(`/api/events/${data.id}`, {
     method: 'PUT',
     body: JSON.stringify(formatEventData(data)),
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      ...makeAuthHeader(auth),
     }
   }).then(jsonOrReject)
 }
 
-export const deleteEvent = (auth, data) => {
+export const deleteEvent = data => {
   return fetch(`/api/events/${data.id}`, {
     method: 'DELETE',
     headers: {
       'Accept': 'application/json',
-      ...makeAuthHeader(auth),
     }
   }).then(emptyOrReject)
 }
 
-export const repeatEvent = (auth, data) => {
+export const repeatEvent = data => {
   return fetch(`/api/events/${data.id}/repeat`, {
     method: 'POST',
     body: JSON.stringify({days: data.repeatIn}),
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      ...makeAuthHeader(auth),
     }
   }).then(jsonOrReject)
 }

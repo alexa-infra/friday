@@ -29,11 +29,3 @@ export const callApi = (method, actionName) => {
   }
   return _callApi(newMethod, actionName);
 }
-
-export const callApiAuth = (method, actionName) => {
-  const newMethod = (getState, data) => {
-    const { auth } = getState();
-    return method(auth, data);
-  }
-  return _callApi(newMethod, actionName);
-}

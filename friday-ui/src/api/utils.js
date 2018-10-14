@@ -1,11 +1,4 @@
 
-export const makeAuthHeader = auth => {
-  if (auth.token) {
-    return { Authorization: `Bearer ${auth.token}` };
-  }
-  return {};
-}
-
 export const jsonOrReject = result => {
   if (result.ok)
     return result.json()
