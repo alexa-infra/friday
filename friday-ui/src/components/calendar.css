@@ -3,6 +3,106 @@
   flex-wrap: wrap;
 }
 
+.calendar .theme-l5 {
+  color: #000;
+  background-color: #f8fbfc;
+}
+
+.calendar .theme-l4 {
+  color: #000;
+  background-color: #e9f0f6;
+}
+
+.calendar .theme-l3 {
+  color: #000;
+  background-color: #d3e1ee;
+}
+
+.calendar .theme-l2 {
+  color: #000;
+  background-color: #bdd2e5;
+}
+
+.calendar .theme-l1 {
+  color: #000;
+  background-color: #a7c4dd;
+}
+
+.calendar .theme-d1 {
+  color: #fff;
+  background-color: #77a3ca;
+}
+
+.calendar .theme-d2 {
+  color: #fff;
+  background-color: #5d92c0;
+}
+
+.calendar .theme-d3 {
+  color: #fff;
+  background-color: #4681b4;
+}
+
+.calendar .theme-d4 {
+  color: #fff;
+  background-color: #3c6e9a;
+}
+
+.calendar .theme-d5 {
+  color: #fff;
+  background-color: #325c81;
+}
+
+.calendar .theme-light {
+  color: #000;
+  background-color: #f8fbfc;
+}
+
+.calendar .theme-dark {
+  color: #fff;
+  background-color: #325c81;
+}
+
+.calendar .theme-action {
+  color: #fff;
+  background-color: #325c81;
+}
+
+.calendar .theme {
+  color: #000;
+  background-color: #92b6d5;
+}
+
+.calendar .text-theme {
+  color: #92b6d5;
+}
+
+.calendar .border-theme {
+  border-color: #92b6d5;
+}
+
+.calendar .hover-theme:hover {
+  color: #000;
+  background-color: #92b6d5;
+}
+
+.calendar .hover-text-theme {
+  color: #92b6d5;
+}
+
+.calendar .hover-border-theme:hover {
+  border-color: #92b6d5;
+}
+
+.calendar a {
+  color: inherit;
+  background-color: inherit;
+}
+
+.calendar a:hover {
+  color: #92b6d5;
+}
+
 .calendar > * {
   flex: 1 0 100%;
 }
