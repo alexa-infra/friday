@@ -62,6 +62,19 @@ class SearchBox extends Component {
   }
 }
 
+const FormFields = () => (
+  <React.Fragment>
+    <div className="form-group">
+      <label htmlFor="url">URL</label>
+      <Field name="url" component="input" type="text" />
+    </div>
+    <div className="form-group">
+      <label htmlFor="title">Title</label>
+      <Field name="title" component="input" type="text" />
+    </div>
+  </React.Fragment>
+);
+
 let LinkForm = props => {
   const { handleSubmit, show, hideEdit, initialValues } = props;
   return (
@@ -72,14 +85,7 @@ let LinkForm = props => {
         </Modal.Header>
         <Modal.Body>
           <Field name="id" component="input" type="hidden" />
-          <div className="form-group">
-            <label htmlFor="url">URL</label>
-            <Field name="url" component="input" type="text" />
-          </div>
-          <div className="form-group">
-            <label htmlFor="title">Title</label>
-            <Field name="title" component="input" type="text" />
-          </div>
+          <FormFields />
         </Modal.Body>
         <Modal.Footer>
           <button type="button" onClick={() => props.delete(initialValues)}>
@@ -116,14 +122,7 @@ let NewLinkForm = props => {
           <Modal.Title>New link</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className="form-group">
-            <label htmlFor="url">URL</label>
-            <Field name="url" component="input" type="text" />
-          </div>
-          <div className="form-group">
-            <label htmlFor="title">Title</label>
-            <Field name="title" component="input" type="text" />
-          </div>
+          <FormFields />
         </Modal.Body>
         <Modal.Footer>
           <button type="submit" disabled={disabled}>

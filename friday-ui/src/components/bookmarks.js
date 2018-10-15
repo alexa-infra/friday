@@ -109,6 +109,23 @@ class SearchBox extends Component {
   }
 }
 
+const FormFields = () => (
+  <React.Fragment>
+    <div className="form-group">
+      <label htmlFor="url">URL</label>
+      <Field name="url" component="input" type="text" />
+    </div>
+    <div className="form-group">
+      <label htmlFor="title">Title</label>
+      <Field name="title" component="input" type="text" />
+    </div>
+    <div className="form-check">
+      <Field name="readed" component="input" type="checkbox" />
+      <label htmlFor="readed">Read</label>
+    </div>
+  </React.Fragment>
+);
+
 let BookmarkForm = props => {
   const { handleSubmit, show, hideEdit, initialValues } = props;
   return (
@@ -119,18 +136,7 @@ let BookmarkForm = props => {
         </Modal.Header>
         <Modal.Body>
           <Field name="id" component="input" type="hidden" />
-          <div className="form-group">
-            <label htmlFor="url">URL</label>
-            <Field name="url" component="input" type="text" />
-          </div>
-          <div className="form-group">
-            <label htmlFor="title">Title</label>
-            <Field name="title" component="input" type="text" />
-          </div>
-          <div className="form-check">
-            <Field name="readed" component="input" type="checkbox" />
-            <label htmlFor="readed">Read</label>
-          </div>
+          <FormFields />
         </Modal.Body>
         <Modal.Footer>
           <button type="button" onClick={() => props.delete(initialValues)}>
@@ -166,19 +172,7 @@ let NewBookmarkForm = props => {
           <Modal.Title>New bookmark</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Field name="id" component="input" type="hidden" />
-          <div className="form-group">
-            <label htmlFor="url">URL</label>
-            <Field name="url" component="input" type="text" />
-          </div>
-          <div className="form-group">
-            <label htmlFor="title">Title</label>
-            <Field name="title" component="input" type="text" />
-          </div>
-          <div className="form-check">
-            <Field name="readed" component="input" type="checkbox" />
-            <label htmlFor="readed">Read</label>
-          </div>
+          <FormFields />
         </Modal.Body>
         <Modal.Footer>
           <button type="submit">
