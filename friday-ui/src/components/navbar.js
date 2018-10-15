@@ -1,23 +1,24 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom';
-import './navbar.css'
+import Navbar from 'react-bootstrap/lib/Navbar'
+import Nav from 'react-bootstrap/lib/Nav'
+import { LinkContainer } from 'react-router-bootstrap'
 
 
-const NavBar = () => (
-  <ul className="navbar theme-d5">
-    <li>
-      <NavLink className="brand" activeClassName="active" to="/">Reader</NavLink>
-    </li>
-    <li>
-      <NavLink activeClassName="active" to="/bookmarks">Read Later</NavLink>
-    </li>
-    <li>
-      <NavLink activeClassName="active" to="/events">Events</NavLink>
-    </li>
-    <li>
-      <NavLink activeClassName="active" to="/docs">Docs</NavLink>
-    </li>
-  </ul>
-)
-
-export default NavBar
+export default () => (
+  <Navbar bg="dark" variant="dark">
+    <LinkContainer to="/">
+      <Navbar.Brand>Reader</Navbar.Brand>
+    </LinkContainer>
+    <Nav className="mr-auto">
+      <LinkContainer to="/bookmarks">
+        <Nav.Link>Read later</Nav.Link>
+      </LinkContainer>
+      <LinkContainer to="/events">
+        <Nav.Link>Events</Nav.Link>
+      </LinkContainer>
+      <LinkContainer to="/docs">
+        <Nav.Link>Docs</Nav.Link>
+      </LinkContainer>
+    </Nav>
+  </Navbar>
+);
