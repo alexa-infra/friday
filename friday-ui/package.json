@@ -21,6 +21,8 @@
     "redux-thunk": "^2.2.0"
   },
   "scripts": {
+    "build-css": "node-sass-chokidar src/ -o src/ --output-style expanded",
+    "watch-css": "node-sass-chokidar src/ -o src/ --watch --output-style expanded",
     "start": "react-scripts start",
     "build": "react-scripts build && sw-precache --root='build/' --config config/sw.js",
     "test": "react-scripts test --env=jsdom",
@@ -32,6 +34,7 @@
     }
   },
   "devDependencies": {
+    "node-sass-chokidar": "^1.3.4",
     "sw-precache": "^5.2.1"
   }
 }
