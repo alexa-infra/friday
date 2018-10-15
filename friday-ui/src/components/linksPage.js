@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
-import Modal from './modal'
-import { FormText } from './form'
+import Modal from 'react-bootstrap/lib/Modal'
+import { Field, reduxForm } from 'redux-form'
+import { connect } from 'react-redux'
+import 'bootstrap/dist/css/bootstrap.css'
 import './linksPage.css'
 
 
@@ -39,8 +41,8 @@ const LinkList = props => (
         </li>
       ))}
     </ul>
-    <EditLinkModal {...props} />
-    <NewLinkModal {...props} />
+    <NewLinkForm onSubmit={values => props.create(values)} {...props} />
+    <LinkForm onSubmit={values => props.update(values)} {...props} />
   </div>
 )
 
@@ -61,111 +63,87 @@ class SearchBox extends Component {
   }
 }
 
-class EditLinkModal extends Component {
-  state = {
-    url: '',
-    title: '',
-    last_access: '',
-    usage_count: '',
-    currentItem: null,
-  }
+let LinkForm = props => {
+  const { handleSubmit, show, hideEdit, initialValues } = props;
+  return (
+    <Modal show={show} onHide={hideEdit}>
+      <form onSubmit={handleSubmit}>
+        <Modal.Header closeButton>
+          <Modal.Title>Modal heading</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Field name="id" component="input" type="hidden" />
+          <div>
+            <label htmlFor="url">URL</label>
+            <Field name="url" component="input" type="text" />
+          </div>
+          <div>
+            <label htmlFor="title">Title</label>
+            <Field name="title" component="input" type="text" />
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <button type="button" onClick={() => props.delete(initialValues)}>
+            Delete
+          </button>
+          <button type="submit">
+            Save
+          </button>
+        </Modal.Footer>
+      </form>
+    </Modal>
+  );
+};
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (prevState.currentItem !== nextProps.currentItem)
-      return {
-        ...nextProps.currentItem,
-        currentItem: nextProps.currentItem,
-      }
-    return null;
-  }
+LinkForm = reduxForm({
+  form: 'link',
+  enableReinitialize: true,
+})(LinkForm);
 
-  handleUrlChange = event => {
-    this.setState({url: event.target.value})
-  }
-  handleTitleChange = event => {
-    this.setState({title: event.target.value})
-  }
+LinkForm = connect(
+  state => ({
+    initialValues: state.links.currentItem,
+    show: state.links.currentItem !== null,
+  }),
+)(LinkForm);
 
-  renderForm(){
-    return (
-      <div className="edit-link-form">
-        <FormText name="URL" value={this.state.url}
-                  onChange={this.handleUrlChange} />
-        <FormText name="Title" value={this.state.title}
-                  onChange={this.handleTitleChange} />
-        <FormText name="Last access" value={this.state.last_access}
-                  disabled={true} />
-        <FormText name="Usage count" value={this.state.usage_count}
-                  disabled={true} />
-      </div>
-    )
-  }
-  renderFooter(){
-    return (
-      <div className="buttons">
-        <button type="button"
-                disabled={this.props.editDisabled}
-                onClick={() => this.props.update(this.state)}>
-          Update
-        </button>
-        <button type="button"
-                disabled={this.props.editDisabled}
-                onClick={() => this.props.delete(this.state)}>
-          Delete
-        </button>
-      </div>
-    )
-  }
-  render() {
-    return <Modal in={this.props.currentItem !== null}
-                  header={<h1>Edit</h1>}
-                  body={this.renderForm()}
-                  footer={this.renderFooter()}
-                  onClose={this.props.hideEdit}
-                  disabled={false} />
-  }
-}
+let NewLinkForm = props => {
+  const { handleSubmit, pristine, submitting, show, hideEdit } = props;
+  const disabled = pristine || submitting;
+  return (
+    <Modal show={show} onHide={hideEdit}>
+      <form onSubmit={handleSubmit}>
+        <Modal.Header closeButton>
+          <Modal.Title>New link</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div>
+            <label htmlFor="url">URL</label>
+            <Field name="url" component="input" type="text" />
+          </div>
+          <div>
+            <label htmlFor="title">Title</label>
+            <Field name="title" component="input" type="text" />
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <button type="submit" disabled={disabled}>
+            Create
+          </button>
+        </Modal.Footer>
+      </form>
+    </Modal>
+  );
+};
 
-class NewLinkModal extends Component {
-  state = {
-    url: '',
-    title: '',
-  }
+NewLinkForm = reduxForm({
+  form: 'new-link',
+})(NewLinkForm);
 
-  handleUrlChange = event => {
-    this.setState({url: event.target.value})
-  }
-  handleTitleChange = event => {
-    this.setState({title: event.target.value})
-  }
-
-  renderForm(){
-    return (
-      <div className="new-link-form">
-        <FormText name="URL" value={this.state.url}
-                  onChange={this.handleUrlChange} />
-        <FormText name="Title" value={this.state.title}
-                  onChange={this.handleTitleChange} />
-      </div>
-    )
-  }
-  renderFooter(){
-    return (
-      <button type="button"
-              disabled={this.props.editDisabled}
-              onClick={() => this.props.create(this.state)}>
-        Create
-      </button>
-    )
-  }
-  render() {
-    return <Modal in={this.props.newLink}
-                  header={<h1>New</h1>}
-                  body={this.renderForm()}
-                  footer={this.renderFooter()}
-                  onClose={this.props.hideEdit}
-                  disabled={this.props.editDisabled} />
-  }
-}
+NewLinkForm = connect(
+  state => ({
+    show: state.links.newLink,
+  }),
+)(NewLinkForm);
 
 export default LinkList
