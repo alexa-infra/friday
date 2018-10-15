@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import classNames from 'classnames'
-import Modal from './modal'
-import { FormText, FormCheckbox } from './form'
+import Modal from 'react-bootstrap/lib/Modal'
+import { Field, reduxForm } from 'redux-form'
+import { connect } from 'react-redux'
 import './bookmarks.css'
 
 
@@ -36,8 +37,8 @@ const BookmarksPage = props => (
     </div>
     <Pagination {...props} />
     <BrowserBookmark />
-    <EditBookmarkModal {...props} />
-    <NewBookmarkModal {...props} />
+    <BookmarkForm onSubmit={values => props.update(values)} {...props} />
+    <NewBookmarkForm onSubmit={values => props.create(values)} {...props} />
   </div>
 )
 
@@ -108,128 +109,96 @@ class SearchBox extends Component {
   }
 }
 
-class EditBookmarkModal extends Component {
-  state = {
-    url: '',
-    title: '',
-    readed: false,
-    currentItem: null,
-  }
-
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (prevState.currentItem !== nextProps.currentItem)
-      return {
-        ...nextProps.currentItem,
-        currentItem: nextProps.currentItem,
-      }
-    return null;
-  }
-
-  handleUrlChange = event => {
-    this.setState({url: event.target.value})
-  }
-  handleTitleChange = event => {
-    this.setState({title: event.target.value})
-  }
-  handleReadedChange = event => {
-    this.setState({readed: event.target.checked})
-  }
-
-  renderForm(){
-    return (
-      <div className="edit-bookmark-form">
-        <FormText name="URL" value={this.state.url}
-                  onChange={this.handleUrlChange} />
-        <FormText name="Title" value={this.state.title}
-                  onChange={this.handleTitleChange} />
-        <FormCheckbox name="Read" value={this.state.readed}
-                      onChange={this.handleReadedChange} />
-      </div>
-    )
-  }
-  renderFooter(){
-    return (
-      <div className="buttons">
-        <button type="button"
-                disabled={this.props.editDisabled}
-                onClick={() => this.props.update(this.state)}>
-          Update
-        </button>
-        <button type="button"
-                disabled={this.props.editDisabled}
-                onClick={() => this.props.delete(this.state)}>
-          Delete
-        </button>
-      </div>
-    )
-  }
-  render() {
-    return <Modal in={this.props.currentItem !== null}
-                  header={<h1>Edit</h1>}
-                  body={this.renderForm()}
-                  footer={this.renderFooter()}
-                  onClose={this.props.hideEdit}
-                  disabled={false} />
-  }
+let BookmarkForm = props => {
+  const { handleSubmit, show, hideEdit, initialValues } = props;
+  return (
+    <Modal show={show} onHide={hideEdit}>
+      <form onSubmit={handleSubmit}>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit bookmark</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Field name="id" component="input" type="hidden" />
+          <div className="form-group">
+            <label htmlFor="url">URL</label>
+            <Field name="url" component="input" type="text" />
+          </div>
+          <div className="form-group">
+            <label htmlFor="title">Title</label>
+            <Field name="title" component="input" type="text" />
+          </div>
+          <div className="form-check">
+            <Field name="readed" component="input" type="checkbox" />
+            <label htmlFor="readed">Read</label>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <button type="button" onClick={() => props.delete(initialValues)}>
+            Delete
+          </button>
+          <button type="submit">
+            Save
+          </button>
+        </Modal.Footer>
+      </form>
+    </Modal>
+  );
 }
 
-class NewBookmarkModal extends Component {
-  state = {
-    url: '',
-    title: '',
-    readed: false,
-    newItem: null,
-  }
+BookmarkForm = reduxForm({
+  form: 'bookmark',
+  enableReinitialize: true,
+})(BookmarkForm);
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (prevState.newItem !== nextProps.newItem)
-      return {
-        ...nextProps.newItem,
-        newItem: nextProps.newItem,
-      }
-    return null;
-  }
+BookmarkForm = connect(
+  state => ({
+    initialValues: state.bookmarks.currentItem,
+    show: state.bookmarks.currentItem !== null,
+  }),
+)(BookmarkForm);
 
-  handleUrlChange = event => {
-    this.setState({url: event.target.value})
-  }
-  handleTitleChange = event => {
-    this.setState({title: event.target.value})
-  }
-  handleReadedChange = event => {
-    this.setState({readed: event.target.checked})
-  }
-
-  renderForm(){
-    return (
-      <div className="new-bookmark-form">
-        <FormText name="URL" value={this.state.url}
-                  onChange={this.handleUrlChange} />
-        <FormText name="Title" value={this.state.title}
-                  onChange={this.handleTitleChange} />
-        <FormCheckbox name="Read" value={this.state.readed}
-                      onChange={this.handleReadedChange} />
-      </div>
-    )
-  }
-  renderFooter(){
-    return (
-      <button type="button"
-              disabled={this.props.editDisabled}
-              onClick={() => this.props.create(this.state)}>
-        Create
-      </button>
-    )
-  }
-  render() {
-    return <Modal in={this.props.newItem !== null}
-                  header={<h1>New</h1>}
-                  body={this.renderForm()}
-                  footer={this.renderFooter()}
-                  onClose={this.props.hideEdit}
-                  disabled={this.props.editDisabled} />
-  }
+let NewBookmarkForm = props => {
+  const { handleSubmit, show, hideEdit } = props;
+  return (
+    <Modal show={show} onHide={hideEdit}>
+      <form onSubmit={handleSubmit}>
+        <Modal.Header closeButton>
+          <Modal.Title>New bookmark</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Field name="id" component="input" type="hidden" />
+          <div className="form-group">
+            <label htmlFor="url">URL</label>
+            <Field name="url" component="input" type="text" />
+          </div>
+          <div className="form-group">
+            <label htmlFor="title">Title</label>
+            <Field name="title" component="input" type="text" />
+          </div>
+          <div className="form-check">
+            <Field name="readed" component="input" type="checkbox" />
+            <label htmlFor="readed">Read</label>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <button type="submit">
+            Save
+          </button>
+        </Modal.Footer>
+      </form>
+    </Modal>
+  );
 }
+
+NewBookmarkForm = reduxForm({
+  form: 'new-bookmark',
+})(NewBookmarkForm);
+
+NewBookmarkForm = connect(
+  state => ({
+    show: state.bookmarks.newItem !== null,
+  }),
+)(NewBookmarkForm);
 
 class BrowserBookmark extends Component {
   getBookmarkScript() {

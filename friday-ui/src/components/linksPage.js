@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import Modal from 'react-bootstrap/lib/Modal'
 import { Field, reduxForm } from 'redux-form'
 import { connect } from 'react-redux'
-import 'bootstrap/dist/css/bootstrap.css'
 import './linksPage.css'
 
 
@@ -73,11 +72,11 @@ let LinkForm = props => {
         </Modal.Header>
         <Modal.Body>
           <Field name="id" component="input" type="hidden" />
-          <div>
+          <div className="form-group">
             <label htmlFor="url">URL</label>
             <Field name="url" component="input" type="text" />
           </div>
-          <div>
+          <div className="form-group">
             <label htmlFor="title">Title</label>
             <Field name="title" component="input" type="text" />
           </div>
@@ -117,11 +116,11 @@ let NewLinkForm = props => {
           <Modal.Title>New link</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div>
+          <div className="form-group">
             <label htmlFor="url">URL</label>
             <Field name="url" component="input" type="text" />
           </div>
-          <div>
+          <div className="form-group">
             <label htmlFor="title">Title</label>
             <Field name="title" component="input" type="text" />
           </div>
