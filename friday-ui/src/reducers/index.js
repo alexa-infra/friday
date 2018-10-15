@@ -5,6 +5,7 @@ import auth from './auth';
 import events from './events';
 import bookmarks from './bookmarks';
 import docs from './docs';
+import { reducer as formReducer } from 'redux-form';
 
 const reducers = combineReducers({
   links: links,
@@ -13,6 +14,7 @@ const reducers = combineReducers({
   events: events,
   bookmarks: bookmarks,
   docs: docs,
+  form: formReducer,
 })
 
 export default reducers;
