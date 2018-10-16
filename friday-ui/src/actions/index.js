@@ -4,7 +4,8 @@ import * as events from './events';
 import * as links from './links';
 import * as bookmarks from './bookmarks';
 import * as docs from './docs';
+import * as tags from './tags';
 import { createAction } from './utils';
 
 
-export { alerts, auth, bookmarks, createAction, events, links, docs };
+export { alerts, auth, bookmarks, createAction, events, links, docs, tags };
