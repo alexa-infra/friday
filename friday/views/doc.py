@@ -3,8 +3,8 @@ from webargs.flaskparser import use_args
 from flask_jwt_extended import jwt_required
 from . import api, BaseView
 from ..models import db
-from ..models import Doc as DocModel
-from ..schemas import Doc as DocSchema
+from ..models import Doc as DocModel, Tag as TagModel
+from ..schemas import Doc as DocSchema, Tag as TagSchema
 
 
 class DocListView(BaseView):
@@ -84,7 +84,19 @@ class DocHtmlView(BaseView):
         return obj.html, 200, headers
 
 
+class TagListView(BaseView):
+    # pylint: disable=no-self-use
+
+    route_base = '/tags'
+    decorators = (jwt_required,)
+
+    def get(self):
+        objects = TagModel.query.all()
+        return TagSchema.jsonify(objects), 200
+
+
 DocListView.register(api, 'doc_list')
 DocItemView.register(api, 'doc_item')
 DocTextView.register(api, 'doc_item_text')
 DocHtmlView.register(api, 'doc_item_html')
+TagListView.register(api, 'tag_list')

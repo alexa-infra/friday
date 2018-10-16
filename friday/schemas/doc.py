@@ -8,3 +8,8 @@ class Doc(BaseSchema):
     created = fields.DateTime(dump_only=True)
     updated = fields.DateTime(dump_only=True)
     tags = fields.List(fields.Str(), required=True, attribute='tagsList')
+
+
+class Tag(BaseSchema):
+    id = fields.Int(dump_only=True)
+    name = fields.Str(required=True)
