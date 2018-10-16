@@ -4,12 +4,12 @@ import { LoginPage } from '../components'
 import { auth } from '../actions'
 
 const LoginPageContainer = ({ onLogin }) => (
-  <LoginPage onLogin={onLogin} />
+  <LoginPage onSubmit={onLogin} />
 );
 
-const mapDispatch = (dispatch) => {
+const mapDispatch = dispatch => {
   return {
-    onLogin: (name, password) => dispatch(auth.login(name, password)),
+    onLogin: ({name, password}) => dispatch(auth.login(name, password)),
   };
 }
 
