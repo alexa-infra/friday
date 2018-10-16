@@ -25,4 +25,15 @@ class LoginView(BaseView):
         return resp, 200
 
 
+class CurrentUser(BaseView):
+    # pylint: disable=no-self-use
+
+    route_base = '/users/current'
+
+    def get(self):
+        user = UserModel.current_user()
+        return UserSchema.jsonify(user), 200
+
+
+CurrentUser.register(api, 'user_current')
 LoginView.register(api, 'user_login')
