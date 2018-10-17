@@ -15,7 +15,10 @@ export const _callApi = (method, actionName) => {
   return data => (dispatch, getState) => {
     dispatch(requestAction(data));
     return method(getState, data)
-      .then(result => dispatch(successAction(result)))
+      .then(result => {
+        dispatch(successAction(result));
+        return result;
+      })
       .catch(error => {
         dispatch(failureAction(error));
         dispatch(handleErrors(error.status));

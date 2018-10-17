@@ -1,9 +1,71 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { TagsViewer, TagsEdit } from './tags.js';
+import { Field, reduxForm } from 'redux-form'
 import './docs.css';
 import './github-markdown.css';
 
+
+const renderTags = ({ input }) => (
+  <TagsEdit tags={input.value}
+            onChange={input.onChange} />
+);
+
+let DocForm = props => {
+  const { handleSubmit } = props;
+  return (
+    <form onSubmit={handleSubmit}>
+      <Field name="id" component="input" type="hidden" />
+      <div className="form-group">
+        <label htmlFor="name">Name</label>
+        <Field name="name" component="input" type="text" />
+      </div>
+      <div className="form-group">
+        <label htmlFor="tags">Tags</label>
+        <Field name="tags" component={renderTags} />
+      </div>
+      <div className="form-group">
+        <label htmlFor="text">Text</label>
+        <Field name="text" component="textarea" wrap="off" />
+      </div>
+      <button type="submit">
+        Save
+      </button>
+    </form>
+  );
+}
+
+DocForm = reduxForm({
+  form: 'doc',
+  enableReinitialize: true,
+})(DocForm);
+
+let NewDocForm = props => {
+  const { handleSubmit } = props;
+  return (
+    <form onSubmit={handleSubmit}>
+      <div className="form-group">
+        <label htmlFor="name">Name</label>
+        <Field name="name" component="input" type="text" />
+      </div>
+      <div className="form-group">
+        <label htmlFor="tags">Tags</label>
+        <Field name="tags" component={renderTags} />
+      </div>
+      <div className="form-group">
+        <label htmlFor="text">Text</label>
+        <Field name="text" component="textarea" wrap="off" />
+      </div>
+      <button type="submit">
+        Create
+      </button>
+    </form>
+  );
+}
+
+NewDocForm = reduxForm({
+  form: 'new-doc',
+})(NewDocForm);
 
 const DocsList = ({items, create}) => (
   <div className="doc-page list">
@@ -25,8 +87,7 @@ const DocsList = ({items, create}) => (
           <div className="item">
             Updated <i title={it.updated.toISOString(true)}>{it.updated.fromNow()}</i>
           </div>
-          <NavLink to={`/docs/${it.id}/edit`}>Edit Text</NavLink>
-          <NavLink to={`/docs/${it.id}/info`}>Change Info</NavLink>
+          <NavLink to={`/docs/${it.id}/edit`}>Edit</NavLink>
         </div>
       </div>
     ))}
@@ -40,8 +101,7 @@ const createMarkup = html => {
 const DocView = ({id, name, html, tags}) => (
   <div className="doc-page view">
     <div className="controls">
-      <NavLink to={`/docs/${id}/edit`}>Edit Text</NavLink>
-      <NavLink to={`/docs/${id}/info`}>Change Info</NavLink>
+      <NavLink to={`/docs/${id}/edit`}>Edit</NavLink>
       <NavLink to="/docs">Back</NavLink>
     </div>
     <div className="header">
@@ -49,156 +109,35 @@ const DocView = ({id, name, html, tags}) => (
     </div>
     <TagsViewer tags={tags} />
     <div className="markdown-body"
-             dangerouslySetInnerHTML={createMarkup(html)}>
+         dangerouslySetInnerHTML={createMarkup(html)}>
     </div>
   </div>
 )
 
-class DocInfoEdit extends Component {
-  state = {
-    id: null,
-    name: '',
-    text: '',
-    tags: [],
-  }
-  static getDerivedStateFromProps(nextProps, prevState) {
-    const { id, name, text, tags } = nextProps;
-    const props = { id, name, text, tags };
-    if (prevState !== props) {
-      return props;
-    }
-    return null;
-  }
-  handleTagChange = tags => {
-    this.setState({ tags });
-  }
-  handleNameChange = event => {
-    this.setState({ name: event.target.value });
-  }
-  render() {
-    const { id, name, tags } = this.state;
-    return (
-      <article className="doc-page edit">
-        <div className="controls">
-          <NavLink to={`/docs/${id}/edit`}>Edit Text</NavLink>
-          <NavLink to={`/docs/${id}`}>View</NavLink>
-          <NavLink to="/docs">Back</NavLink>
-        </div>
-        <input type="text"
-               onInput={this.handleNameChange}
-               value={name}
-               placeholder="Name..."
-               />
-        <TagsEdit tags={tags}
-              onChange={this.handleTagChange}
-              placeholder="Tags..."
-              disabled={false}/>
-        <div className="controls">
-          <button onClick={() => this.props.delete(this.state)}>
-            Delete
-          </button>
-          <button onClick={() => this.props.updateInfo(this.state)}>
-            Save
-          </button>
-        </div>
-      </article>
-    )
-  }
-}
-
-class DocNew extends Component {
-  state = {
-    name: '',
-    tags: [],
-  }
-  handleTagChange = tags => {
-    this.setState({ tags });
-  }
-  handleNameChange = event => {
-    this.setState({ name: event.target.value });
-  }
-  render() {
-    const { name, tags } = this.state;
-    return (
-      <article className="doc-page new">
-        <div className="controls">
-          <NavLink to="/docs">Back</NavLink>
-        </div>
-        <input type="text"
-               onInput={this.handleNameChange}
-               value={name}
-               placeholder="Name..."
-               />
-        <TagsEdit tags={tags}
-              onChange={this.handleTagChange}
-              placeholder="Tags..."
-              disabled={false}/>
-        <div className="controls">
-          <button onClick={() => this.props.create(this.state)}>
-            Create
-          </button>
-        </div>
-      </article>
-    )
-  }
-}
-
-class DocEdit extends Component {
-  state = {
-    id: null,
-    name: '',
-    text: '',
-    tags: [],
-  }
-  static getDerivedStateFromProps(nextProps, prevState) {
-    const { id, name, text, tags } = nextProps;
-    const props = { id, name, text, tags };
-    if (prevState !== props) {
-      return props;
-    }
-    return null;
-  }
-  handleTextChange = event => {
-    this.setState({ text: event.target.value });
-  }
-  getTextNumRows() {
-    const { text } = this.state;
-    if (!text) return 10;
-    const lines = text.split('\n');
-    return Math.max(lines.length, 10);
-  }
-  render() {
-    const { id, name, text, tags } = this.state;
-    return (
-      <div className="doc-page edit">
-        <div className="controls">
-          <NavLink to={`/docs/${id}`}>View</NavLink>
-          <NavLink to={`/docs/${id}/info`}>Change Info</NavLink>
-          <NavLink to="/docs">Back</NavLink>
-        </div>
-        <div className="header">
-          {name}
-        </div>
-        <TagsViewer tags={tags}
-              placeholder=""
-              disabled={true}/>
-        <textarea
-          onInput={this.handleTextChange}
-          value={text}
-          placeholder="Text..."
-          rows={this.getTextNumRows()}
-          wrap="off"
-          />
-        <div className="controls">
-          <button onClick={() => this.props.updateText(this.state)}>
-            Save
-          </button>
-        </div>
+const DocEdit = props => {
+  const { id, name, tags, text } = props;
+  return (
+    <article className="doc-page edit">
+      <div className="controls">
+        <NavLink to={`/docs/${id}/edit`}>Edit Text</NavLink>
+        <NavLink to={`/docs/${id}`}>View</NavLink>
+        <NavLink to="/docs">Back</NavLink>
       </div>
-    )
-  }
+      <DocForm onSubmit={values => props.update(values)}
+               initialValues={{ id, name, tags, text }}/>
+    </article>
+  )
 }
 
-export { DocsList, DocNew, DocView, DocEdit, DocInfoEdit };
+const DocNew = props => (
+  <article className="doc-page new">
+    <div className="controls">
+      <NavLink to="/docs">Back</NavLink>
+    </div>
+    <NewDocForm onSubmit={values => props.create(values)} />
+  </article>
+);
+
+export { DocsList, DocNew, DocView, DocEdit };
 
 export default DocsList;
