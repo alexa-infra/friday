@@ -5,25 +5,29 @@ import './tags.css';
 const Tag = ({tag, onRemove, disabled}) => (
   <div className='tag'>
     {tag}
-    <i className='fa fa-times delete'
-       disabled={disabled}
-       onClick={onRemove} />
+    {disabled ? null : (
+      <i className='fa fa-times delete'
+         onClick={onRemove} />
+    )}
   </div>
 )
 
-const Tags = ({ tags, remove, disabled }) => (
-  <div className='tags'>
-    {
-      tags.map(it => (
-        <Tag key={it.id}
-             tag={it.name}
-             disabled={disabled}
-             onRemove={() => remove(it)}
-        />
-      ))
-    }
-  </div>
-)
+const Tags = ({ tags, remove, disabled }) => {
+  let nextId = 1;
+  return (
+    <div className='tags'>
+      {
+        tags.map(tag => (
+          <Tag key={nextId++}
+               tag={tag}
+               disabled={disabled}
+               onRemove={() => remove(tag)}
+          />
+        ))
+      }
+    </div>
+  );
+}
 
 class TagInput extends Component {
   state = {
@@ -33,10 +37,13 @@ class TagInput extends Component {
   getNewTags(text) {
     const { breaks } = this.state;
     const re = `[${ breaks.join('') }]`;
-    return text.split(new RegExp(re));
+    return text.split(new RegExp(re))
+      .map(it => it.trim())
+      .filter(it => it.length > 0);
   }
   addTags(text) {
     const tags = this.getNewTags(text);
+    if (!tags) return;
     const { addRange } = this.props;
     addRange(tags)
     this.setState({ text: '' });
@@ -93,62 +100,50 @@ class TagInput extends Component {
   }
 }
 
-class TagsContainer extends Component {
-  state = {
-    tags: [],
-    nextId: 1,
-  }
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (nextProps.tags !== prevState.tags) {
-      const tags = nextProps.tags;
-      if (tags === null || tags === undefined) return null;
-      let nextId = 1;
-      const newTags = tags.map(it => ({id: nextId++, name: it}));
-      return { tags: newTags, nextId: nextId };
-    }
-    return null;
-  }
+class TagsEdit extends Component {
   remove = tag => {
-    const { tags } = this.state;
-    const newTags = tags.filter(it => it.id !== tag.id);
-    this.props.onChange(newTags.map(it => it.name));
+    const { tags } = this.props;
+    const newTags = tags.filter(it => it !== tag);
+    this.props.onChange(newTags);
   }
   add = tag => {
-    const { tags, nextId } = this.state;
-    const newTags = [...tags, { name: tag, id: nextId+1 }];
-    this.props.onChange(newTags.map(it => it.name));
+    const { tags } = this.props;
+    const newTags = [...tags, tag];
+    this.props.onChange(newTags);
   }
   addRange = tags => {
-    const oldTags = this.state.tags;
-    let { nextId } = this.state;
-    const converted = tags.filter(it => it.trim().length > 0).map(
-      it => ({name: it, id: nextId++})
-    );
-    const newTags = [...oldTags, ...converted];
-    this.props.onChange(newTags.map(it => it.name));
+    const { tags: oldTags } = this.props;
+    const newTags = [...oldTags, ...tags];
+    this.props.onChange(newTags);
   }
-  setFocus() {
+  setFocus = () => {
     if (this.props.disabled) return;
     this.tagInput.setFocus();
   }
   render() {
-    const { tags } = this.state;
-    const { placeholder, disabled } = this.props;
+    const { tags, placeholder, disabled } = this.props;
     return (
       <div className='tags-container'
-           onClick={() => this.setFocus()}
+           onClick={this.setFocus}
            disabled={disabled}>
-        <Tags tags={tags}
+        <Tags tags={tags || []}
               remove={this.remove}
               disabled={disabled} />
-        <TagInput tags={tags}
-                  addRange={this.addRange}
+        <TagInput addRange={this.addRange}
                   ref={el => { this.tagInput = el; }}
                   disabled={disabled}
-                  placeholder={tags.length === 0 ? placeholder : ''} />
+                  placeholder={tags.length ? '' : placeholder} />
       </div>
     )
   }
 }
 
-export default TagsContainer;
+const TagsViewer = ({tags}) => (
+  <div className='tags-container' disabled>
+    <Tags tags={tags || []} disabled />
+  </div>
+);
+
+export { TagsEdit, TagsViewer };
+
+export default TagsEdit;

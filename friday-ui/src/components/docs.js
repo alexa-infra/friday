@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
-import Tags from './tags.js';
+import { TagsViewer, TagsEdit } from './tags.js';
 import './docs.css';
 import './github-markdown.css';
 
@@ -13,10 +13,10 @@ const DocsList = ({items, create}) => (
     {items.map(it => (
       <div className="row" key={it.id}>
         <div className="doc">
-          <b>{it.name}</b>
-          <Tags tags={it.tags}
-                placeholder=""
-                disabled={true}/>
+          <NavLink to={`/docs/${it.id}`}>
+            <b>{it.name}</b>
+          </NavLink>
+          <TagsViewer tags={it.tags} />
         </div>
         <div className="doc-controls">
           <div className="item">
@@ -25,7 +25,6 @@ const DocsList = ({items, create}) => (
           <div className="item">
             Updated <i title={it.updated.toISOString(true)}>{it.updated.fromNow()}</i>
           </div>
-          <NavLink to={`/docs/${it.id}`}>View</NavLink>
           <NavLink to={`/docs/${it.id}/edit`}>Edit Text</NavLink>
           <NavLink to={`/docs/${it.id}/info`}>Change Info</NavLink>
         </div>
@@ -48,9 +47,7 @@ const DocView = ({id, name, html, tags}) => (
     <div className="header">
       <b>{name}</b>
     </div>
-    <Tags tags={tags}
-          placeholder=""
-          disabled={true}/>
+    <TagsViewer tags={tags} />
     <div className="markdown-body"
              dangerouslySetInnerHTML={createMarkup(html)}>
     </div>
@@ -92,7 +89,7 @@ class DocInfoEdit extends Component {
                value={name}
                placeholder="Name..."
                />
-        <Tags tags={tags}
+        <TagsEdit tags={tags}
               onChange={this.handleTagChange}
               placeholder="Tags..."
               disabled={false}/>
@@ -132,7 +129,7 @@ class DocNew extends Component {
                value={name}
                placeholder="Name..."
                />
-        <Tags tags={tags}
+        <TagsEdit tags={tags}
               onChange={this.handleTagChange}
               placeholder="Tags..."
               disabled={false}/>
@@ -182,7 +179,7 @@ class DocEdit extends Component {
         <div className="header">
           {name}
         </div>
-        <Tags tags={tags}
+        <TagsViewer tags={tags}
               placeholder=""
               disabled={true}/>
         <textarea
