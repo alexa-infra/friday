@@ -1,90 +1,82 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom'
 import { history } from '../store';
 import { docs } from '../actions';
 import { DocsList, DocNew, DocView, DocEdit } from '../components/docs';
+import withOnLoad from '../components/withOnLoad';
 
 
-const mapDispatch = dispatch => ({
-  loadAll: () => dispatch(docs.getDocs()),
-  loadHtml: data => dispatch(docs.getDoc(data)).then(
-    () => dispatch(docs.getDocHtml(data))
-  ),
-  load: data => dispatch(docs.getDoc(data)).then(
-    () => dispatch(docs.getDocText(data))
-  ),
-  create: data => dispatch(docs.createDoc(data)).then(
-    ({ id }) => dispatch(docs.updateDocText({...data, id }))
-  ).then(
-    () => history.push('/docs')
-  ),
-  update: data => dispatch(docs.updateDoc(data)).then(
-    () => dispatch(docs.updateDocText(data))
-  ).then(
-    () => history.push(`/docs/${data.id}`)
-  ),
-  delete: data => dispatch(docs.deleteDoc(data)).then(
-    () => history.push('/docs')
-  ),
-})
-
-const selectCurrentItem = state => {
-  const { currentItem } = state.docs;
-  return currentItem || {};
-}
-
-class DocsListContainer extends Component {
-  componentDidMount() {
-    this.props.loadAll();
-  }
-  render() {
-    return <DocsList {...this.props} />
-  }
-}
-DocsListContainer = connect(state => state.docs, mapDispatch)(DocsListContainer)
+let DocsListContainer = withOnLoad(DocsList, props => props.loadAll());
+DocsListContainer = connect(
+  state => state.docs,
+  dispatch => ({
+    loadAll: () => dispatch(docs.getDocs()),
+  }),
+)(DocsListContainer)
 
 
-class DocViewContainer extends Component {
-  componentDidMount() {
-    const { match } = this.props;
+let DocViewContainer = withOnLoad(
+  DocView,
+  props => {
+    const { match } = props;
     const data = { id: match.params.id };
-    this.props.loadHtml(data);
+    props.loadHtml(data);
   }
-  render() {
-    return <DocView {...this.props} />
-  }
-}
-DocViewContainer = connect(selectCurrentItem, mapDispatch)(DocViewContainer)
+);
+DocViewContainer = connect(
+  state => state.docs.currentItem,
+  dispatch => ({
+    loadHtml: data => dispatch(docs.getDoc(data)).then(
+      () => dispatch(docs.getDocHtml(data))
+    ),
+  })
+)(DocViewContainer)
 
 
-class DocEditContainer extends Component {
-  componentDidMount() {
-    const { match } = this.props;
+let DocEditContainer = withOnLoad(
+  DocEdit,
+  props => {
+    const { match } = props;
     const data = { id: match.params.id };
-    this.props.load(data);
+    props.load(data);
   }
-  render() {
-    return <DocEdit {...this.props} />
-  }
-}
-DocEditContainer = connect(selectCurrentItem, mapDispatch)(DocEditContainer)
+);
+DocEditContainer = connect(
+  state => state.docs.currentItem,
+  dispatch => ({
+    load: data => dispatch(docs.getDoc(data)).then(
+      () => dispatch(docs.getDocText(data))
+    ),
+    update: data => dispatch(docs.updateDoc(data)).then(
+      () => dispatch(docs.updateDocText(data))
+    ).then(
+      () => history.push(`/docs/${data.id}`)
+    ),
+    delete: data => dispatch(docs.deleteDoc(data)).then(
+      () => history.push('/docs')
+    ),
+  })
+)(DocEditContainer)
 
 
-const DocNewContainer = connect(() => ({}), mapDispatch)(DocNew)
+const DocNewContainer = connect(
+  null,
+  dispatch => ({
+    create: data => dispatch(docs.createDoc(data)).then(
+        ({ id }) => dispatch(docs.updateDocText({...data, id }))
+      ).then(() => history.push('/docs')),
+  })
+)(DocNew)
 
 
-class DocsPageContainer extends React.Component {
-  render() {
-    return (
-      <Switch>
-        <Route path="/docs/new" component={DocNewContainer} />
-        <Route path="/docs/:id/edit" component={DocEditContainer} />
-        <Route path="/docs/:id" component={DocViewContainer} />
-        <Route path="/docs" component={DocsListContainer} />
-      </Switch>
-    )
-  }
-}
+const DocsPageContainer = () => (
+  <Switch>
+    <Route path="/docs/new" component={DocNewContainer} />
+    <Route path="/docs/:id/edit" component={DocEditContainer} />
+    <Route path="/docs/:id" component={DocViewContainer} />
+    <Route path="/docs" component={DocsListContainer} />
+  </Switch>
+);
 
 export default DocsPageContainer
