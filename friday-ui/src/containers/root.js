@@ -8,7 +8,7 @@ import AlertsContainer from './alerts'
 import LoginPageContainer from './loginPage'
 import EventsPageContainer from './eventsPage'
 import BookmarksPageContainer from './bookmarks.js'
-import DocsPageContainer from './docs.js'
+import { Docs as DocsPageContainer } from '../pages';
 
 const Root = ({store, history}) => (
   <Provider store={store}>
