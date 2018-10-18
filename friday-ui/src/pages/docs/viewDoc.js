@@ -8,21 +8,25 @@ import withOnLoad from '../../components/withOnLoad';
 
 const createMarkup = html => ({__html: html});
 
-const DocView = ({id, name, html, tags}) => (
-  <div className="doc-page view">
-    <div className="controls">
-      <NavLink to={`/docs/${id}/edit`}>Edit</NavLink>
-      <NavLink to="/docs">Back</NavLink>
+const DocView = props => {
+  const { doc } = props;
+  const { id, name, html, tags } = doc || {};
+  return (
+    <div className="doc-page view">
+      <div className="controls">
+        <NavLink to={`/docs/${id}/edit`}>Edit</NavLink>
+        <NavLink to="/docs">Back</NavLink>
+      </div>
+      <div className="header">
+        <b>{name}</b>
+      </div>
+      <TagsViewer tags={tags} />
+      <div className="markdown-body"
+           dangerouslySetInnerHTML={createMarkup(html)}>
+      </div>
     </div>
-    <div className="header">
-      <b>{name}</b>
-    </div>
-    <TagsViewer tags={tags} />
-    <div className="markdown-body"
-         dangerouslySetInnerHTML={createMarkup(html)}>
-    </div>
-  </div>
-);
+  );
+}
 
 let DocViewContainer = withOnLoad(
   DocView,
@@ -33,7 +37,9 @@ let DocViewContainer = withOnLoad(
   }
 );
 DocViewContainer = connect(
-  state => state.docs.currentItem,
+  state => ({
+    doc: state.docs.currentItem,
+  }),
   dispatch => ({
     loadHtml: data => dispatch(docs.getDoc(data)).then(
       () => dispatch(docs.getDocHtml(data))

@@ -8,7 +8,8 @@ import withOnLoad from '../../components/withOnLoad';
 
 
 const DocEdit = props => {
-  const { id, name, tags, text } = props;
+  const { doc } = props;
+  const { id } = doc || {};
   return (
     <article className="doc-page edit">
       <div className="controls">
@@ -17,7 +18,7 @@ const DocEdit = props => {
         <NavLink to="/docs">Back</NavLink>
       </div>
       <DocForm onSubmit={values => props.update(values)}
-               initialValues={{ id, name, tags, text }}/>
+               initialValues={doc}/>
     </article>
   )
 }
@@ -31,7 +32,9 @@ let DocEditContainer = withOnLoad(
   }
 );
 DocEditContainer = connect(
-  state => state.docs.currentItem,
+  state => ({
+    doc: state.docs.currentItem,
+  }),
   dispatch => ({
     load: data => dispatch(docs.getDoc(data)).then(
       () => dispatch(docs.getDocText(data))
