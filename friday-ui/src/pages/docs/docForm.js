@@ -18,7 +18,8 @@ let DocForm = props => {
       </div>
       <div className="form-group">
         <label htmlFor="text">Text</label>
-        <Field name="text" component="textarea" wrap="off" />
+        <Field name="text" component="textarea" wrap="off"
+               className="form-control" rows={15} />
       </div>
       <button type="submit">
         Save
