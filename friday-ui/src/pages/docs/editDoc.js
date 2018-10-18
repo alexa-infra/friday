@@ -18,7 +18,8 @@ const DocEdit = props => {
         <NavLink to="/docs">Back</NavLink>
       </div>
       <DocForm onSubmit={values => props.update(values)}
-               initialValues={doc}/>
+               initialValues={doc}
+               onDelete={values => props.delete(values)}/>
     </article>
   )
 }

@@ -4,7 +4,7 @@ import { renderTags } from './tags';
 
 
 let DocForm = props => {
-  const { handleSubmit } = props;
+  const { handleSubmit, initialValues, onDelete } = props;
   return (
     <form onSubmit={handleSubmit}>
       <Field name="id" component="input" type="hidden" />
@@ -21,6 +21,9 @@ let DocForm = props => {
         <Field name="text" component="textarea" wrap="off"
                className="form-control" rows={15} />
       </div>
+      <button type="button" onClick={() => onDelete(initialValues)}>
+        Delete
+      </button>
       <button type="submit">
         Save
       </button>
