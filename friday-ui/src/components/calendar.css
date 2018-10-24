@@ -132,7 +132,7 @@
 
 .calendar .days-grid li {
   position: relative;
-  height: 100px;
+  height: 95px;
 }
 
 @media all and (max-width: 740px) {
