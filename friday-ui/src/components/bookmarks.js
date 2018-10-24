@@ -186,10 +186,12 @@ let NewBookmarkForm = props => {
 
 NewBookmarkForm = reduxForm({
   form: 'new-bookmark',
+  enableReinitialize: true,
 })(NewBookmarkForm);
 
 NewBookmarkForm = connect(
   state => ({
+    initialValues: state.bookmarks.newItem,
     show: state.bookmarks.newItem !== null,
   }),
 )(NewBookmarkForm);
