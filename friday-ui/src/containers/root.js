@@ -5,10 +5,9 @@ import './root.css'
 import { NavBar } from '../components'
 import LinksPageContainer from './linksPage'
 import AlertsContainer from './alerts'
-import LoginPageContainer from './loginPage'
 import EventsPageContainer from './eventsPage'
 import BookmarksPageContainer from './bookmarks.js'
-import { Docs as DocsPageContainer } from '../pages';
+import { Docs as DocsPageContainer, Login as LoginPageContainer } from '../pages';
 
 const Root = ({store, history}) => (
   <Provider store={store}>
