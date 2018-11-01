@@ -1,8 +1,10 @@
-import React from 'react'
-import Modal from 'react-bootstrap/lib/Modal'
-import { Field, reduxForm, getFormValues } from 'redux-form'
+import React from 'react';
+import Modal from 'react-bootstrap/lib/Modal';
+import { Field, reduxForm, getFormValues } from 'redux-form';
 import { connect } from 'react-redux'
 import * as moment from 'moment';
+import { events, createAction } from '../../actions';
+import { Actions } from '../../constants';
 
 
 const RepeatInDays = props => {
@@ -20,7 +22,7 @@ const RepeatInDays = props => {
   );
 }
 
-const FormFields = props => (
+export const FormFields = props => (
   <React.Fragment>
     <div className="form-group">
       <label htmlFor="date">Date</label>
@@ -51,7 +53,7 @@ const FormFields = props => (
 );
 
 let EventForm = props => {
-  const { handleSubmit, show, hideEdit, initialValues } = props;
+  const { handleSubmit, show, hideEdit, initialValues, deleteEvent } = props;
   return (
     <Modal show={show} onHide={hideEdit}>
       <form onSubmit={handleSubmit}>
@@ -64,7 +66,7 @@ let EventForm = props => {
           <RepeatInDays {...props} />
         </Modal.Body>
         <Modal.Footer>
-          <button type="button" onClick={() => props.delete(initialValues)}>
+          <button type="button" onClick={() => deleteEvent(initialValues)}>
             Delete
           </button>
           <button type="submit">
@@ -87,39 +89,15 @@ EventForm = connect(
     show: state.events.currentItem !== null,
     formValues: getFormValues('event')(state),
   }),
+  dispatch => {
+    const getEvents = () => dispatch(events.getEvents());
+    return {
+      onSubmit: item => dispatch(events.updateEvent(item)).then(getEvents),
+      repeatIn: item => dispatch(events.repeatEvent(item)).then(getEvents),
+      deleteEvent: item => dispatch(events.deleteEvent(item)).then(getEvents),
+      hideEdit: item => dispatch(createAction(Actions.EVENTS_HIDE_EDIT)),
+    };
+  }
 )(EventForm);
 
-let NewEventForm = props => {
-  const { handleSubmit, show, hideEdit } = props;
-  return (
-    <Modal show={show} onHide={hideEdit}>
-      <form onSubmit={handleSubmit}>
-        <Modal.Header closeButton>
-          <Modal.Title>Create event</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <FormFields />
-        </Modal.Body>
-        <Modal.Footer>
-          <button type="submit">
-            Create
-          </button>
-        </Modal.Footer>
-      </form>
-    </Modal>
-  );
-};
-
-NewEventForm = reduxForm({
-  form: 'new-event',
-  enableReinitialize: true,
-})(NewEventForm);
-
-NewEventForm = connect(
-  state => ({
-    initialValues: { date: state.events.newEventDate },
-    show: state.events.newEventDate !== null,
-  }),
-)(NewEventForm);
-
-export { NewEventForm as NewEventModal, EventForm as EditEventModal }
+export default EventForm;

@@ -1,8 +1,11 @@
-import React from 'react'
-import * as moment from 'moment'
-import classNames from 'classnames'
-import './calendar.css'
-import 'font-awesome/css/font-awesome.css'
+import React from 'react';
+import * as moment from 'moment';
+import classNames from 'classnames';
+import './calendar.css';
+import 'font-awesome/css/font-awesome.css';
+import { connect } from 'react-redux';
+import { events, createAction } from '../../actions';
+import { Actions } from '../../constants';
 
 
 function *iterDays(start, end) {
@@ -101,9 +104,9 @@ const Caption = ({month, nextMonth, prevMonth}) => (
       Next
     </button>
   </header>
-)
+);
 
-const Calendar = props => {
+let Calendar = props => {
   return (
     <div className="calendar">
       <Caption {...props} />
@@ -113,4 +116,20 @@ const Calendar = props => {
   )
 }
 
-export default Calendar
+Calendar = connect(
+  state => ({
+    ...state.events,
+    events: state.events.items,
+  }),
+  dispatch => {
+    const getEvents = () => dispatch(events.getEvents());
+    return {
+      showEdit: item => dispatch(createAction(Actions.EVENTS_SHOW_EDIT, item)),
+      showEditNew: item => dispatch(createAction(Actions.EVENTS_SHOW_EDIT_NEW, item)),
+      nextMonth: () => dispatch(events.nextMonth()).then(getEvents),
+      prevMonth: () => dispatch(events.prevMonth()).then(getEvents),
+    };
+  }
+)(Calendar);
+
+export default Calendar;
