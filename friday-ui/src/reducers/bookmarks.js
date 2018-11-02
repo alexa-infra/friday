@@ -1,5 +1,5 @@
 import * as moment from 'moment'
-import { Actions } from '../constants'
+import { LIST, NEW, EDIT, DELETE, SELECT_PAGE, SELECT_PER_PAGE, FILTER, SHOW_EDIT, HIDE_EDIT, SHOW_NEW } from '../constants/bookmarks.actions';
 
 
 const initialState = {
@@ -32,41 +32,41 @@ const convertItem = it => {
 
 export default function (state = initialState, action) {
   switch (action.type) {
-    case Actions.BOOKMARKS_SUCCESS:
+    case LIST.SUCCESS:
       let { items } = action.data
       items = items.map(convertItem)
       return { ...state, ...action.data, items };
-    case Actions.BOOKMARKS_SELECT_PAGE:
+    case SELECT_PAGE:
       const page = action.data;
       const { pages } = state;
       if (page < 1 || page > pages)
         return state;
       return { ...state, page };
-    case Actions.BOOKMARKS_SELECT_PER_PAGE:
+    case SELECT_PER_PAGE:
       const per_page = action.data;
       if (per_page < 0 || per_page > 100)
         return state;
       return { ...state, per_page, page: 1 };
-    case Actions.BOOKMARKS_FILTER:
+    case FILTER:
       const search = action.data;
       return { ...state, search: search, page: 1 };
-    case Actions.BOOKMARKS_SHOW_EDIT:
+    case SHOW_EDIT:
       return { ...state, currentItem: action.data };
-    case Actions.BOOKMARKS_SHOW_NEW:
+    case SHOW_NEW:
       return { ...state, currentItem: null, newItem: action.data || newItemInitial };
-    case Actions.BOOKMARKS_HIDE_EDIT:
+    case HIDE_EDIT:
       return { ...state, currentItem: null, newItem: null };
-    case Actions.BOOKMARKS_NEW_REQUEST:
-    case Actions.BOOKMARKS_EDIT_REQUEST:
-    case Actions.BOOKMARKS_DELETE_REQUEST:
+    case NEW.REQUEST:
+    case EDIT.REQUEST:
+    case DELETE.REQUEST:
       return { ...state, editDisabled: true };
-    case Actions.BOOKMARKS_NEW_SUCCESS:
-    case Actions.BOOKMARKS_EDIT_SUCCESS:
-    case Actions.BOOKMARKS_DELETE_SUCCESS:
+    case NEW.SUCCESS:
+    case EDIT.SUCCESS:
+    case DELETE.SUCCESS:
       return { ...state, currentItem: null, newItem: null, editDisabled: false };
-    case Actions.BOOKMARKS_NEW_FAILURE:
-    case Actions.BOOKMARKS_EDIT_FAILURE:
-    case Actions.BOOKMARKS_DELETE_FAILURE:
+    case NEW.FAILURE:
+    case EDIT.FAILURE:
+    case DELETE.FAILURE:
       return { ...state, editDisabled: false };
     default:
       return state;
