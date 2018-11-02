@@ -3,7 +3,7 @@
   flex-flow: column nowrap;
 }
 
-.alert {
+.alert-list .alert {
   display: flex;
   flex-flow: row nowrap;
   border-radius: .25rem;
@@ -11,11 +11,11 @@
   align-items: center;
 }
 
-.alert .message {
+.alert-list .alert .message {
   flex: 1;
 }
 
-.alert .close {
+.alert-list .alert .close {
   cursor: pointer;
   color: #000;
   background-color: transparent;
@@ -26,23 +26,26 @@
   padding: 0;
 }
 
-.alert .close:hover {
+.alert-list .alert .close:hover {
   opacity: 0.75;
 }
 
-.alert-success {
+.alert-list .alert.alert-success {
   color: #fff;
   background-color: #61b832;
 }
-.alert-info {
+
+.alert-list .alert.alert-info {
   color: #fff;
   background-color: #4ea5cd;
 }
-.alert-warning {
+
+.alert-list .alert.alert-warning {
   color: #fff;
   background-color: #eaaf51;
 }
-.alert-error {
+
+.alert-list .alert.alert-error {
   color: #fff;
   background-color: #de4343;
 }

@@ -2,11 +2,8 @@ import React from 'react'
 import { Provider } from 'react-redux'
 import { Router, Route, Switch } from 'react-router'
 import './root.css'
-import { NavBar } from '../components'
-import AlertsContainer from './alerts'
-import { Docs as DocsPageContainer, Login as LoginPageContainer,
-         Events as EventsPageContainer, Links as LinksPageContainer,
-         Bookmarks as BookmarksPageContainer } from '../pages';
+import { NavBar, Alerts } from '../components'
+import * as Pages from '../pages';
 
 const Root = ({store, history}) => (
   <Provider store={store}>
@@ -16,13 +13,13 @@ const Root = ({store, history}) => (
           <NavBar />
         </header>
         <main>
-          <AlertsContainer />
+          <Alerts />
           <Switch>
-            <Route path="/login" component={LoginPageContainer} />
-            <Route path="/events" component={EventsPageContainer} />
-            <Route path="/bookmarks" component={BookmarksPageContainer} />
-            <Route path="/docs" component={DocsPageContainer} />
-            <Route path="/" component={LinksPageContainer} />
+            <Route path="/login" component={Pages.Login} />
+            <Route path="/events" component={Pages.Events} />
+            <Route path="/bookmarks" component={Pages.Bookmarks} />
+            <Route path="/docs" component={Pages.Docs} />
+            <Route path="/" component={Pages.Links} />
           </Switch>
         </main>
       </content>
