@@ -3,8 +3,7 @@ import Modal from 'react-bootstrap/lib/Modal';
 import { reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { FormFields } from './editForm';
-import { events, createAction } from '../../actions';
-import { Actions } from '../../constants';
+import { events } from '../../actions';
 
 
 let NewEventForm = props => {
@@ -42,7 +41,7 @@ NewEventForm = connect(
     onSubmit: values => dispatch(events.createEvent(values)).then(
       () => dispatch(events.getEvents())
     ),
-    hideEdit: () => dispatch(createAction(Actions.EVENTS_HIDE_EDIT)),
+    hideEdit: () => dispatch(events.hideEdit()),
   })
 )(NewEventForm);
 

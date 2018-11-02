@@ -33,3 +33,7 @@ export const createEvent = callApi(api.createEvent, 'EVENTS_NEW');
 export const updateEvent = callApi(api.updateEvent, 'EVENTS_EDIT');
 export const deleteEvent = callApi(api.deleteEvent, 'EVENTS_DELETE');
 export const repeatEvent = callApi(api.repeatEvent, 'EVENTS_REPEAT');
+
+export const hideEdit = () => createAction(Actions.EVENTS_HIDE_EDIT);
+export const showEdit = item => createAction(Actions.EVENTS_SHOW_EDIT, item);
+export const showEditNew = item => createAction(Actions.EVENTS_SHOW_EDIT_NEW, item);

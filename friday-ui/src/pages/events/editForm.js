@@ -3,8 +3,7 @@ import Modal from 'react-bootstrap/lib/Modal';
 import { Field, reduxForm, getFormValues } from 'redux-form';
 import { connect } from 'react-redux'
 import * as moment from 'moment';
-import { events, createAction } from '../../actions';
-import { Actions } from '../../constants';
+import { events } from '../../actions';
 
 
 const RepeatInDays = props => {
@@ -95,7 +94,7 @@ EventForm = connect(
       onSubmit: item => dispatch(events.updateEvent(item)).then(getEvents),
       repeatIn: item => dispatch(events.repeatEvent(item)).then(getEvents),
       deleteEvent: item => dispatch(events.deleteEvent(item)).then(getEvents),
-      hideEdit: item => dispatch(createAction(Actions.EVENTS_HIDE_EDIT)),
+      hideEdit: () => dispatch(events.hideEdit()),
     };
   }
 )(EventForm);

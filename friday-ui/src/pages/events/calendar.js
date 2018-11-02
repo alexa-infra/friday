@@ -4,8 +4,7 @@ import classNames from 'classnames';
 import './calendar.css';
 import 'font-awesome/css/font-awesome.css';
 import { connect } from 'react-redux';
-import { events, createAction } from '../../actions';
-import { Actions } from '../../constants';
+import { events } from '../../actions';
 
 
 function *iterDays(start, end) {
@@ -124,8 +123,8 @@ Calendar = connect(
   dispatch => {
     const getEvents = () => dispatch(events.getEvents());
     return {
-      showEdit: item => dispatch(createAction(Actions.EVENTS_SHOW_EDIT, item)),
-      showEditNew: item => dispatch(createAction(Actions.EVENTS_SHOW_EDIT_NEW, item)),
+      showEdit: item => dispatch(events.showEdit(item)),
+      showEditNew: item => dispatch(events.showEditNew(item)),
       nextMonth: () => dispatch(events.nextMonth()).then(getEvents),
       prevMonth: () => dispatch(events.prevMonth()).then(getEvents),
     };
