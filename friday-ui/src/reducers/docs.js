@@ -1,5 +1,5 @@
 import * as moment from 'moment'
-import { Actions } from '../constants';
+import * as Actions from '../constants/docs.actions';
 
 
 const initialState = {
@@ -19,21 +19,21 @@ const convertItem = it => {
 
 export default function (state = initialState, action) {
   switch (action.type) {
-    case Actions.DOCS_SUCCESS:
+    case Actions.LIST.SUCCESS:
       let items = action.data;
       items = items.map(convertItem);
       return { ...state, items: items, currentItem: null };
-    case Actions.DOCS_HTML_SUCCESS: {
+    case Actions.HTML.SUCCESS: {
       const { html } = action.data;
       const { currentItem } = state;
       return { ...state, currentItem: { ...currentItem, html }};
     }
-    case Actions.DOCS_TEXT_SUCCESS: {
+    case Actions.TEXT.SUCCESS: {
       const { text } = action.data;
       const { currentItem } = state;
       return { ...state, currentItem: { ...currentItem, text }};
     }
-    case Actions.DOCS_INFO_SUCCESS: {
+    case Actions.INFO.SUCCESS: {
       const { currentItem } = state;
       return { ...state, currentItem: { ...currentItem, ...action.data }};
     }
