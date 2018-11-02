@@ -1,4 +1,4 @@
-import { LIST, NEW, EDIT, DELETE, SHOW_EDIT, HIDE_EDIT, SHOW_NEW, FILTER, EDIT_MODE } from '../constants/links.actions';
+import * as Actions from '../constants/links.actions';
 
 const initialState = {
   currentItem: null,
@@ -19,34 +19,34 @@ const filterItems = term => item => {
 
 export default function (state = initialState, action) {
   switch (action.type) {
-    case LIST.SUCCESS: {
+    case Actions.LIST.SUCCESS: {
       const { items } = action.data;
       return { ...state, currentItem: null, items: items, allItems: items, filter: '' };
     }
-    case FILTER: {
+    case Actions.FILTER: {
       const query = action.data;
       const filtered = state.allItems.filter(filterItems(query));
       return { ...state, items: filtered, filter: query };
     }
-    case SHOW_EDIT:
+    case Actions.SHOW_EDIT:
       return { ...state, currentItem: action.data, newLink: false, editDisabled: false };
-    case HIDE_EDIT:
+    case Actions.HIDE_EDIT:
       return { ...state, currentItem: null, newLink: false, editDisabled: true };
-    case EDIT_MODE:
+    case Actions.EDIT_MODE:
       return { ...state, editMode: action.data, newLink: false };
-    case SHOW_NEW:
+    case Actions.SHOW_NEW:
       return { ...state, newLink: true, editDisabled: false };
-    case NEW.REQUEST:
-    case EDIT.REQUEST:
-    case DELETE.REQUEST:
+    case Actions.NEW.REQUEST:
+    case Actions.EDIT.REQUEST:
+    case Actions.DELETE.REQUEST:
       return { ...state, editDisabled: true };
-    case NEW.FAILURE:
-    case EDIT.FAILURE:
-    case DELETE.FAILURE:
+    case Actions.NEW.FAILURE:
+    case Actions.EDIT.FAILURE:
+    case Actions.DELETE.FAILURE:
       return { ...state, editDisabled: false };
-    case NEW.SUCCESS:
-    case EDIT.SUCCESS:
-    case DELETE.SUCCESS:
+    case Actions.NEW.SUCCESS:
+    case Actions.EDIT.SUCCESS:
+    case Actions.DELETE.SUCCESS:
       return { ...state, newLink: false, currentItem: null, editDisabled: false };
     default:
       return state;

@@ -1,5 +1,5 @@
 import * as moment from 'moment';
-import { SELECT_MONTH, SHOW_EDIT, HIDE_EDIT, SHOW_EDIT_NEW, LIST, NEW, EDIT, DELETE, REPEAT } from '../constants/events.actions';
+import * as Actions from '../constants/events.actions';
 
 const calendarRange = (date) => {
   const firstDay = date.clone().startOf('month').startOf('isoWeek');
@@ -32,31 +32,31 @@ const convertItem = (it) => {
 
 export default function (state = initialState, action) {
   switch (action.type) {
-    case SELECT_MONTH:
+    case Actions.SELECT_MONTH:
       const date = action.data;
       return { ...initialState, month: date, ...calendarRange(date) };
-    case LIST.SUCCESS:
+    case Actions.LIST.SUCCESS:
       return { ...state, currentItem: null, items: action.data.map(convertItem) };
-    case SHOW_EDIT:
+    case Actions.SHOW_EDIT:
       return { ...state, currentItem: action.data, editDisabled: false };
-    case HIDE_EDIT:
+    case Actions.HIDE_EDIT:
       return { ...state, currentItem: null, editDisabled: true, newEventDate: null };
-    case NEW.REQUEST:
-    case EDIT.REQUEST:
-    case DELETE.REQUEST:
-    case REPEAT.REQUEST:
+    case Actions.NEW.REQUEST:
+    case Actions.EDIT.REQUEST:
+    case Actions.DELETE.REQUEST:
+    case Actions.REPEAT.REQUEST:
       return { ...state, editDisabled: true };
-    case NEW.FAILURE:
-    case EDIT.FAILURE:
-    case DELETE.FAILURE:
-    case REPEAT.FAILURE:
+    case Actions.NEW.FAILURE:
+    case Actions.EDIT.FAILURE:
+    case Actions.DELETE.FAILURE:
+    case Actions.REPEAT.FAILURE:
       return { ...state, editDisabled: false };
-    case NEW.SUCCESS:
-    case EDIT.SUCCESS:
-    case DELETE.SUCCESS:
-    case REPEAT.SUCCESS:
+    case Actions.NEW.SUCCESS:
+    case Actions.EDIT.SUCCESS:
+    case Actions.DELETE.SUCCESS:
+    case Actions.REPEAT.SUCCESS:
       return { ...state, newEventDate: null, currentItem: null, editDisabled: false };
-    case SHOW_EDIT_NEW:
+    case Actions.SHOW_EDIT_NEW:
       return { ...state, newEventDate: action.data, editDisabled: false }
     default:
       return state;

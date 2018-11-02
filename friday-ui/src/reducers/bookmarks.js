@@ -1,5 +1,5 @@
 import * as moment from 'moment'
-import { LIST, NEW, EDIT, DELETE, SELECT_PAGE, SELECT_PER_PAGE, FILTER, SHOW_EDIT, HIDE_EDIT, SHOW_NEW } from '../constants/bookmarks.actions';
+import * as Actions from '../constants/bookmarks.actions';
 
 
 const initialState = {
@@ -32,41 +32,41 @@ const convertItem = it => {
 
 export default function (state = initialState, action) {
   switch (action.type) {
-    case LIST.SUCCESS:
+    case Actions.LIST.SUCCESS:
       let { items } = action.data
       items = items.map(convertItem)
       return { ...state, ...action.data, items };
-    case SELECT_PAGE:
+    case Actions.SELECT_PAGE:
       const page = action.data;
       const { pages } = state;
       if (page < 1 || page > pages)
         return state;
       return { ...state, page };
-    case SELECT_PER_PAGE:
+    case Actions.SELECT_PER_PAGE:
       const per_page = action.data;
       if (per_page < 0 || per_page > 100)
         return state;
       return { ...state, per_page, page: 1 };
-    case FILTER:
+    case Actions.FILTER:
       const search = action.data;
       return { ...state, search: search, page: 1 };
-    case SHOW_EDIT:
+    case Actions.SHOW_EDIT:
       return { ...state, currentItem: action.data };
-    case SHOW_NEW:
+    case Actions.SHOW_NEW:
       return { ...state, currentItem: null, newItem: action.data || newItemInitial };
-    case HIDE_EDIT:
+    case Actions.HIDE_EDIT:
       return { ...state, currentItem: null, newItem: null };
-    case NEW.REQUEST:
-    case EDIT.REQUEST:
-    case DELETE.REQUEST:
+    case Actions.NEW.REQUEST:
+    case Actions.EDIT.REQUEST:
+    case Actions.DELETE.REQUEST:
       return { ...state, editDisabled: true };
-    case NEW.SUCCESS:
-    case EDIT.SUCCESS:
-    case DELETE.SUCCESS:
+    case Actions.NEW.SUCCESS:
+    case Actions.EDIT.SUCCESS:
+    case Actions.DELETE.SUCCESS:
       return { ...state, currentItem: null, newItem: null, editDisabled: false };
-    case NEW.FAILURE:
-    case EDIT.FAILURE:
-    case DELETE.FAILURE:
+    case Actions.NEW.FAILURE:
+    case Actions.EDIT.FAILURE:
+    case Actions.DELETE.FAILURE:
       return { ...state, editDisabled: false };
     default:
       return state;

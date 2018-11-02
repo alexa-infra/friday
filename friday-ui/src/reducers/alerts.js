@@ -1,15 +1,15 @@
-import { ADD, DISMISS } from '../constants/alerts.actions';
+import * as Actions from '../constants/alerts.actions';
 
 const initialState = [];
 
 export default function (state = initialState, action) {
   switch (action.type) {
-    case ADD: {
+    case Actions.ADD: {
       const { id, message, type } = action.data;
       const newAlert = { id, message, type };
       return [...state, newAlert];
     }
-    case DISMISS: {
+    case Actions.DISMISS: {
       const { id } = action.data;
       return state.filter(it => it.id !== id);
     }
