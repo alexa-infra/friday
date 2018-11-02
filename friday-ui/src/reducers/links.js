@@ -1,4 +1,4 @@
-import { Actions } from '../constants';
+import { LIST, NEW, EDIT, DELETE, SHOW_EDIT, HIDE_EDIT, SHOW_NEW, FILTER, EDIT_MODE } from '../constants/links.actions';
 
 const initialState = {
   currentItem: null,
@@ -19,34 +19,34 @@ const filterItems = term => item => {
 
 export default function (state = initialState, action) {
   switch (action.type) {
-    case Actions.LINKS_SUCCESS: {
+    case LIST.SUCCESS: {
       const { items } = action.data;
       return { ...state, currentItem: null, items: items, allItems: items, filter: '' };
     }
-    case Actions.LINKS_FILTER: {
+    case FILTER: {
       const query = action.data;
       const filtered = state.allItems.filter(filterItems(query));
       return { ...state, items: filtered, filter: query };
     }
-    case Actions.LINKS_SHOW_EDIT:
+    case SHOW_EDIT:
       return { ...state, currentItem: action.data, newLink: false, editDisabled: false };
-    case Actions.LINKS_HIDE_EDIT:
+    case HIDE_EDIT:
       return { ...state, currentItem: null, newLink: false, editDisabled: true };
-    case Actions.LINKS_EDIT_MODE:
+    case EDIT_MODE:
       return { ...state, editMode: action.data, newLink: false };
-    case Actions.LINKS_SHOW_NEW:
+    case SHOW_NEW:
       return { ...state, newLink: true, editDisabled: false };
-    case Actions.LINKS_NEW_REQUEST:
-    case Actions.LINKS_EDIT_REQUEST:
-    case Actions.LINKS_DELETE_REQUEST:
+    case NEW.REQUEST:
+    case EDIT.REQUEST:
+    case DELETE.REQUEST:
       return { ...state, editDisabled: true };
-    case Actions.LINKS_NEW_FAILURE:
-    case Actions.LINKS_EDIT_FAILURE:
-    case Actions.LINKS_DELETE_FAILURE:
+    case NEW.FAILURE:
+    case EDIT.FAILURE:
+    case DELETE.FAILURE:
       return { ...state, editDisabled: false };
-    case Actions.LINKS_NEW_SUCCESS:
-    case Actions.LINKS_EDIT_SUCCESS:
-    case Actions.LINKS_DELETE_SUCCESS:
+    case NEW.SUCCESS:
+    case EDIT.SUCCESS:
+    case DELETE.SUCCESS:
       return { ...state, newLink: false, currentItem: null, editDisabled: false };
     default:
       return state;

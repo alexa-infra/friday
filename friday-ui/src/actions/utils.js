@@ -5,13 +5,10 @@ export const createAction = (type, data) => {
   return { type, data };
 }
 
-export const _callApi = (method, actionName) => {
-  const request = actionName + '_REQUEST';
-  const success = actionName + '_SUCCESS';
-  const failure = actionName + '_FAILURE';
-  const requestAction = data => createAction(request, data);
-  const successAction = data => createAction(success, data);
-  const failureAction = error => createAction(failure, { error });
+export const _callApi = (method, action) => {
+  const requestAction = data => createAction(action.REQUEST, data);
+  const successAction = data => createAction(action.SUCCESS, data);
+  const failureAction = error => createAction(action.FAILURE, { error });
   return data => (dispatch, getState) => {
     dispatch(requestAction(data));
     return method(getState, data)
