@@ -9,6 +9,7 @@ import BrowserBookmark from './browserBookmark';
 import EditForm from './editForm';
 import NewForm from './newForm';
 import { bookmarks } from '../../actions';
+import './style.css';
 
 
 class BookmarksPage extends Component {
