@@ -4,9 +4,9 @@ import { Router, Route, Switch } from 'react-router'
 import './root.css'
 import { NavBar } from '../components'
 import AlertsContainer from './alerts'
-import BookmarksPageContainer from './bookmarks.js'
 import { Docs as DocsPageContainer, Login as LoginPageContainer,
-         Events as EventsPageContainer, Links as LinksPageContainer } from '../pages';
+         Events as EventsPageContainer, Links as LinksPageContainer,
+         Bookmarks as BookmarksPageContainer } from '../pages';
 
 const Root = ({store, history}) => (
   <Provider store={store}>

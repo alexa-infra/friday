@@ -37,3 +37,7 @@ export const markReadBookmark = _callApi((getState, data) => {
   const { readed } = data;
   return api.updateBookmark({...data, readed: !readed});
 }, 'BOOKMARKS_EDIT');
+
+export const showEdit = item => createAction(Actions.BOOKMARKS_SHOW_EDIT, item);
+export const hideEdit = () => createAction(Actions.BOOKMARKS_HIDE_EDIT);
+export const showNew = item => createAction(Actions.BOOKMARKS_SHOW_NEW, item);
