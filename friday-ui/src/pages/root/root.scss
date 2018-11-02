@@ -1,0 +1,14 @@
+#root {
+  height: 100%;
+
+  content {
+    height: 100%;
+
+    display: grid;
+    grid-template-columns: 1fr minmax(320px, 740px) 1fr;
+    grid-template-rows: auto 1fr;
+  }
+
+  main { grid-column: 2; }
+  header { grid-column: 1 / -1; }
+}
