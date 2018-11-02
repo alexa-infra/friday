@@ -3,23 +3,19 @@ import { connect } from 'react-redux';
 import Calendar from './calendar';
 import EditEventModal from './editForm';
 import NewEventModal from './newForm';
+import { withOnLoad } from '../../components';
 import { events } from '../../actions';
 
 
-class EventsPage extends React.Component {
-  componentDidMount() {
-    this.props.initCalendar();
-  }
-  render() {
-    return (
-      <div>
-        <Calendar />
-        <EditEventModal />
-        <NewEventModal />
-      </div>
-    );
-  }
-}
+let EventsPage = () => (
+  <div>
+    <Calendar />
+    <EditEventModal />
+    <NewEventModal />
+  </div>
+);
+
+EventsPage = withOnLoad(EventsPage, props => props.initCalendar());
 
 EventsPage = connect(
   null,

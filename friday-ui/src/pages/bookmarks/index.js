@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import BookmarksAddShortcut from './newShortcut';
@@ -9,26 +9,22 @@ import BrowserBookmark from './browserBookmark';
 import EditForm from './editForm';
 import NewForm from './newForm';
 import { bookmarks } from '../../actions';
+import { withOnLoad } from '../../components';
 import './style.css';
 
 
-class BookmarksPage extends Component {
-  componentDidMount() {
-    this.props.onLoad()
-  }
-  render() {
-    return (
-      <div className="bookmarks-page">
-        <Controls />
-        <List />
-        <Pagination />
-        <BrowserBookmark />
-        <EditForm />
-        <NewForm />
-      </div>
-    );
-  }
-}
+let BookmarksPage = () => (
+  <div className="bookmarks-page">
+    <Controls />
+    <List />
+    <Pagination />
+    <BrowserBookmark />
+    <EditForm />
+    <NewForm />
+  </div>
+);
+
+BookmarksPage = withOnLoad(BookmarksPage, props => props.onLoad());
 
 BookmarksPage = connect(
   null,

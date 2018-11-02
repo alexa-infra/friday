@@ -5,24 +5,20 @@ import EditModal from './editForm';
 import NewModal from './newForm';
 import { connect } from 'react-redux';
 import { links } from '../../actions';
+import { withOnLoad } from '../../components';
 import './style.css';
 
 
-class LinksPage extends React.Component {
-  componentDidMount() {
-    this.props.onLoad();
-  }
-  render() {
-    return (
-      <div className="links-page">
-        <Controls />
-        <List />
-        <NewModal />
-        <EditModal />
-      </div>
-    );
-  }
-};
+let LinksPage = () => (
+  <div className="links-page">
+    <Controls />
+    <List />
+    <NewModal />
+    <EditModal />
+  </div>
+);
+
+LinksPage = withOnLoad(LinksPage, props => props.onLoad());
 
 LinksPage = connect(
   null,
