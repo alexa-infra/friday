@@ -1,5 +1,5 @@
 import * as moment from 'moment';
-import { Actions } from '../constants';
+import { SELECT_MONTH, SHOW_EDIT, HIDE_EDIT, SHOW_EDIT_NEW, LIST, NEW, EDIT, DELETE, REPEAT } from '../constants/events.actions';
 
 const calendarRange = (date) => {
   const firstDay = date.clone().startOf('month').startOf('isoWeek');
@@ -32,31 +32,31 @@ const convertItem = (it) => {
 
 export default function (state = initialState, action) {
   switch (action.type) {
-    case Actions.EVENTS_SELECT_MONTH:
+    case SELECT_MONTH:
       const date = action.data;
       return { ...initialState, month: date, ...calendarRange(date) };
-    case Actions.EVENTS_SUCCESS:
+    case LIST.SUCCESS:
       return { ...state, currentItem: null, items: action.data.map(convertItem) };
-    case Actions.EVENTS_SHOW_EDIT:
+    case SHOW_EDIT:
       return { ...state, currentItem: action.data, editDisabled: false };
-    case Actions.EVENTS_HIDE_EDIT:
+    case HIDE_EDIT:
       return { ...state, currentItem: null, editDisabled: true, newEventDate: null };
-    case Actions.EVENTS_NEW_REQUEST:
-    case Actions.EVENTS_EDIT_REQUEST:
-    case Actions.EVENTS_DELETE_REQUEST:
-    case Actions.EVENTS_REPEAT_REQUEST:
+    case NEW.REQUEST:
+    case EDIT.REQUEST:
+    case DELETE.REQUEST:
+    case REPEAT.REQUEST:
       return { ...state, editDisabled: true };
-    case Actions.EVENTS_NEW_FAILURE:
-    case Actions.EVENTS_EDIT_FAILURE:
-    case Actions.EVENTS_DELETE_FAILURE:
-    case Actions.EVENTS_REPEAT_FAILURE:
+    case NEW.FAILURE:
+    case EDIT.FAILURE:
+    case DELETE.FAILURE:
+    case REPEAT.FAILURE:
       return { ...state, editDisabled: false };
-    case Actions.EVENTS_NEW_SUCCESS:
-    case Actions.EVENTS_EDIT_SUCCESS:
-    case Actions.EVENTS_DELETE_SUCCESS:
-    case Actions.EVENTS_REPEAT_SUCCESS:
+    case NEW.SUCCESS:
+    case EDIT.SUCCESS:
+    case DELETE.SUCCESS:
+    case REPEAT.SUCCESS:
       return { ...state, newEventDate: null, currentItem: null, editDisabled: false };
-    case Actions.EVENTS_SHOW_EDIT_NEW:
+    case SHOW_EDIT_NEW:
       return { ...state, newEventDate: action.data, editDisabled: false }
     default:
       return state;
