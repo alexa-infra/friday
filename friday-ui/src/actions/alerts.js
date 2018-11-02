@@ -1,9 +1,10 @@
 import { createAction } from './utils';
-import { Actions, Alerts } from '../constants';
+import { Alerts } from '../constants';
+import { ADD, DISMISS } from '../constants/alerts.actions';
 
 
-const addAlert = data => createAction(Actions.ADD_ALERT, data);
-const removeAlert = data => createAction(Actions.DISMISS_ALERT, data);
+const addAlert = data => createAction(ADD, data);
+const removeAlert = data => createAction(DISMISS, data);
 
 let alertId = 0;
 
