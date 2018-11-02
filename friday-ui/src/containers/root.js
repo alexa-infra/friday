@@ -3,11 +3,10 @@ import { Provider } from 'react-redux'
 import { Router, Route, Switch } from 'react-router'
 import './root.css'
 import { NavBar } from '../components'
-import LinksPageContainer from './linksPage'
 import AlertsContainer from './alerts'
 import BookmarksPageContainer from './bookmarks.js'
 import { Docs as DocsPageContainer, Login as LoginPageContainer,
-         Events as EventsPageContainer } from '../pages';
+         Events as EventsPageContainer, Links as LinksPageContainer } from '../pages';
 
 const Root = ({store, history}) => (
   <Provider store={store}>
