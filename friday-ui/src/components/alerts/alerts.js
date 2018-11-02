@@ -38,7 +38,9 @@ let AlertList = ({ items, dismissAlert }) => (
 );
 
 AlertList = connect(
-  state => state.alerts,
+  state => ({
+    items: state.alerts,
+  }),
   dispatch => ({
     dismissAlert: item => dispatch(alerts.dismissAlert(item.id)),
   })
