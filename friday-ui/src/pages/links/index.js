@@ -6,7 +6,7 @@ import NewModal from './newForm';
 import { connect } from 'react-redux';
 import { links } from '../../actions';
 import { withOnLoad } from '../../components';
-import './style.css';
+import './style.scss';
 
 
 let LinksPage = () => (

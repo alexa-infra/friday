@@ -1,7 +1,7 @@
 import React from 'react'
 import { Provider } from 'react-redux'
 import { Router, Route, Switch } from 'react-router'
-import './root.css'
+import './root.scss'
 
 import Docs from '../docs';
 import Login from '../login';

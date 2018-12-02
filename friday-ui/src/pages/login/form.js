@@ -1,6 +1,6 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form'
-import './form.css';
+import './form.scss';
 
 
 let LoginForm = props => {

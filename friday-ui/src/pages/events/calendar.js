@@ -1,7 +1,7 @@
 import React from 'react';
 import * as moment from 'moment';
 import classNames from 'classnames';
-import './calendar.css';
+import './calendar.scss';
 import 'font-awesome/css/font-awesome.css';
 import { connect } from 'react-redux';
 import { events } from '../../actions';

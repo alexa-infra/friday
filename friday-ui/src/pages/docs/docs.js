@@ -2,8 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { TagsViewer, TagsEdit } from './tags.js';
 import { Field, reduxForm } from 'redux-form'
-import './docs.css';
-import './github-markdown.css';
+import './docs.scss';
 
 
 const renderTags = ({ input }) => (

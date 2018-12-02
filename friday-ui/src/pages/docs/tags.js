@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './tags.css';
+import './tags.scss';
 
 
 const Tag = ({tag, onRemove, disabled}) => (

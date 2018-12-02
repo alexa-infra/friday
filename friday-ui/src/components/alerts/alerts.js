@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { Alerts } from '../../constants';
 import { connect } from 'react-redux';
 import { alerts } from '../../actions';
-import './alerts.css';
+import './alerts.scss';
 
 
 const Alert = ({ item, onDismissAlert }) => {
