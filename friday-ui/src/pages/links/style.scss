@@ -16,8 +16,24 @@
       text-align: center;
       padding: 5px 10px;
     }
+  }
 
-    a {
+  .link-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline;
+    margin: 0;
+    padding: 0;
+
+    &:hover, &:focus {
+      text-decoration: none;
+    }
+  }
+  .link {
+    text-decoration: none;
+    &:hover, &:focus {
       text-decoration: none;
     }
   }

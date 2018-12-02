@@ -16,9 +16,24 @@ const Bookmark = ({item, onEdit, onMarkRead, onDelete}) => {
       </div>
       <div className="controls">
         <i title={created.toISOString(true)}>{created.fromNow()}</i>
-        <a onClick={onEdit}>edit</a>
-        <a onClick={onMarkRead}>mark as read</a>
-        <a onClick={onDelete}>remove</a>
+        <button
+          type="button"
+          className="link-button"
+          onClick={onEdit}>
+            edit
+        </button>
+        <button
+          type="button"
+          className="link-button"
+          onClick={onMarkRead}>
+            mark as read
+        </button>
+        <button
+          type="button"
+          className="link-button"
+          onClick={onDelete}>
+            remove
+        </button>
       </div>
     </div>
   );

@@ -4,11 +4,21 @@ import { links } from '../../actions';
 
 
 const Link = ({ id, url, title }) => (
-  <a href={`/api/links/${id}/redirect`} title={url}>{title}</a>
+  <a
+    className="link"
+    href={`/api/links/${id}/redirect`}
+    title={url}>
+      {title}
+  </a>
 );
 
 const LinkEdit = ({url, title, showEdit}) => (
-  <a title={url} onClick={showEdit}>{title}</a>
+  <button
+    type="button"
+    className="link-button"
+    onClick={showEdit}>
+      {title}
+  </button>
 );
 
 let LinkList = ({ items, editMode, showEdit }) => (
