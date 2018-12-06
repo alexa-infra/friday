@@ -107,7 +107,7 @@ def test_tags6(app):
     cc = db.session.query(DocTag).count()
     assert cc == 2
 
-    obj.setTags(['tag1', 'tag2', 'tag1', 'tag2'])
+    obj.update(tagsList=['tag1', 'tag2', 'tag1', 'tag2'])
     db.session.commit()
 
     cc = db.session.query(DocTag).count()
