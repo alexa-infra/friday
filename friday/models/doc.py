@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, Text, DateTime, ForeignKey
+from sqlalchemy import Table, Column, Integer, Text, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 from slugify import slugify
 from markdown import Markdown
@@ -9,12 +9,17 @@ from . import db
 md = Markdown(extensions=['markdown.extensions.tables'])
 
 
+DocTag = Table('doc_tag', db.metadata,
+    Column('tag_id', Integer, ForeignKey('tag.id'), primary_key=True),
+    Column('doc_id', Integer, ForeignKey('doc.id'), primary_key=True)
+)
+
+
 class Tag(db.Model):
     id = Column(Integer, primary_key=True)
     name = Column(Text, nullable=False, unique=True)
-    docs = relationship('DocTag', back_populates='tag',
-                        cascade='all, delete-orphan',
-                        passive_deletes=True)
+    docs = relationship('Doc', back_populates='tags',
+                        secondary=DocTag)
 
     @classmethod
     def new(cls, name, **kwargs):
@@ -29,22 +34,6 @@ class Tag(db.Model):
             self.name = slugify(self.name)
 
 
-class DocTag(db.Model):
-    # pylint: disable=too-few-public-methods
-    tag_id = Column(Integer, ForeignKey('tag.id', ondelete='cascade'),
-                    primary_key=True)
-    doc_id = Column(Integer, ForeignKey('doc.id', ondelete='cascade'),
-                    primary_key=True)
-    tag = relationship('Tag', back_populates='docs', uselist=False,
-                       passive_deletes=True)
-    doc = relationship('Doc', back_populates='tags', uselist=False,
-                       passive_deletes=True)
-
-    @property
-    def name(self):
-        return self.tag.name
-
-
 class Doc(db.Model):
     id = Column(Integer, primary_key=True)
     name = Column(Text, nullable=False)
@@ -52,9 +41,8 @@ class Doc(db.Model):
     created = Column(DateTime, nullable=False, default=utcnow)
     updated = Column(DateTime, nullable=False, default=utcnow,
                      onupdate=utcnow)
-    tags = relationship('DocTag', back_populates='doc',
-                        cascade='all, delete-orphan',
-                        passive_deletes=True)
+    tags = relationship('Tag', back_populates='docs',
+                        secondary=DocTag)
 
     @property
     def html(self):
@@ -66,7 +54,7 @@ class Doc(db.Model):
     def query_list(cls):
         return (
             cls.query.options(db.defer(Doc.text),
-                              db.joinedload(Doc.tags).joinedload(DocTag.tag))
+                              db.joinedload(Doc.tags))
         )
 
     @classmethod
@@ -101,5 +89,4 @@ class Doc(db.Model):
             if not tag:
                 tag = Tag(name=d)
                 db.session.add(tag)
-            doc_tag = DocTag(doc=self, tag=tag)
-            db.session.add(doc_tag)
+            self.tags.append(tag)
