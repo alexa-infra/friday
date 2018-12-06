@@ -1,5 +1,6 @@
 #!/bin/bash
 
+source ./local/bin/activate
 export PORT=3001
 export PYTHONPATH=$(pwd):$PYTHONPATH
 python -m friday.app
