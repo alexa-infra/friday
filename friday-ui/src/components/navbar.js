@@ -19,6 +19,9 @@ export default () => (
       <LinkContainer to="/docs">
         <Nav.Link>Docs</Nav.Link>
       </LinkContainer>
+      <LinkContainer to="/recipes">
+        <Nav.Link>Recipes</Nav.Link>
+      </LinkContainer>
     </Nav>
   </Navbar>
 );

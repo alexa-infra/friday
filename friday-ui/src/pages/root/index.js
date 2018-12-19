@@ -8,6 +8,7 @@ import Login from '../login';
 import Events from '../events';
 import Links from '../links';
 import Bookmarks from '../bookmarks';
+import Recipes from '../kueche';
 
 import { NavBar, Alerts } from '../../components'
 
@@ -26,6 +27,7 @@ const Root = ({store, history}) => (
             <Route path="/events" component={Events} />
             <Route path="/bookmarks" component={Bookmarks} />
             <Route path="/docs" component={Docs} />
+            <Route path="/recipes" component={Recipes} />
             <Route path="/" component={Links} />
           </Switch>
         </main>

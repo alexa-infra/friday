@@ -1,0 +1,27 @@
+.image-board {
+  width: 100%;
+
+  .image-row {
+    display: flex;
+    width: 100%;
+
+    .image {
+      overflow: hidden;
+      position: relative;
+
+      img {
+        position: absolute;
+      }
+
+      .info {
+        color: white;
+        width: 100%;
+        position: absolute;
+        background-image: linear-gradient(0deg,rgba(0,0,0,.6) 15%,transparent 100%);
+        bottom: 0;
+        left: 0;
+        text-align: center;
+      }
+    }
+  }
+}

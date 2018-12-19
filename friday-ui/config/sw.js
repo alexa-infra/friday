@@ -6,6 +6,8 @@ module.exports = {
     'build/**/*'
   ],
   navigateFallback: '/index.html',
-  navigateFallbackWhitelist: [/^(?!\/api\/).*/],
+  navigateFallbackWhitelist: [
+    /^(?!\/api\/).*/
+  ],
   cacheId: 'my-friday-build-magic'
 }
