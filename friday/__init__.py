@@ -8,6 +8,7 @@ from .errors import Errors
 this_dir = os.path.dirname(os.path.abspath(__file__))
 ui_dir = os.path.join(this_dir, '..', 'friday-ui', 'build')
 migrations_path = os.path.join(this_dir, 'migrations')
+storage_dir = os.path.join(this_dir, '..', 'images2')
 
 
 def walk_dir(path):
@@ -52,6 +53,10 @@ def make_app(settings=None):
 
     from .views import api
     app.register_blueprint(api, url_prefix='/api')
+
+    @app.route('/storage/<path:filename>')
+    def storage_file(filename):  # pylint: disable=unused-variable
+        return send_from_directory(storage_dir, filename)
 
     @app.route('/', defaults={'filename': None})
     @app.route('/<path:filename>')
