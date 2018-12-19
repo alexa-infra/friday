@@ -70,7 +70,7 @@ def test_tags4(app):
     db.session.add(obj)
     db.session.commit()
 
-    tag = TagModel.query.filter(TagModel.name=='tag2').first()
+    tag = TagModel.query.filter(TagModel.name == 'tag2').first()
     db.session.delete(tag)
     db.session.commit()
 

@@ -155,7 +155,8 @@ class Storage:
             if isinstance(file, FileStorage):
                 file = file.stream
 
-            return self.storage.put(path, name, file, overwrite=overwrite)
+            path = os.path.join(path, name)
+            return self.storage.put(path, file, overwrite)
 
     def get_url(self, path, external=False):
         pass

@@ -69,6 +69,7 @@ class Event(db.Model):
 
     @classmethod
     def get_repeated(cls):
+        # pylint: disable=singleton-comparison
         query = (
             db.session.query(cls).filter(Event.repeat != None)  # noqa: E711
         )

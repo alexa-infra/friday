@@ -25,8 +25,7 @@ class EventListView(BaseView):
         if fromdate is not None and todate is not None:
             matches = EventModel.get_between(fromdate, todate)
             return EventMatch.jsonify(matches), 200
-        else:
-            objects = EventModel.query_all().all()
+        objects = EventModel.query_all().all()
         return EventSchema.jsonify(objects), 200
 
     @use_args(EventSchema())
