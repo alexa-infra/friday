@@ -4,4 +4,5 @@ from .link import Link
 from .user import User
 from .event import Event
 from .bookmark import Bookmark
-from .doc import Doc, Tag
+from .doc import Doc
+from .tag import Tag
