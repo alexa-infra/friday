@@ -1,7 +1,7 @@
 from sqlalchemy import Table, Column, Integer, Text, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
-from flask import url_for
 from friday.utils import utcnow
+from .. import storage
 from . import db
 from .tag import Tag
 
@@ -79,4 +79,4 @@ class RecipeImage(db.Model):
 
     @property
     def url(self):
-        return url_for('storage_file', filename=self.filename)
+        return storage.get_url(self.filename)

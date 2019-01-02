@@ -11,6 +11,7 @@ from urllib.parse import urlparse
 import requests
 from werkzeug.datastructures import FileStorage
 from werkzeug.utils import secure_filename
+from flask import url_for, send_file
 
 URL_REGEXP = re.compile(r'^(http|https)://')
 
@@ -73,14 +74,12 @@ class StorageError(Exception):
 
 class LocalStorage:
 
-    def __init__(self, path, *args, **kwargs):
+    def __init__(self, path):
         self.base_path = path
 
         if not os.path.isdir(self.base_path):
             raise StorageError('Base path is not a directory')
         self.base_path = self.base_path.rstrip('/')
-
-        super().__init__(*args, **kwargs)
 
     def exists(self, path):
         try:
@@ -132,8 +131,27 @@ class LocalStorage:
         rmdirs(path, self.base_path)
 
 class Storage:
-    def __init__(self, path):
+    def __init__(self, app=None):
+        self.storage = None
+        if app:
+            self.init_app(app)
+
+    def init_app(self, app):
+        path = app.config.get('STORAGE_PATH', None)
+        if not path:
+            raise ValueError("'STORAGE_PATH' is missing")
         self.storage = LocalStorage(path)
+        self._register_static_route(app)
+        return self
+
+    def _register_static_route(self, app):
+        @app.route('/storage/<path:filename>', endpoint='storage')
+        def storage_file(filename):  # pylint: disable=unused-variable
+            try:
+                filename = self.storage.get_path(filename)
+            except StorageError:
+                return 404, 'Not found'
+            return send_file(filename, conditional=True)
 
     def upload(self, path, file, name=None, overwrite=False):
         if not name:
@@ -158,5 +176,10 @@ class Storage:
             path = os.path.join(path, name)
             return self.storage.put(path, file, overwrite)
 
-    def get_url(self, path, external=False):
-        pass
+    def get_url(self, filename, external=False):
+        try:
+            self.storage.get_path(filename)
+        except StorageError:
+            return None
+        return url_for('storage', filename=filename,
+                       _external=external)

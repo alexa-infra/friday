@@ -3,12 +3,12 @@ from flask import Flask, send_from_directory
 from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
 from .errors import Errors
+from .storage import Storage
 
 
 this_dir = os.path.dirname(os.path.abspath(__file__))
 ui_dir = os.path.join(this_dir, '..', 'friday-ui', 'build')
 migrations_path = os.path.join(this_dir, 'migrations')
-storage_dir = os.path.join(this_dir, '..', 'images2')
 
 
 def walk_dir(path):
@@ -22,6 +22,7 @@ static_files = list(walk_dir(ui_dir))
 migrate = Migrate(directory=migrations_path)
 jwt = JWTManager()
 errors = Errors()
+storage = Storage()
 static_ext = [
     '.js', '.json', '.css', '.svg', '.ttf', '.eot',
     '.jpeg', '.jpg', '.png',
@@ -50,13 +51,10 @@ def make_app(settings=None):
     migrate.init_app(app)
     jwt.init_app(app)
     errors.init_app(app)
+    storage.init_app(app)
 
     from .views import api
     app.register_blueprint(api, url_prefix='/api')
-
-    @app.route('/storage/<path:filename>')
-    def storage_file(filename):  # pylint: disable=unused-variable
-        return send_from_directory(storage_dir, filename)
 
     @app.route('/', defaults={'filename': None})
     @app.route('/<path:filename>')

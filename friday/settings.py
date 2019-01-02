@@ -19,3 +19,4 @@ JWT_ACCESS_COOKIE_PATH = '/api/'
 JWT_COOKIE_CSRF_PROTECT = False
 
 JSON_AS_ASCII = False
+STORAGE_PATH = os.path.join(this_dir, '..', 'images2')
