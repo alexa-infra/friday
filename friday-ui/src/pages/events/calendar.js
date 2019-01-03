@@ -18,6 +18,7 @@ function *iterDays(start, end) {
 const genCalendar = (date, firstDay, lastDay) => {
   const today = moment().startOf('day');
   const days = [...iterDays(firstDay, lastDay)]
+  const numWeeks = Math.floor(days.length / 7);
   return days.map(it => ({
     day: it.clone(),
     dayNum: it.date(),
@@ -26,6 +27,7 @@ const genCalendar = (date, firstDay, lastDay) => {
     prevMonth: it.isBefore(date, 'month'),
     thisMonth: it.isSame(date, 'month'),
     nextMonth: it.isAfter(date, 'month'),
+    numWeeks: numWeeks,
   }))
 }
 
@@ -39,7 +41,7 @@ const EventList = ({events, onClick}) => (
   </ul>
 )
 
-const CalendarDay = ({day, dayNum, weekend, prevMonth, nextMonth, today, events, onEventClick, onAddNew}) => {
+const CalendarDay = ({day, dayNum, weekend, prevMonth, nextMonth, today, events, onEventClick, onAddNew, numWeeks}) => {
   
   const thisMonth = !prevMonth && !nextMonth;
   const thisMonthNotToday = thisMonth && !today;
@@ -56,6 +58,7 @@ const CalendarDay = ({day, dayNum, weekend, prevMonth, nextMonth, today, events,
       'theme-l2': themeWeekend,
       'theme': themeToday,
       'hover-theme': true,
+      [`weeks-${numWeeks}`]: true,
       })}>
       <span className="day">{dayNum}</span>
       <i className={classNames('fa', 'fa-plus', 'add')} title="Add..." onClick={e => onAddNew(day)} />
