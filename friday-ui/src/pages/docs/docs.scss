@@ -34,10 +34,17 @@
     }
   }
   &.view {
+    .markdown-body {
+      margin-top: 1em;
+    }
   }
   &.edit {
     display: flex;
     flex-flow: column;
+
+    textarea {
+      font-family: monospace;
+    }
   }
   .controls {
     text-align: right;
