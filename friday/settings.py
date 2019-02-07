@@ -1,13 +1,15 @@
 import os
 from datetime import timedelta
 
-this_dir = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+UI_DIR = os.path.join(ROOT_DIR, '..', 'friday-ui', 'build')
+MIGRATIONS_DIR = os.path.join(ROOT_DIR, 'migrations')
 
 DEBUG = True
 SECRET_KEY = 'blah-blah-blah'
 
-db_path = os.path.join(this_dir, 'database.sqlite')
-SQLALCHEMY_DATABASE_URI = 'sqlite:///{}'.format(db_path)
+DB_PATH = os.path.join(ROOT_DIR, 'database.sqlite')
+SQLALCHEMY_DATABASE_URI = 'sqlite:///{}'.format(DB_PATH)
 #SQLALCHEMY_ECHO = True
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
@@ -19,6 +21,13 @@ JWT_ACCESS_COOKIE_PATH = '/api/'
 JWT_COOKIE_CSRF_PROTECT = False
 
 JSON_AS_ASCII = False
-STORAGE_PATH = os.path.join(this_dir, '..', 'images2')
+STORAGE_PATH = os.path.join(ROOT_DIR, '..', 'images2')
 
 MAX_IMAGE_SIZE = 1024
+
+STATIC_EXT = [
+    '.js', '.json', '.css', '.svg', '.ttf', '.eot',
+    '.jpeg', '.jpg', '.png',
+    '.woff', '.woff2', '.css.map', '.js.map', '.ico',
+    '.html',
+]
