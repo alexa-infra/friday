@@ -43,9 +43,9 @@ class Recipe(db.Model):
         tags = kwargs.pop('tagsList', None)
         names = kwargs.pop('namesList', None)
         obj = cls(**kwargs)
-        if isinstance(tags, (list, set)):
+        if isinstance(tags, (list, set, tuple)):
             Tag.setTags(obj, tags)
-        if isinstance(names, (list, set)):
+        if isinstance(names, (list, set, tuple)):
             obj.names = ','.join(names)
         elif isinstance(names, str):
             obj.names = names
@@ -54,9 +54,9 @@ class Recipe(db.Model):
     def update(self, **kwargs):
         tags = kwargs.pop('tagsList', None)
         names = kwargs.pop('namesList', None)
-        if isinstance(tags, (list, set)):
+        if isinstance(tags, (list, set, tuple)):
             Tag.setTags(self, tags)
-        if isinstance(names, (list, set)):
+        if isinstance(names, (list, set, tuple)):
             self.names = ','.join(names)
         elif isinstance(names, str):
             self.names = names
