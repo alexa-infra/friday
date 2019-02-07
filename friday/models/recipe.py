@@ -1,5 +1,7 @@
+from flask import current_app
 from sqlalchemy import Table, Column, Integer, Text, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
+from PilLite import Image
 from friday.utils import utcnow
 from .. import storage
 from . import db
@@ -70,8 +72,29 @@ class RecipeImage(db.Model):
     recipe = relationship('Recipe', back_populates='images')
 
     @classmethod
-    def new(cls, **kwargs):
-        return cls(**kwargs)
+    def new(cls, url=None, recipe=None, **kwargs):
+        filename = storage.upload(recipe.name, url)
+        path = storage.get_path(filename)
+
+        if current_app:
+            max_size = current_app.config['MAX_IMAGE_SIZE']
+        else:
+            max_size = 1024
+
+        img = Image.open(path)
+        w, h = img.size
+        if w > max_size or h > max_size:
+            img.thumbnail((max_size, max_size))
+            img.save(path)
+            w, h = img.size
+
+        return cls(
+            filename=filename,
+            width=w,
+            height=h,
+            recipe=recipe,
+            **kwargs
+        )
 
     def update(self, **kwargs):
         for k, v in kwargs.items():

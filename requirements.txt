@@ -25,6 +25,7 @@ markdown==3.0.1
 markupsafe==1.1.0         # via jinja2, mako
 marshmallow==2.16.3
 more-itertools==4.3.0     # via pytest
+pil-lite==0.0.7
 pluggy==0.8.0             # via pytest
 py==1.7.0                 # via pytest
 pycparser==2.19           # via cffi

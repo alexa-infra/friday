@@ -10,3 +10,4 @@ python-slugify
 Markdown
 requests
 pytest
+pil-lite

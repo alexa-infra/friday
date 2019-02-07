@@ -20,3 +20,5 @@ JWT_COOKIE_CSRF_PROTECT = False
 
 JSON_AS_ASCII = False
 STORAGE_PATH = os.path.join(this_dir, '..', 'images2')
+
+MAX_IMAGE_SIZE = 1024

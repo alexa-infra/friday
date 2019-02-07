@@ -63,6 +63,11 @@ def unique_path(path):
             return newpath
         idx += 1
 
+def relpath(path1, path2):
+    dirname, _ = os.path.split(path1)
+    _, filename = os.path.split(path2)
+    return os.path.join(dirname, filename)
+
 def download_url(url, file):
     r = requests.get(url, stream=True)
     r.raise_for_status()
@@ -110,6 +115,7 @@ class LocalStorage:
         return True
 
     def put(self, path, fo, overwrite=False):
+        initial_path = path
         path = self.get_path(path, raise_error=False)
         if os.path.exists(path):
             if not overwrite:
@@ -119,7 +125,7 @@ class LocalStorage:
             os.makedirs(dirpath, exist_ok=True)
         with open(path, 'wb') as f:
             shutil.copyfileobj(fo, f)
-        return os.path.basename(path)
+        return relpath(initial_path, path)
 
     def delete_dir(self, path):
         path = os.path.join(self.base_path, path)
@@ -169,6 +175,7 @@ class Storage:
             if isinstance(file, str) and is_url(file):
                 download_url(file, tmp_file)
                 file = tmp_file
+                file.seek(0)
 
             if isinstance(file, FileStorage):
                 file = file.stream
@@ -176,10 +183,14 @@ class Storage:
             path = os.path.join(path, name)
             return self.storage.put(path, file, overwrite)
 
+    def remove(self, path):
+        return self.storage.delete(path)
+
+    def get_path(self, path):
+        return self.storage.get_path(path)
+
     def get_url(self, filename, external=False):
-        try:
-            self.storage.get_path(filename)
-        except StorageError:
+        if not self.storage.exists(filename):
             return None
         return url_for('storage', filename=filename,
                        _external=external)
