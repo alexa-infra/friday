@@ -1,6 +1,17 @@
 from datetime import datetime
 import random
 import bcrypt
+from markdown.extensions import Extension
+from markdown.inlinepatterns import SimpleTagPattern
+
+
+DEL_RE = r'(~~)(.*?)~~'
+
+
+class MarkdownStrikeExt(Extension):
+    def extendMarkdown(self, md, md_globals):
+        del_tag = SimpleTagPattern(DEL_RE, 'del')
+        md.inlinePatterns.add('del', del_tag, '>not_strong')
 
 
 def utcnow():

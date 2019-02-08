@@ -1,12 +1,12 @@
 from sqlalchemy import Table, Column, Integer, Text, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 from markdown import Markdown
-from friday.utils import utcnow
+from friday.utils import utcnow, MarkdownStrikeExt
 from . import db
 from .tag import Tag
 
 
-md = Markdown(extensions=['markdown.extensions.tables'])
+md = Markdown(extensions=['markdown.extensions.tables', MarkdownStrikeExt()])
 
 
 DocTag = Table('doc_tag', db.metadata,
