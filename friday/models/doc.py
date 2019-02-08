@@ -34,6 +34,7 @@ class Doc(db.Model):
         return (
             cls.query.options(db.defer(Doc.text),
                               db.joinedload(Doc.tags))
+            .order_by(Doc.updated.desc())
         )
 
     @classmethod
