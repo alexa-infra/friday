@@ -10,7 +10,7 @@ from .link import pagination_args
 
 
 filter_args = {
-    'search': fields.Str(location='query'),
+    'search': fields.Str(required=False, location='query'),
 }
 
 
@@ -22,7 +22,7 @@ class BookmarkListView(BaseView):
 
     @use_kwargs(pagination_args)
     @use_kwargs(filter_args)
-    def get(self, page, per_page, search):
+    def get(self, page=1, per_page=10, search=None):
         query = BookmarkModel.query
         search = slugify(search, separator=' ') if search else None
         if search:

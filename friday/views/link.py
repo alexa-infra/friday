@@ -21,9 +21,9 @@ def validate_page(val):
 
 
 pagination_args = {
-    'page': fields.Int(missing=1, location='query',
+    'page': fields.Int(required=False, location='query',
                        validate=validate_page),
-    'per_page': fields.Int(missing=10, location='query',
+    'per_page': fields.Int(required=False, location='query',
                            validate=validate_per_page),
 }
 
@@ -35,7 +35,7 @@ class LinkListView(BaseView):
     decorators = (jwt_required,)
 
     @use_kwargs(pagination_args)
-    def get(self, page, per_page):
+    def get(self, page=1, per_page=10):
         pagination = (
             LinkModel.query.order_by(LinkModel.last_access.desc())
             .paginate(page, per_page))

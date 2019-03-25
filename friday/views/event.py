@@ -9,8 +9,8 @@ from ..schemas.event import Event as EventSchema, EventMatch
 
 
 eventlist_args = {
-    'fromdate': fields.Date(missing=None, location='query'),
-    'todate': fields.Date(missing=None, location='query'),
+    'fromdate': fields.Date(required=False, location='query'),
+    'todate': fields.Date(required=False, location='query'),
 }
 
 
@@ -21,8 +21,8 @@ class EventListView(BaseView):
     decorators = (jwt_required,)
 
     @use_kwargs(eventlist_args)
-    def get(self, fromdate, todate):
-        if fromdate is not None and todate is not None:
+    def get(self, fromdate=None, todate=None):
+        if fromdate and todate:
             matches = EventModel.get_between(fromdate, todate)
             return EventMatch.jsonify(matches), 200
         objects = EventModel.query_all().all()
