@@ -1,5 +1,5 @@
 from flask import Blueprint
-from flask.views import MethodView
+from flask.views import MethodView, http_method_funcs
 from friday.utils import camel_to_snake
 
 api = Blueprint('api', __name__)
@@ -10,6 +10,12 @@ class BaseView(MethodView):
 
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
+        if not hasattr(cls, 'methods') or not cls.methods:
+            methods = [method.upper()
+                       for method in http_method_funcs
+                       if hasattr(cls, method)]
+            if methods:
+                cls.methods = methods
         name = camel_to_snake(cls.__name__)
         cls.register(api, name)
 
