@@ -2,7 +2,7 @@ from datetime import timedelta
 from webargs import fields
 from webargs.flaskparser import use_args, use_kwargs
 from flask_jwt_extended import jwt_required
-from . import api, BaseView
+from . import BaseView
 from ..models import db
 from ..models.event import Event as EventModel
 from ..schemas.event import Event as EventSchema, EventMatch
@@ -83,8 +83,3 @@ class EventRepeatView(BaseView):
         db.session.add(new_obj)
         db.session.commit()
         return EventSchema.jsonify(new_obj), 201
-
-
-EventListView.register(api, 'event_list')
-EventItemView.register(api, 'event_item')
-EventRepeatView.register(api, 'event_item_repeat')

@@ -1,7 +1,7 @@
 from flask import request, abort
 from webargs.flaskparser import use_args
 from flask_jwt_extended import jwt_required
-from . import api, BaseView
+from . import BaseView
 from ..models import db
 from ..models import Doc as DocModel, Tag as TagModel
 from ..schemas import Doc as DocSchema, Tag as TagSchema
@@ -93,10 +93,3 @@ class TagListView(BaseView):
     def get(self):
         objects = TagModel.query.all()
         return TagSchema.jsonify(objects), 200
-
-
-DocListView.register(api, 'doc_list')
-DocItemView.register(api, 'doc_item')
-DocTextView.register(api, 'doc_item_text')
-DocHtmlView.register(api, 'doc_item_html')
-TagListView.register(api, 'tag_list')

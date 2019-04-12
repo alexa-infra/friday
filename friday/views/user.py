@@ -1,7 +1,7 @@
 from webargs import fields
 from webargs.flaskparser import use_kwargs
 from flask_jwt_extended import set_access_cookies
-from . import api, BaseView
+from . import BaseView
 from ..models.user import User as UserModel
 from ..schemas.user import User as UserSchema
 
@@ -33,7 +33,3 @@ class CurrentUser(BaseView):
     def get(self):
         user = UserModel.current_user()
         return UserSchema.jsonify(user), 200
-
-
-CurrentUser.register(api, 'user_current')
-LoginView.register(api, 'user_login')

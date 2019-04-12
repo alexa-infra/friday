@@ -2,7 +2,7 @@ from flask import redirect
 from webargs import fields
 from webargs.flaskparser import use_args, use_kwargs
 from flask_jwt_extended import jwt_required
-from . import api, BaseView
+from . import BaseView
 from ..models import db
 from ..models.link import Link as LinkModel
 from ..schemas.link import Link as LinkSchema
@@ -86,8 +86,3 @@ class LinkRedirectView(BaseView):
         db.session.add(obj)
         db.session.commit()
         return redirect(obj.url)
-
-
-LinkListView.register(api, 'link_list')
-LinkItemView.register(api, 'link_item')
-LinkRedirectView.register(api, 'link_redirect')

@@ -2,7 +2,7 @@ from webargs import fields
 from webargs.flaskparser import use_args, use_kwargs
 from flask_jwt_extended import jwt_required
 from slugify import slugify
-from . import api, BaseView
+from . import BaseView
 from ..models import db
 from ..models import Bookmark as BookmarkModel
 from ..schemas import Bookmark as BookmarkSchema
@@ -64,7 +64,3 @@ class BookmarkItemView(BaseView):
         db.session.delete(obj)
         db.session.commit()
         return '', 204
-
-
-BookmarkListView.register(api, 'bookmark_list')
-BookmarkItemView.register(api, 'bookmark_item')

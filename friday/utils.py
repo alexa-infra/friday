@@ -1,3 +1,4 @@
+import re
 from datetime import datetime
 import random
 import bcrypt
@@ -35,3 +36,7 @@ def get_random_string(length=12,
                                     '0123456789!@#$%^&*(-_=+)'):
     rng = random.SystemRandom()
     return ''.join(rng.choice(allowed_chars) for i in range(length))
+
+def camel_to_snake(name):
+    s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
+    return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()

@@ -1,6 +1,6 @@
 from webargs.flaskparser import use_args
 from flask_jwt_extended import jwt_required
-from . import api, BaseView
+from . import BaseView
 from ..models import db
 from ..models import Recipe as RecipeModel
 from ..schemas import Recipe as RecipeSchema
@@ -47,7 +47,3 @@ class RecipeItemView(BaseView):
         db.session.delete(obj)
         db.session.commit()
         return '', 204
-
-
-RecipeListView.register(api, 'recipe_list')
-RecipeItemView.register(api, 'recipe_item')
