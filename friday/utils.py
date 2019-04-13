@@ -10,9 +10,9 @@ DEL_RE = r'(~~)(.*?)~~'
 
 
 class MarkdownStrikeExt(Extension):
-    def extendMarkdown(self, md, md_globals):
+    def extendMarkdown(self, md):
         del_tag = SimpleTagPattern(DEL_RE, 'del')
-        md.inlinePatterns.add('del', del_tag, '>not_strong')
+        md.inlinePatterns.register(del_tag, 'del', 40)
 
 
 def utcnow():
