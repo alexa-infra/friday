@@ -13,7 +13,7 @@ def create_app(_=None):
     from friday import make_app
     return make_app(settings)
 
-cli = FlaskGroup(add_default_commands=False, create_app=create_app)
+cli = FlaskGroup(create_app=create_app)
 for src in commands.sources:
     cli.add_command(src)
 
