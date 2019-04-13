@@ -154,7 +154,7 @@ class SignallingSession(SessionBase):
     def get_bind(self, mapper=None, clause=None):
         # mapper is None if someone tries to just get a connection
         if mapper is not None:
-            info = getattr(mapper.mapped_table, 'info', {})
+            info = getattr(mapper.persist_selectable, 'info', {})
             bind_key = info.get('bind_key')
             if bind_key is not None:
                 state = get_state(self.app)
@@ -551,7 +551,7 @@ class _EngineConnector(object):
             if (uri, echo) == self._connected_for:
                 return self._engine
             info = make_url(uri)
-            options = {'convert_unicode': True}
+            options = {}
             self._sa.apply_pool_defaults(self._app, options)
             self._sa.apply_driver_hacks(self._app, info, options)
             if echo:
