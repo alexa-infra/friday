@@ -1,5 +1,5 @@
-import pytest
 import unittest
+import pytest
 
 from friday import make_app
 from friday.models import db
@@ -29,9 +29,7 @@ def assertCountEqual(x, y):
 
 
 def test_tags1(app):
-    obj = DocModel.new(name='test', text='asdf', tagsList=['tag1', 'tag2'])
-    db.session.add(obj)
-    db.session.commit()
+    obj = DocModel.create(name='test', text='asdf', tagsList=['tag1', 'tag2'])
     objects = DocModel.query_list().all()
     assert len(objects) == 1
     obj = DocModel.query_list().first()
@@ -42,22 +40,15 @@ def test_tags1(app):
 
 
 def test_tags2(app):
-    obj1 = DocModel.new(name='test1', text='asdf', tagsList=['tag1', 'tag2'])
-    obj2 = DocModel.new(name='test2', text='asdf', tagsList=['tag2', 'tag3'])
-    db.session.add(obj1)
-    db.session.add(obj2)
-    db.session.commit()
+    DocModel.create(name='test1', text='asdf', tagsList=['tag1', 'tag2'])
+    DocModel.create(name='test2', text='asdf', tagsList=['tag2', 'tag3'])
     tags = TagModel.query.all()
     assert len(tags) == 3
 
 
 def test_tags3(app):
-    obj = DocModel.new(name='test1', text='asdf', tagsList=['tag1', 'tag2'])
-    db.session.add(obj)
-    db.session.commit()
+    obj = DocModel.create(name='test1', text='asdf', tagsList=['tag1', 'tag2'])
     obj.update(tagsList=['tag2', 'tag3'])
-    db.session.add(obj)
-    db.session.commit()
     obj = DocModel.query_list().first()
     expected = ['tag2', 'tag3']
     assertCountEqual(obj.tagsList, expected)
@@ -66,13 +57,10 @@ def test_tags3(app):
 
 
 def test_tags4(app):
-    obj = DocModel.new(name='test1', text='asdf', tagsList=['tag1', 'tag2'])
-    db.session.add(obj)
-    db.session.commit()
+    obj = DocModel.create(name='test1', text='asdf', tagsList=['tag1', 'tag2'])
 
     tag = TagModel.query.filter(TagModel.name == 'tag2').first()
-    db.session.delete(tag)
-    db.session.commit()
+    tag.delete()
 
     obj = DocModel.query_list().first()
     expected = ['tag1']
@@ -80,15 +68,12 @@ def test_tags4(app):
 
 
 def test_tags5(app):
-    obj = DocModel.new(name='test1', text='asdf', tagsList=['tag1', 'tag2'])
-    db.session.add(obj)
-    db.session.commit()
+    obj = DocModel.create(name='test1', text='asdf', tagsList=['tag1', 'tag2'])
 
     cc = db.session.query(DocTag).count()
     assert cc == 2
 
-    db.session.delete(obj)
-    db.session.commit()
+    obj.delete()
 
     tags = TagModel.query.all()
     tagNames = [tag.name for tag in tags]
@@ -100,15 +85,12 @@ def test_tags5(app):
 
 
 def test_tags6(app):
-    obj = DocModel.new(name='test1', text='asdf', tagsList=['tag1', 'tag2'])
-    db.session.add(obj)
-    db.session.commit()
+    obj = DocModel.create(name='test1', text='asdf', tagsList=['tag1', 'tag2'])
 
     cc = db.session.query(DocTag).count()
     assert cc == 2
 
     obj.update(tagsList=['tag1', 'tag2', 'tag1', 'tag2'])
-    db.session.commit()
 
     cc = db.session.query(DocTag).count()
     assert cc == 2

@@ -3,7 +3,6 @@ from webargs import fields
 from webargs.flaskparser import use_args, use_kwargs
 from flask_jwt_extended import jwt_required
 from . import BaseView
-from ..models import db
 from ..models.link import Link as LinkModel
 from ..schemas.link import Link as LinkSchema
 
@@ -43,9 +42,7 @@ class LinkListView(BaseView):
 
     @use_args(LinkSchema())
     def post(self, args):
-        obj = LinkModel(**args)
-        db.session.add(obj)
-        db.session.commit()
+        obj = LinkModel.create(**args)
         return LinkSchema.jsonify(obj), 201
 
 
@@ -56,21 +53,18 @@ class LinkItemView(BaseView):
     decorators = (jwt_required,)
 
     def get(self, id):  # pylint: disable=redefined-builtin
-        obj = LinkModel.query.get_or_404(id)
+        obj = LinkModel.get_or_404(id)
         return LinkSchema.jsonify(obj), 200
 
     @use_args(LinkSchema())
     def put(self, args, id):  # pylint: disable=redefined-builtin
-        obj = LinkModel.query.get_or_404(id)
+        obj = LinkModel.get_or_404(id)
         obj.update(**args)
-        db.session.add(obj)
-        db.session.commit()
         return LinkSchema.jsonify(obj), 200
 
     def delete(self, id):  # pylint: disable=redefined-builtin
-        obj = LinkModel.query.get_or_404(id)
-        db.session.delete(obj)
-        db.session.commit()
+        obj = LinkModel.get_or_404(id)
+        obj.delete()
         return '', 204
 
 
@@ -81,8 +75,6 @@ class LinkRedirectView(BaseView):
     # decorators = (jwt_required,)
 
     def get(self, id):  # pylint: disable=redefined-builtin
-        obj = LinkModel.query.get_or_404(id)
+        obj = LinkModel.get_or_404(id)
         obj.touch()
-        db.session.add(obj)
-        db.session.commit()
         return redirect(obj.url)

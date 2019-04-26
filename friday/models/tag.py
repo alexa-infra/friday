@@ -1,23 +1,20 @@
 from sqlalchemy import Column, Integer, Text
+from sqlalchemy.ext.hybrid import hybrid_property
 from slugify import slugify
 from . import db
 
 
 class Tag(db.Model):
     id = Column(Integer, primary_key=True)
-    name = Column(Text, nullable=False, unique=True)
+    _name = Column('name', Text, nullable=False, unique=True)
 
-    @classmethod
-    def new(cls, name, **kwargs):
-        name = slugify(name)
-        obj = cls(**kwargs, name=name)
-        return obj
+    @hybrid_property
+    def name(self):
+        return self._name
 
-    def update(self, **kwargs):
-        for k, v in kwargs.items():
-            setattr(self, k, v)
-        if 'name' in kwargs:
-            self.name = slugify(self.name)
+    @name.setter
+    def name(self, value):
+        self._name = slugify(value)
 
     @staticmethod
     def setTags(item, tags):
@@ -31,6 +28,5 @@ class Tag(db.Model):
         for d in to_create:
             tag = Tag.query.filter(Tag.name == d).first()
             if not tag:
-                tag = Tag(name=d)
-                db.session.add(tag)
+                tag = Tag.create(name=d)
             item.tags.append(tag)

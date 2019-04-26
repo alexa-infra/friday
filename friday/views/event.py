@@ -3,7 +3,6 @@ from webargs import fields
 from webargs.flaskparser import use_args, use_kwargs
 from flask_jwt_extended import jwt_required
 from . import BaseView
-from ..models import db
 from ..models.event import Event as EventModel
 from ..schemas.event import Event as EventSchema, EventMatch
 
@@ -30,9 +29,7 @@ class EventListView(BaseView):
 
     @use_args(EventSchema())
     def post(self, args):
-        obj = EventModel.new(**args)
-        db.session.add(obj)
-        db.session.commit()
+        obj = EventModel.create(**args)
         return EventSchema.jsonify(obj), 201
 
 
@@ -43,21 +40,18 @@ class EventItemView(BaseView):
     decorators = (jwt_required,)
 
     def get(self, id):  # pylint: disable=redefined-builtin
-        obj = EventModel.query.get_or_404(id)
+        obj = EventModel.get_or_404(id)
         return EventSchema.jsonify(obj), 200
 
     @use_args(EventSchema())
     def put(self, args, id):  # pylint: disable=redefined-builtin
-        obj = EventModel.query.get_or_404(id)
+        obj = EventModel.get_or_404(id)
         obj.update(**args)
-        db.session.add(obj)
-        db.session.commit()
         return EventSchema.jsonify(obj), 200
 
     def delete(self, id):  # pylint: disable=redefined-builtin
-        obj = EventModel.query.get_or_404(id)
-        db.session.delete(obj)
-        db.session.commit()
+        obj = EventModel.get_or_404(id)
+        obj.delete()
         return '', 204
 
 
@@ -74,12 +68,10 @@ class EventRepeatView(BaseView):
 
     @use_kwargs(repeat_args)
     def post(self, id, days):  # pylint: disable=redefined-builtin
-        obj = EventModel.query.get_or_404(id)
+        obj = EventModel.get_or_404(id)
         if obj.repeat is not None:
             return '', 400
         dt = obj.date + timedelta(days=days)
-        new_obj = EventModel.new(name=obj.name, icon=obj.icon,
-                                 date=dt)
-        db.session.add(new_obj)
-        db.session.commit()
+        new_obj = EventModel.create(
+            name=obj.name, icon=obj.icon, date=dt)
         return EventSchema.jsonify(new_obj), 201

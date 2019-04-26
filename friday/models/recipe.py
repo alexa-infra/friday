@@ -34,34 +34,21 @@ class Recipe(db.Model):
     def tagsList(self):
         return [tag.name for tag in self.tags]
 
+    @tagsList.setter
+    def tagsList(self, value):
+        if isinstance(value, (list, set, tuple)):
+            Tag.setTags(self, value)
+
     @property
     def namesList(self):
         return list(map(str.strip, self.names.split(',')))
 
-    @classmethod
-    def new(cls, **kwargs):
-        tags = kwargs.pop('tagsList', None)
-        names = kwargs.pop('namesList', None)
-        obj = cls(**kwargs)
-        if isinstance(tags, (list, set, tuple)):
-            Tag.setTags(obj, tags)
-        if isinstance(names, (list, set, tuple)):
-            obj.names = ','.join(names)
-        elif isinstance(names, str):
-            obj.names = names
-        return obj
-
-    def update(self, **kwargs):
-        tags = kwargs.pop('tagsList', None)
-        names = kwargs.pop('namesList', None)
-        if isinstance(tags, (list, set, tuple)):
-            Tag.setTags(self, tags)
-        if isinstance(names, (list, set, tuple)):
-            self.names = ','.join(names)
-        elif isinstance(names, str):
-            self.names = names
-        for k, v in kwargs.items():
-            setattr(self, k, v)
+    @namesList.setter
+    def namesList(self, value):
+        if isinstance(value, (list, set, tuple)):
+            self.names = ','.join(value)
+        elif isinstance(value, str):
+            self.names = value
 
 
 class RecipeImage(db.Model):
@@ -72,7 +59,7 @@ class RecipeImage(db.Model):
     recipe = relationship('Recipe', back_populates='images')
 
     @classmethod
-    def new(cls, url=None, recipe=None, **kwargs):
+    def create(cls, commit=True, url=None, recipe=None, **kwargs):
         filename = storage.upload(recipe.name, url)
         path = storage.get_path(filename)
 
@@ -88,17 +75,14 @@ class RecipeImage(db.Model):
             img.save(path)
             w, h = img.size
 
-        return cls(
-            filename=filename,
+        return super().create(
+            commit,
+            filename,
+            recipe,
             width=w,
             height=h,
-            recipe=recipe,
             **kwargs
         )
-
-    def update(self, **kwargs):
-        for k, v in kwargs.items():
-            setattr(self, k, v)
 
     @property
     def url(self):

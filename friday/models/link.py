@@ -10,14 +10,11 @@ class Link(db.Model):
     usage_count = Column(Integer, default=0)
     last_access = Column(DateTime, default=utcnow)
 
-    def touch(self):
+    def touch(self, commit=True):
         self.last_access = utcnow()
         self.usage_count += 1
+        return self.save(commit)
 
     @classmethod
     def query_all(cls):
         return cls.query.order_by(Link.last_access.desc())
-
-    def update(self, **kwargs):
-        for k, v in kwargs.items():
-            setattr(self, k, v)

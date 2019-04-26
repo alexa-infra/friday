@@ -1,8 +1,7 @@
-import os
 import click
 from flask.cli import AppGroup
 from friday import storage
-from friday.models import db, Recipe, RecipeImage
+from friday.models import Recipe, RecipeImage
 from friday.schemas import Recipe as RecipeSchema
 
 
@@ -15,13 +14,11 @@ recipe_group = AppGroup('recipe')
 @click.option('--tag', '-t', multiple=True)
 def make_recipe(itemname, name, tag):
     '''Create new recipe'''
-    r = Recipe.new(
+    r = Recipe.create(
         name=itemname,
         namesList=name,
         tagsList=tag,
     )
-    db.session.add(r)
-    db.session.commit()
     click.echo(RecipeSchema.jsonify(r).get_data())
 
 
@@ -51,8 +48,6 @@ def update_recipe(itemid, itemname, name, tag):
         namesList=name,
         tagsList=tag,
     )
-    db.session.add(r)
-    db.session.commit()
     click.echo(RecipeSchema.jsonify(r).get_data())
 
 @recipe_group.command('delete')
@@ -62,8 +57,7 @@ def delete_recipe(itemid):
     r = Recipe.query_list().get(itemid)
     if not r:
         click.echo('Not found')
-    db.session.delete(r)
-    db.session.commit()
+    r.delete()
     click.echo('Done')
 
 @recipe_group.command('add-image')
@@ -74,12 +68,10 @@ def add_image(itemid, imageurl):
     r = Recipe.query_list().get(itemid)
     if not r:
         click.echo('Not found')
-    ri = RecipeImage.new(
+    RecipeImage.create(
         recipe=r,
         url=imageurl
     )
-    db.session.add(ri)
-    db.session.commit()
     click.echo(RecipeSchema.jsonify(r).get_data())
 
 
@@ -87,7 +79,7 @@ def add_image(itemid, imageurl):
 @click.argument('itemid')
 @click.argument('filename')
 def remove_image(itemid, filename):
-    '''Add image'''
+    '''Remove image'''
     r = Recipe.query_list().get(itemid)
     if not r:
         click.echo('Not found')
@@ -95,6 +87,5 @@ def remove_image(itemid, filename):
     if not ri:
         click.echo('Image not found')
     storage.remove(filename)
-    db.session.delete(ri)
-    db.session.commit()
+    ri.delete()
     click.echo('Done')

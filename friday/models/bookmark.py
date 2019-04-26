@@ -1,5 +1,6 @@
 from urllib.parse import urlparse
 from sqlalchemy import Column, Integer, Text, DateTime, Boolean
+from sqlalchemy.ext.hybrid import hybrid_property
 from slugify import slugify
 from friday.utils import utcnow
 from . import db
@@ -7,8 +8,8 @@ from . import db
 
 class Bookmark(db.Model):
     id = Column(Integer, primary_key=True)
-    url = Column(Text, nullable=False)
-    title = Column(Text, nullable=False)
+    _url = Column('url', Text, nullable=False)
+    _title = Column('title', Text, nullable=False)
     created = Column(DateTime, nullable=False, default=utcnow)
     updated = Column(DateTime, nullable=False, default=utcnow,
                      onupdate=utcnow)
@@ -16,12 +17,24 @@ class Bookmark(db.Model):
     slug = Column(Text)
     domain = Column(Text)
 
-    @classmethod
-    def new(cls, **kwargs):
-        obj = cls(**kwargs)
-        obj.update_slug()
-        obj.update_domain()
-        return obj
+    @hybrid_property
+    def url(self):
+        return self._url
+
+    @url.setter
+    def url(self, value):
+        self._url = value
+        self.update_domain()
+        self.update_slug()
+
+    @hybrid_property
+    def title(self):
+        return self._title
+
+    @title.setter
+    def title(self, value):
+        self._title = value
+        self.update_slug()
 
     @property
     def _slug(self):
@@ -41,11 +54,3 @@ class Bookmark(db.Model):
 
     def update_domain(self):
         self.domain = self._domain
-
-    def update(self, **kwargs):
-        for k, v in kwargs.items():
-            setattr(self, k, v)
-        if 'url' in kwargs or 'title' in kwargs:
-            self.update_slug()
-        if 'url' in kwargs:
-            self.update_domain()

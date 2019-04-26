@@ -3,7 +3,6 @@ from webargs.flaskparser import use_args, use_kwargs
 from flask_jwt_extended import jwt_required
 from slugify import slugify
 from . import BaseView
-from ..models import db
 from ..models import Bookmark as BookmarkModel
 from ..schemas import Bookmark as BookmarkSchema
 from .link import pagination_args
@@ -35,9 +34,7 @@ class BookmarkListView(BaseView):
 
     @use_args(BookmarkSchema())
     def post(self, args):
-        obj = BookmarkModel.new(**args)
-        db.session.add(obj)
-        db.session.commit()
+        obj = BookmarkModel.create(**args)
         return BookmarkSchema.jsonify(obj), 201
 
 
@@ -48,19 +45,16 @@ class BookmarkItemView(BaseView):
     decorators = (jwt_required,)
 
     def get(self, id):  # pylint: disable=redefined-builtin
-        obj = BookmarkModel.query.get_or_404(id)
+        obj = BookmarkModel.get_or_404(id)
         return BookmarkSchema.jsonify(obj), 200
 
     @use_args(BookmarkSchema())
     def put(self, args, id):  # pylint: disable=redefined-builtin
-        obj = BookmarkModel.query.get_or_404(id)
+        obj = BookmarkModel.get_or_404(id)
         obj.update(**args)
-        db.session.add(obj)
-        db.session.commit()
         return BookmarkSchema.jsonify(obj), 200
 
     def delete(self, id):  # pylint: disable=redefined-builtin
-        obj = BookmarkModel.query.get_or_404(id)
-        db.session.delete(obj)
-        db.session.commit()
+        obj = BookmarkModel.get_or_404(id)
+        obj.delete()
         return '', 204

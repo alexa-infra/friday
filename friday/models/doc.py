@@ -37,21 +37,11 @@ class Doc(db.Model):
             .order_by(Doc.updated.desc())
         )
 
-    @classmethod
-    def new(cls, **kwargs):
-        tags = kwargs.pop('tagsList', None)
-        obj = cls(**kwargs)
-        if isinstance(tags, (list, set)):
-            Tag.setTags(obj, tags)
-        return obj
-
-    def update(self, **kwargs):
-        tags = kwargs.pop('tagsList', None)
-        if isinstance(tags, (list, set)):
-            Tag.setTags(self, tags)
-        for k, v in kwargs.items():
-            setattr(self, k, v)
-
     @property
     def tagsList(self):
         return [tag.name for tag in self.tags]
+
+    @tagsList.setter
+    def tagsList(self, value):
+        if isinstance(value, (list, set)):
+            Tag.setTags(self, value)

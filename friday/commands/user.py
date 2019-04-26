@@ -1,6 +1,6 @@
 import click
 from flask.cli import AppGroup
-from friday.models import db, User
+from friday.models import User
 from friday.utils import get_random_string
 
 
@@ -15,9 +15,7 @@ def make_user(email, password):
     if not password:
         password = get_random_string()
         click.echo('New password: {}'.format(password))
-    usr = User.new(email, password)
-    db.session.add(usr)
-    db.session.commit()
+    User.create(email, password)
 
 
 @user.command('change_password')
@@ -25,7 +23,7 @@ def make_user(email, password):
 @click.option('--password')
 def change_password(user_id, password):
     '''Change user password'''
-    usr = User.query.get(user_id)
+    usr = User.get(user_id)
     if not usr:
         click.echo('Not found')
         return
@@ -33,8 +31,6 @@ def change_password(user_id, password):
         password = get_random_string()
         click.echo('New password: {}'.format(password))
     usr.update(password=password)
-    db.session.add(usr)
-    db.session.commit()
 
 
 @user.command('list')

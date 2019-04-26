@@ -1,6 +1,7 @@
 from datetime import timedelta
 import enum
 from sqlalchemy import Column, Integer, Text, Enum, Date
+from sqlalchemy.ext.hybrid import hybrid_property
 from . import db
 
 
@@ -37,21 +38,17 @@ class Event(db.Model):
     name = Column(Text, nullable=False)
     icon = Column(Text, nullable=False)
     date = Column(Date, nullable=False)
-    repeat = Column(Enum(Repeat), default=None)
+    _repeat = Column('repeat', Enum(Repeat), default=None)
 
-    @classmethod
-    def new(cls, **kwargs):
-        repeat = kwargs.pop('repeat', None)
-        if repeat is not None:
-            repeat = Repeat[repeat]
-        return cls(repeat=repeat, **kwargs)
+    @hybrid_property
+    def repeat(self):
+        return self._repeat
 
-    def update(self, **kwargs):
-        for k, v in kwargs.items():
-            if k == 'repeat':
-                if v is not None:
-                    v = Repeat[v]
-            setattr(self, k, v)
+    @repeat.setter
+    def repeat(self, value):
+        if isinstance(value, str):
+            value = Repeat[value]
+        self._repeat = value
 
     @classmethod
     def query_all(cls):

@@ -1,7 +1,6 @@
 from webargs.flaskparser import use_args
 from flask_jwt_extended import jwt_required
 from . import BaseView
-from ..models import db
 from ..models import Recipe as RecipeModel
 from ..schemas import Recipe as RecipeSchema
 
@@ -18,9 +17,7 @@ class RecipeListView(BaseView):
 
     @use_args(RecipeSchema())
     def post(self, args):
-        obj = RecipeModel.new(**args)
-        db.session.add(obj)
-        db.session.commit()
+        obj = RecipeModel.create(**args)
         return RecipeSchema.jsonify(obj), 200
 
 
@@ -38,12 +35,9 @@ class RecipeItemView(BaseView):
     def put(self, args, id):  # pylint: disable=redefined-builtin
         obj = RecipeModel.query_list().get_or_404(id)
         obj.update(**args)
-        db.session.add(obj)
-        db.session.commit()
         return RecipeSchema.jsonify(obj), 200
 
     def delete(self, id):  # pylint: disable=redefined-builtin
         obj = RecipeModel.query_list().get_or_404(id)
-        db.session.delete(obj)
-        db.session.commit()
+        obj.delete()
         return '', 204
