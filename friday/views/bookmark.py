@@ -8,8 +8,9 @@ from ..schemas import Bookmark as BookmarkSchema
 from .link import pagination_args
 
 
+clear_search = lambda txt: slugify(txt, separator=' ')
 filter_args = {
-    'search': fields.Str(required=False, location='query'),
+    'search': fields.Function(deserialize=clear_search, required=False, location='query'),
 }
 
 
@@ -23,7 +24,6 @@ class BookmarkListView(BaseView):
     @use_kwargs(filter_args)
     def get(self, page=1, per_page=10, search=None):
         query = BookmarkModel.query
-        search = slugify(search, separator=' ') if search else None
         if search:
             search_term = '%{}%'.format(search)
             query = query.filter(
