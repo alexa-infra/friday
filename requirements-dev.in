@@ -4,3 +4,4 @@ flake8
 bandit
 pytest
 requests-mock
+pip-tools
