@@ -46,8 +46,8 @@ class Bookmark(db.Model):
 
     @property
     def _domain(self):
-        d = urlparse(self._url).netloc
-        return d.strip('www.')
+        d = str(urlparse(self._url).netloc)
+        return d[4:] if d.startswith('www.') else d
 
     def update_slug(self):
         self.slug = self._slug
