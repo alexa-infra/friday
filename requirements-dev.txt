@@ -9,7 +9,7 @@ astroid==2.2.5            # via pylint
 atomicwrites==1.3.0       # via pytest
 attrs==19.1.0             # via pytest
 backcall==0.1.0           # via ipython
-bandit==1.6.0
+bandit==1.6.1
 bcrypt==3.1.6
 certifi==2019.3.9         # via requests
 cffi==1.12.3              # via bcrypt
@@ -26,7 +26,7 @@ gitdb2==2.0.5             # via gitpython
 gitpython==2.1.11         # via bandit
 gunicorn==19.9.0
 idna==2.8                 # via requests
-importlib-metadata==0.17  # via pluggy, pytest
+importlib-metadata==0.18  # via pluggy, pytest
 ipython-genutils==0.2.0   # via traitlets
 ipython==7.5.0
 isort==4.3.20             # via pylint
@@ -34,19 +34,19 @@ itsdangerous==1.1.0       # via flask
 jedi==0.13.3              # via ipython
 jinja2==2.10.1            # via flask
 lazy-object-proxy==1.4.1  # via astroid
-mako==1.0.11              # via alembic
+mako==1.0.12              # via alembic
 markdown==3.1.1
 markupsafe==1.1.1         # via jinja2, mako
-marshmallow==2.19.2
+marshmallow==2.19.3
 mccabe==0.6.1             # via flake8, pylint
 more-itertools==7.0.0     # via pytest
 packaging==19.0           # via pytest
 parso==0.4.0              # via jedi
-pbr==5.2.1                # via stevedore
+pbr==5.3.0                # via stevedore
 pexpect==4.7.0            # via ipython
 pickleshare==0.7.5        # via ipython
 pil-lite==0.1.0
-pip-tools==3.7.0
+pip-tools==3.8.0
 pluggy==0.12.0            # via pytest
 prompt-toolkit==2.0.9     # via ipython
 ptyprocess==0.6.0         # via pexpect
@@ -58,11 +58,11 @@ pygments==2.4.2           # via ipython
 pyjwt==1.7.1              # via flask-jwt-extended
 pylint==2.3.1
 pyparsing==2.4.0          # via packaging
-pytest==4.6.1
+pytest==4.6.3
 python-dateutil==2.8.0    # via alembic
 python-editor==1.0.4      # via alembic
 python-slugify==3.0.2
-pyyaml==5.1               # via bandit
+pyyaml==5.1.1             # via bandit
 requests-mock==1.6.0
 requests==2.22.0
 six==1.12.0               # via astroid, bandit, bcrypt, flask-jwt-extended, packaging, pip-tools, prompt-toolkit, pytest, python-dateutil, requests-mock, stevedore, traitlets
@@ -71,7 +71,7 @@ sqlalchemy==1.3.4         # via alembic, flask-sqlalchemy
 stevedore==1.30.1         # via bandit
 text-unidecode==1.2       # via python-slugify
 traitlets==4.3.2          # via ipython
-typed-ast==1.3.5          # via astroid
+typed-ast==1.4.0          # via astroid
 urllib3==1.25.3           # via requests
 wcwidth==0.1.7            # via prompt-toolkit, pytest
 webargs==5.3.1

@@ -18,13 +18,13 @@ flask-sqlalchemy==2.4.0
 flask==1.0.3
 gunicorn==19.9.0
 idna==2.8                 # via requests
-importlib-metadata==0.17  # via pluggy, pytest
+importlib-metadata==0.18  # via pluggy, pytest
 itsdangerous==1.1.0       # via flask
 jinja2==2.10.1            # via flask
-mako==1.0.11              # via alembic
+mako==1.0.12              # via alembic
 markdown==3.1.1
 markupsafe==1.1.1         # via jinja2, mako
-marshmallow==2.19.2
+marshmallow==2.19.3
 more-itertools==7.0.0     # via pytest
 packaging==19.0           # via pytest
 pil-lite==0.1.0
@@ -33,7 +33,7 @@ py==1.8.0                 # via pytest
 pycparser==2.19           # via cffi
 pyjwt==1.7.1              # via flask-jwt-extended
 pyparsing==2.4.0          # via packaging
-pytest==4.6.1
+pytest==4.6.3
 python-dateutil==2.8.0    # via alembic
 python-editor==1.0.4      # via alembic
 python-slugify==3.0.2
