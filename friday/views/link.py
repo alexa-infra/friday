@@ -1,30 +1,10 @@
 from flask import redirect
-from webargs import fields
 from webargs.flaskparser import use_args, use_kwargs
 from flask_jwt_extended import jwt_required
 from . import BaseView
 from ..models.link import Link as LinkModel
 from ..schemas.link import Link as LinkSchema
-
-
-def validate_per_page(val):
-    if val <= 0 or val > 100:
-        return False
-    return True
-
-
-def validate_page(val):
-    if val < 0:
-        return False
-    return True
-
-
-pagination_args = {
-    'page': fields.Int(required=False, location='query',
-                       validate=validate_page),
-    'per_page': fields.Int(required=False, location='query',
-                           validate=validate_per_page),
-}
+from .utils import pagination_args
 
 
 class LinkListView(BaseView):

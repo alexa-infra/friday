@@ -1,17 +1,9 @@
-from webargs import fields
 from webargs.flaskparser import use_args, use_kwargs
 from flask_jwt_extended import jwt_required
-from slugify import slugify
 from . import BaseView
 from ..models import Bookmark as BookmarkModel
 from ..schemas import Bookmark as BookmarkSchema
-from .link import pagination_args
-
-
-clear_search = lambda txt: slugify(txt, separator=' ')
-filter_args = {
-    'search': fields.Function(deserialize=clear_search, required=False, location='query'),
-}
+from .utils import pagination_args, search_args
 
 
 class BookmarkListView(BaseView):
@@ -21,7 +13,7 @@ class BookmarkListView(BaseView):
     decorators = (jwt_required,)
 
     @use_kwargs(pagination_args)
-    @use_kwargs(filter_args)
+    @use_kwargs(search_args)
     def get(self, page=1, per_page=10, search=None):
         query = BookmarkModel.query
         if search:
