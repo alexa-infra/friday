@@ -1,3 +1,4 @@
+import pytest
 from friday.models import db
 from friday.models import Doc as DocModel
 from friday.models import Tag as TagModel
@@ -5,7 +6,8 @@ from friday.models.doc import DocTag
 from .common import assertCountEqual
 
 
-def test_tags1(app):
+@pytest.mark.usefixtures('app')
+def test_tags1():
     obj = DocModel.create(name='test', text='asdf', tagsList=['tag1', 'tag2'])
     objects = DocModel.query_list().all()
     assert len(objects) == 1
@@ -16,14 +18,16 @@ def test_tags1(app):
     assertCountEqual(obj.tagsList, expected)
 
 
-def test_tags2(app):
+@pytest.mark.usefixtures('app')
+def test_tags2():
     DocModel.create(name='test1', text='asdf', tagsList=['tag1', 'tag2'])
     DocModel.create(name='test2', text='asdf', tagsList=['tag2', 'tag3'])
     tags = TagModel.query.all()
     assert len(tags) == 3
 
 
-def test_tags3(app):
+@pytest.mark.usefixtures('app')
+def test_tags3():
     obj = DocModel.create(name='test1', text='asdf', tagsList=['tag1', 'tag2'])
     obj.update(tagsList=['tag2', 'tag3'])
     obj = DocModel.query_list().first()
@@ -33,7 +37,8 @@ def test_tags3(app):
     assert len(tags) == 3
 
 
-def test_tags4(app):
+@pytest.mark.usefixtures('app')
+def test_tags4():
     obj = DocModel.create(name='test1', text='asdf', tagsList=['tag1', 'tag2'])
 
     tag = TagModel.query.filter(TagModel.name == 'tag2').first()
@@ -44,7 +49,8 @@ def test_tags4(app):
     assertCountEqual(obj.tagsList, expected)
 
 
-def test_tags5(app):
+@pytest.mark.usefixtures('app')
+def test_tags5():
     obj = DocModel.create(name='test1', text='asdf', tagsList=['tag1', 'tag2'])
 
     cc = db.session.query(DocTag).count()
@@ -61,7 +67,8 @@ def test_tags5(app):
     assert cc == 0
 
 
-def test_tags6(app):
+@pytest.mark.usefixtures('app')
+def test_tags6():
     obj = DocModel.create(name='test1', text='asdf', tagsList=['tag1', 'tag2'])
 
     cc = db.session.query(DocTag).count()

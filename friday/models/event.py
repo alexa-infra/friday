@@ -94,18 +94,18 @@ class Event(db.Model):
         return False
 
     def check_date(self, dt):
-        if self.repeat == Repeat.daily:
+        if self._repeat == Repeat.daily:
             return True
-        if self.repeat == Repeat.weekly:
+        if self._repeat == Repeat.weekly:
             return dt.isoweekday() == self.date.isoweekday()
-        if self.repeat == Repeat.biweekly:
+        if self._repeat == Repeat.biweekly:
             start, end = get_week(self.date), get_week(dt)
             ts = end - start
             weeks = ts.days / 7
             even_week = weeks % 2 == 0
             return even_week and dt.isoweekday() == self.date.isoweekday()
-        if self.repeat == Repeat.monthly:
+        if self._repeat == Repeat.monthly:
             return dt.day == self.date.day
-        if self.repeat == Repeat.annually:
+        if self._repeat == Repeat.annually:
             return dt.day == self.date.day and dt.month == self.date.month
         return False
