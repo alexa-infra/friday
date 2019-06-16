@@ -5,7 +5,7 @@ from PilLite import Image
 from friday.utils import utcnow
 from .. import storage
 from . import db
-from .tag import Tag
+from .tag import TagMixin
 
 
 RecipeTag = Table('recipe_tag', db.metadata,
@@ -13,7 +13,7 @@ RecipeTag = Table('recipe_tag', db.metadata,
                   Column('recipe_id', Integer, ForeignKey('recipe.id'), primary_key=True))
 
 
-class Recipe(db.Model):
+class Recipe(db.Model, TagMixin):
     id = Column(Integer, primary_key=True)
     name = Column(Text, nullable=False)
     names = Column(Text, nullable=False)
@@ -29,15 +29,6 @@ class Recipe(db.Model):
             cls.query.options(db.joinedload(Recipe.tags),
                               db.joinedload(Recipe.images))
         )
-
-    @property
-    def tagsList(self):
-        return [tag.name for tag in self.tags]
-
-    @tagsList.setter
-    def tagsList(self, value):
-        if isinstance(value, (list, set, tuple)):
-            Tag.setTags(self, value)
 
     @property
     def namesList(self):

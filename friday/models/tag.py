@@ -30,3 +30,15 @@ class Tag(db.Model):
             if not tag:
                 tag = Tag.create(name=d)
             item.tags.append(tag)
+
+
+class TagMixin: # pylint: disable=too-few-public-methods
+
+    @property
+    def tagsList(self):
+        return [tag.name for tag in self.tags]
+
+    @tagsList.setter
+    def tagsList(self, value):
+        if isinstance(value, (list, set)):
+            Tag.setTags(self, value)

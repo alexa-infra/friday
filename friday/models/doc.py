@@ -3,7 +3,7 @@ from sqlalchemy.orm import relationship
 from markdown import Markdown
 from friday.utils import utcnow, MarkdownStrikeExt
 from . import db
-from .tag import Tag
+from .tag import TagMixin
 
 
 md = Markdown(extensions=['markdown.extensions.tables', MarkdownStrikeExt()])
@@ -14,7 +14,7 @@ DocTag = Table('doc_tag', db.metadata,
                Column('doc_id', Integer, ForeignKey('doc.id'), primary_key=True))
 
 
-class Doc(db.Model):
+class Doc(db.Model, TagMixin):
     id = Column(Integer, primary_key=True)
     name = Column(Text, nullable=False)
     text = Column(Text, nullable=True)
@@ -36,12 +36,3 @@ class Doc(db.Model):
                               db.joinedload(Doc.tags))
             .order_by(Doc.updated.desc())
         )
-
-    @property
-    def tagsList(self):
-        return [tag.name for tag in self.tags]
-
-    @tagsList.setter
-    def tagsList(self, value):
-        if isinstance(value, (list, set)):
-            Tag.setTags(self, value)
