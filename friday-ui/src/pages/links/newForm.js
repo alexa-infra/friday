@@ -1,5 +1,5 @@
 import React from 'react';
-import Modal from 'react-bootstrap/lib/Modal';
+import Modal from 'react-bootstrap/Modal';
 import { reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { FormFields } from './editForm';
