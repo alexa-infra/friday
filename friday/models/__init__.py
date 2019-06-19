@@ -6,5 +6,5 @@ from .user import User
 from .event import Event, Repeat
 from .bookmark import Bookmark
 from .tag import Tag
-from .doc import Doc
+from .doc import Doc, DocTag
 from .recipe import Recipe, RecipeImage

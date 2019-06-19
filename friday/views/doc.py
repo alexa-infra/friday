@@ -1,9 +1,10 @@
 from flask import request, abort
-from webargs.flaskparser import use_args
+from webargs.flaskparser import use_args, use_kwargs
 from flask_jwt_extended import jwt_required
 from . import BaseView
-from ..models import Doc as DocModel, Tag as TagModel
+from ..models import Doc as DocModel, Tag as TagModel, DocTag
 from ..schemas import Doc as DocSchema, Tag as TagSchema, TagCloud
+from .utils import tag_args, pagination_args
 
 
 class DocListView(BaseView):
@@ -12,9 +13,17 @@ class DocListView(BaseView):
     route_base = '/docs'
     decorators = (jwt_required,)
 
-    def get(self):
-        objects = DocModel.query_list().all()
-        return DocSchema.jsonify(objects), 200
+    @use_kwargs(tag_args)
+    @use_kwargs(pagination_args)
+    def get(self, page=1, per_page=10, tag=None):
+        query = DocModel.query_list()
+        if tag:
+            query = query.join(DocTag)
+            query = query.join(TagModel)
+            query = query.filter(TagModel.name == tag)
+        query = query.order_by(DocModel.updated.desc())
+        pagination = query.paginate(page, per_page)
+        return DocSchema.jsonify(pagination), 200
 
     @use_args(DocSchema())
     def post(self, args):

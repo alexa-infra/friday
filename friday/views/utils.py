@@ -28,3 +28,8 @@ clear_search = lambda txt: slugify(txt, separator=' ')
 search_args = {
     'search': fields.Function(deserialize=clear_search, required=False, location='query'),
 }
+
+
+tag_args = {
+    'tag': fields.Function(deserialize=slugify, required=False, location='query')
+}
