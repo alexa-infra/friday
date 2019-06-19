@@ -7,4 +7,4 @@ from .event import Event
 from .bookmark import Bookmark
 from .doc import Doc
 from .recipe import Recipe
-from .tag import Tag
+from .tag import Tag, TagCloud

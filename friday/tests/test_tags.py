@@ -78,3 +78,25 @@ def test_tags6():
 
     cc = db.session.query(DocTag).count()
     assert cc == 2
+
+
+@pytest.mark.usefixtures('app')
+def test_tags_cloud():
+    DocModel.create(name='test1', text='asdf', tagsList=['tag1', 'tag2'])
+    DocModel.create(name='test1', text='asdf', tagsList=['tag2', 'tag3'])
+    DocModel.create(name='test1', text='asdf', tagsList=['tag2', 'tag3', 'tag4'])
+
+    cc = db.session.query(DocTag).count()
+    assert cc == 7
+
+    cc = db.session.query(TagModel).count()
+    assert cc == 4
+
+    cloud = DocModel.tag_cloud()
+    expected = (
+        (1, 'tag1'),
+        (3, 'tag2'),
+        (2, 'tag3'),
+        (1, 'tag4'),
+    )
+    assertCountEqual(cloud, expected)

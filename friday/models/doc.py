@@ -1,9 +1,9 @@
-from sqlalchemy import Table, Column, Integer, Text, DateTime, ForeignKey
+from sqlalchemy import Table, Column, Integer, Text, DateTime, ForeignKey, func
 from sqlalchemy.orm import relationship
 from markdown import Markdown
 from friday.utils import utcnow, MarkdownStrikeExt
 from . import db
-from .tag import TagMixin
+from .tag import Tag, TagMixin
 
 
 md = Markdown(extensions=['markdown.extensions.tables', MarkdownStrikeExt()])
@@ -36,3 +36,11 @@ class Doc(db.Model, TagMixin):
                               db.joinedload(Doc.tags))
             .order_by(Doc.updated.desc())
         )
+
+    @classmethod
+    def tag_cloud(cls):
+        query = db.session.query(func.count('*').label('count'), Tag.name)
+        query = query.select_from(DocTag)
+        query = query.join(Tag)
+        query = query.group_by(Tag.id)
+        return query.all()

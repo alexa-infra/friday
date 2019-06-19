@@ -3,7 +3,7 @@ from webargs.flaskparser import use_args
 from flask_jwt_extended import jwt_required
 from . import BaseView
 from ..models import Doc as DocModel, Tag as TagModel
-from ..schemas import Doc as DocSchema, Tag as TagSchema
+from ..schemas import Doc as DocSchema, Tag as TagSchema, TagCloud
 
 
 class DocListView(BaseView):
@@ -74,6 +74,17 @@ class DocHtmlView(BaseView):
         obj = DocModel.get_or_404(id)
         headers = {'Content-Type': 'text/html'}
         return obj.html, 200, headers
+
+
+class DocTagCloudView(BaseView):
+    # pylint: disable=no-self-use
+
+    route_base = '/docs/tags'
+    decorators = (jwt_required,)
+
+    def get(self):
+        objects = DocModel.tag_cloud()
+        return TagCloud.jsonify(objects), 200
 
 
 class TagListView(BaseView):
