@@ -8,3 +8,7 @@ export const EDIT = requestActions('Docs/Edit');
 export const EDIT_TEXT = requestActions('Docs/EditText');
 export const NEW = requestActions('Docs/New');
 export const DELETE = requestActions('Docs/Delete');
+export const TAG_CLOUD = requestActions('Docs/TagCloud');
+export const SELECT_PAGE = 'Docs/SelectPage';
+export const SELECT_PER_PAGE = 'Docs/SelectPerPage';
+export const FILTER = 'Docs/Filter';

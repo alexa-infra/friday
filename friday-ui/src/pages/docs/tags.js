@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
+import classNames from 'classnames';
 import './tags.scss';
 
 
-const Tag = ({tag, onRemove, disabled}) => (
-  <div className='tag'>
+const Tag = ({tag, onRemove, onClick, mark, disabled}) => (
+  <div className={classNames('tag', {current: mark})} onClick={onClick}>
     {tag}
     {disabled ? null : (
       <i className='fa fa-times delete'
@@ -12,16 +13,18 @@ const Tag = ({tag, onRemove, disabled}) => (
   </div>
 )
 
-const Tags = ({ tags, remove, disabled }) => {
+const Tags = ({ tags, remove, onClick, disabled }) => {
   let nextId = 1;
   return (
     <div className='tags'>
       {
         tags.map(tag => (
           <Tag key={nextId++}
-               tag={tag}
+               tag={tag.name}
                disabled={disabled}
-               onRemove={() => remove(tag)}
+               onRemove={() => remove ? remove(tag.value) : null}
+               onClick={() => onClick ? onClick(tag.value) : null}
+               mark={tag.mark}
           />
         ))
       }
@@ -126,7 +129,10 @@ class TagsEdit extends Component {
       <div className='tags-container'
            onClick={this.setFocus}
            disabled={disabled}>
-        <Tags tags={tags || []}
+        <Tags tags={(tags || []).map(tag => ({
+                name: tag,
+                value: tag,
+              }))}
               remove={this.remove}
               disabled={disabled} />
         <TagInput addRange={this.addRange}
@@ -140,7 +146,10 @@ class TagsEdit extends Component {
 
 const TagsViewer = ({tags}) => (
   <div className='tags-container' disabled>
-    <Tags tags={tags || []} disabled />
+    <Tags tags={(tags || []).map(tag => ({
+      name: tag,
+      value: tag,
+    }))} disabled />
   </div>
 );
 
@@ -149,4 +158,17 @@ const renderTags = ({ input }) => (
             onChange={input.onChange} />
 );
 
-export { TagsEdit, TagsViewer, renderTags };
+const TagCloud = ({tags, current, onClick}) => (
+  <div className='tags-container' disabled>
+    <Tags
+      tags={tags.map(tag => ({
+        name: `${tag.name} (${tag.count})`,
+        value: tag.name,
+        mark: tag.name === current,
+      }))}
+      disabled
+      onClick={onClick} />
+  </div>
+);
+
+export { TagsEdit, TagsViewer, renderTags, TagCloud };

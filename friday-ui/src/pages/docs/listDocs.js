@@ -1,16 +1,18 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { TagsViewer } from './tags';
+import { TagsViewer, TagCloud } from './tags';
 import { connect } from 'react-redux';
 import { docs } from '../../actions';
 import withOnLoad from '../../components/withOnLoad';
+import Pagination from './pagination';
 
 
-const DocsList = ({items, create}) => (
+const DocsList = ({items, tagCloud, tag, filterByTag}) => (
   <div className="doc-page list">
     <div className="controls">
       <NavLink to='/docs/new'>New doc</NavLink>
     </div>
+    <TagCloud tags={tagCloud} current={tag} onClick={filterByTag} />
     {items.map(it => (
       <div className="row" key={it.id}>
         <div className="doc">
@@ -30,6 +32,7 @@ const DocsList = ({items, create}) => (
         </div>
       </div>
     ))}
+    <Pagination />
   </div>
 );
 
@@ -37,7 +40,12 @@ let DocsListContainer = withOnLoad(DocsList, props => props.loadAll());
 DocsListContainer = connect(
   state => state.docs,
   dispatch => ({
-    loadAll: () => dispatch(docs.getDocs()),
+    loadAll: () => dispatch(docs.getDocs()).then(
+      () => dispatch(docs.getDocsTagCloud())
+    ),
+    filterByTag: tag => dispatch(docs.filterByTag(tag)).then(
+      () => dispatch(docs.getDocs())
+    ),
   }),
 )(DocsListContainer);
 

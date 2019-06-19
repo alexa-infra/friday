@@ -6,8 +6,13 @@ const makeDoc = data => ({
   tags: data.tags,
 })
 
-export const getDocs = () => {
-  return fetch('/api/docs', {
+export const getDocs = (tag, page, per_page) => {
+  const params = new URLSearchParams();
+  if (tag)
+    params.append('tag', tag);
+  params.append('page', page)
+  params.append('per_page', per_page);
+  return fetch('/api/docs?' + params.toString(), {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
@@ -85,4 +90,13 @@ export const getDocHtml = data => {
     },
   }).then(textOrReject)
   .then(html => ({...data, html}));
+}
+
+export const getDocsTagCloud = () => {
+  return fetch('/api/docs/tags', {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+    },
+  }).then(jsonOrReject);
 }
