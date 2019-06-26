@@ -1,11 +1,7 @@
-import { jsonOrReject } from './utils'
+import { wrap } from './utils'
 
 
-export const getTags = () => {
-  return fetch('/api/tags', {
-    method: 'GET',
-    headers: {
-      'Accept': 'application/json',
-    },
-  }).then(jsonOrReject);
-}
+export const getTags = wrap(() => ({
+  url: '/api/tags',
+  method: 'GET',
+}))

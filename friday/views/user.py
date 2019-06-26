@@ -1,6 +1,6 @@
 from webargs import fields
 from webargs.flaskparser import use_kwargs
-from flask_jwt_extended import set_access_cookies
+from flask_jwt_extended import set_access_cookies, jwt_required
 from . import BaseView
 from ..models.user import User as UserModel
 from ..schemas.user import User as UserSchema
@@ -29,6 +29,7 @@ class CurrentUser(BaseView):
     # pylint: disable=no-self-use
 
     route_base = '/users/current'
+    decorators = (jwt_required,)
 
     def get(self):
         user = UserModel.current_user()

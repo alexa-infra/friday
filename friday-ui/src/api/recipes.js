@@ -1,11 +1,7 @@
-import { jsonOrReject } from './utils'
+import { wrap } from './utils'
 
 
-export const getRecipes = page => {
-  return fetch('/api/recipes', {
-    method: 'GET',
-    headers: {
-      'Accept': 'application/json',
-    },
-  }).then(jsonOrReject);
-}
+export const getRecipes = wrap(() => ({
+  url: '/api/recipes',
+  method: 'GET',
+}))

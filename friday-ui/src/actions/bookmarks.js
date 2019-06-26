@@ -1,12 +1,11 @@
 import * as Actions from '../constants/bookmarks.actions';
 import * as api from '../api';
-import { createAction, _callApi, callApi } from './utils';
+import { createAction, callApi } from './utils';
 
 
-export const getBookmarks = _callApi((getState, data) => {
+export const getBookmarks = callApi((data, getState) => {
   const { bookmarks } = getState();
-  const { page, per_page, search } = bookmarks;
-  return api.getBookmarks(search, page, per_page);
+  return api.getBookmarks(bookmarks, getState);
 }, Actions.LIST);
 
 export const nextPage = () => (dispatch, getState) => {
@@ -33,9 +32,9 @@ export const createBookmark = callApi(api.createBookmark, Actions.NEW);
 export const updateBookmark = callApi(api.updateBookmark, Actions.EDIT);
 export const deleteBookmark = callApi(api.deleteBookmark, Actions.DELETE);
 
-export const markReadBookmark = _callApi((getState, data) => {
+export const markReadBookmark = callApi((data, getState) => {
   const { readed } = data;
-  return api.updateBookmark({...data, readed: !readed});
+  return api.updateBookmark({...data, readed: !readed}, getState);
 }, Actions.EDIT);
 
 export const showEdit = item => createAction(Actions.SHOW_EDIT, item);

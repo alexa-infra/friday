@@ -1,46 +1,28 @@
-import { jsonOrReject, emptyOrReject } from './utils'
+import { wrap } from './utils'
 
 
 const formatLinkData = ({url, title}) => {
   return {url, title}
 }
 
-export const getLinks = page => {
-  return fetch('/api/links?per_page=100', {
-    method: 'GET',
-    headers: {
-      'Accept': 'application/json',
-    },
-  }).then(jsonOrReject)
-}
+export const getLinks = wrap(() => ({
+  method: 'GET',
+  url: '/api/links?per_page=100',
+}))
 
-export const createLink = data => {
-  return fetch('/api/links', {
-    method: 'POST',
-    body: JSON.stringify(formatLinkData(data)),
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    }
-  }).then(jsonOrReject)
-}
+export const createLink = wrap(data => ({
+  method: 'POST',
+  url: '/api/links',
+  body: formatLinkData(data),
+}));
 
-export const updateLink = data => {
-  return fetch(`/api/links/${data.id}`, {
-    method: 'PUT',
-    body: JSON.stringify(formatLinkData(data)),
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    }
-  }).then(jsonOrReject)
-}
+export const updateLink = wrap(data => ({
+  method: 'PUT',
+  url: `/api/links/${data.id}`,
+  body: formatLinkData(data),
+}));
 
-export const deleteLink = data => {
-  return fetch(`/api/links/${data.id}`, {
-    method: 'DELETE',
-    headers: {
-      'Accept': 'application/json',
-    }
-  }).then(emptyOrReject)
-}
+export const deleteLink = wrap(data => ({
+  method: 'DELETE',
+  url: `/api/links/${data.id}`,
+}));

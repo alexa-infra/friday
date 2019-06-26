@@ -1,4 +1,4 @@
-import { jsonOrReject, emptyOrReject } from './utils'
+import { wrap } from './utils'
 
 
 const formatData = data => {
@@ -6,47 +6,34 @@ const formatData = data => {
   return { url, title, readed };
 }
 
-export const getBookmarks = (search, page, per_page) => {
+const searchParams = ({search, page, per_page}) => {
   const params = new URLSearchParams();
   if (search)
     params.append('search', search);
   params.append('page', page)
   params.append('per_page', per_page);
-  return fetch('/api/bookmarks?' + params.toString(), {
-    method: 'GET',
-    headers: {
-      'Accept': 'application/json',
-    },
-  }).then(jsonOrReject)
+  return params.toString()
 }
 
-export const createBookmark = data => {
-  return fetch('/api/bookmarks', {
-    method: 'POST',
-    body: JSON.stringify(formatData(data)),
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    }
-  }).then(jsonOrReject)
-}
+export const getBookmarks = wrap(data => ({
+  url: '/api/bookmarks?' + searchParams(data),
+  method: 'GET',
+}))
 
-export const updateBookmark = data => {
-  return fetch(`/api/bookmarks/${data.id}`, {
-    method: 'PUT',
-    body: JSON.stringify(formatData(data)),
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    }
-  }).then(jsonOrReject)
-}
+export const createBookmark = wrap(data => ({
+  url: '/api/bookmarks',
+  method: 'POST',
+  body: formatData(data),
+}))
 
-export const deleteBookmark = data => {
-  return fetch(`/api/bookmarks/${data.id}`, {
-    method: 'DELETE',
-    headers: {
-      'Accept': 'application/json',
-    }
-  }).then(emptyOrReject)
-}
+export const updateBookmark = wrap(data => ({
+  url: `/api/bookmarks/${data.id}`,
+  method: 'PUT',
+  body: formatData(data),
+}))
+
+export const deleteBookmark = wrap(data => ({
+  url: `/api/bookmarks/${data.id}`,
+  method: 'DELETE',
+  body: formatData(data),
+}))

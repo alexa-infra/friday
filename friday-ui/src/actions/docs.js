@@ -1,12 +1,11 @@
 import * as api from '../api';
-import { createAction, callApi, _callApi } from './utils';
+import { createAction, callApi } from './utils';
 import * as Actions from '../constants/docs.actions';
 
 
-export const getDocs = _callApi((getState, data) => {
+export const getDocs = callApi((data, getState) => {
   const { docs } = getState();
-  const { page, per_page, tag } = docs;
-  return api.getDocs(tag, page, per_page);
+  return api.getDocs(docs, getState);
 }, Actions.LIST);
 
 export const nextPage = () => (dispatch, getState) => {

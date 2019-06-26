@@ -1,13 +1,13 @@
-import { jsonOrReject } from './utils'
+import { wrap } from './utils'
 
 
-export const login = (name, password) => {
-  return fetch('/api/users/login', {
-    method: 'POST',
-    body: JSON.stringify({email: name, password}),
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    },
-  }).then(jsonOrReject)
-}
+export const login = wrap(({ email, password }) => ({
+  url: '/api/users/login',
+  method: 'POST',
+  body: { email, password },
+}))
+
+export const currentUser = wrap(() => ({
+  url: '/api/users/current',
+  method: 'GET',
+}))

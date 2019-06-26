@@ -1,30 +1,58 @@
 
-export const jsonOrReject = result => {
-  if (result.ok)
-    return result.json()
-  return Promise.reject({
-    name: 'ResponseError',
-    message: '',
-    status: result.status,
-  })
-}
 
-export const emptyOrReject = result => {
-  if (result.ok)
-    return {}
-  return Promise.reject({
-    name: 'ResponseError',
-    message: '',
-    status: result.status,
-  })
-}
+const requireAccept = ['GET', 'PUT', 'POST', 'PATCH'];
+const requireBody = ['PUT', 'POST', 'PATCH'];
 
-export const textOrReject = result => {
-  if (result.ok)
-    return result.text();
-  return Promise.reject({
-    name: 'ResponseError',
-    message: '',
-    status: result.status,
+export const wrap = apiFunc => (data, getState) => {
+  const params = apiFunc(data, getState);
+  const { auth } = getState();
+
+  let headers = {};
+
+  if (requireAccept.includes(params.method)) {
+    if (params.text)
+      headers['Accept'] = 'text/html, application/json';
+    else
+      headers['Accept'] = 'application/json';
+  }
+
+  let body = null;
+  if (requireBody.includes(params.method)) {
+    if (params.text) {
+      body = params.body;
+      headers['Content-Type'] = 'text/html';
+    } else {
+      body = JSON.stringify(params.body);
+      headers['Content-Type'] = 'application/json';
+    }
+  }
+
+  if (auth.use_headers && auth.user) {
+    headers['X-Authentication-Token'] = `Bearer ${auth.user.token}`;
+  }
+
+  const request = new Request(params.url, {
+    method: params.method,
+    headers,
+    body,
+  });
+
+  return fetch(request).then(response => {
+
+    if (!response.ok) {
+      return Promise.reject({
+        name: 'ResponseError',
+        message: '',
+        status: response.status,
+      })
+    }
+
+    if (requireAccept.includes(params.method)) {
+      if (params.text)
+        return response.text();
+      else
+        return response.json();
+    }
+    return {};
   })
 }

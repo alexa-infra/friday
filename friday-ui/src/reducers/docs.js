@@ -44,12 +44,12 @@ export default function (state = initialState, action) {
       const tag = action.data;
       return { ...state, tag: tag, page: 1 };
     case Actions.HTML.SUCCESS: {
-      const { html } = action.data;
+      const html = action.data;
       const { currentItem } = state;
       return { ...state, currentItem: { ...currentItem, html }};
     }
     case Actions.TEXT.SUCCESS: {
-      const { text } = action.data;
+      const text = action.data;
       const { currentItem } = state;
       return { ...state, currentItem: { ...currentItem, text }};
     }

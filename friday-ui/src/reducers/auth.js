@@ -2,6 +2,7 @@ import * as Actions from '../constants/auth.actions';
 
 const initialState = {
   user: null,
+  use_headers: false,
 }
 
 export default (state = initialState, action) => {
@@ -12,6 +13,8 @@ export default (state = initialState, action) => {
       return {...state, user: action.data };
     case Actions.LOGIN.FAILURE:
       return {...state, user: null};
+    case Actions.USE_HEADERS:
+      return {...state, use_headers: true};
     default:
       return state;
   }

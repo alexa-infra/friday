@@ -1,4 +1,4 @@
-import { jsonOrReject, textOrReject, emptyOrReject } from './utils'
+import { wrap } from './utils'
 
 
 const makeDoc = data => ({
@@ -6,97 +6,62 @@ const makeDoc = data => ({
   tags: data.tags,
 })
 
-export const getDocs = (tag, page, per_page) => {
+const searchParams = ({tag, page, per_page}) => {
   const params = new URLSearchParams();
   if (tag)
     params.append('tag', tag);
   params.append('page', page)
   params.append('per_page', per_page);
-  return fetch('/api/docs?' + params.toString(), {
-    method: 'GET',
-    headers: {
-      'Accept': 'application/json',
-    },
-  }).then(jsonOrReject)
+  return params.toString()
 }
 
-export const getDoc = data => {
-  return fetch(`/api/docs/${data.id}`, {
-    method: 'GET',
-    headers: {
-      'Accept': 'application/json',
-    },
-  }).then(jsonOrReject)
-}
+export const getDocs = wrap(data => ({
+  url: '/api/docs?' + searchParams(data),
+  method: 'GET',
+}))
 
-export const createDoc = data => {
-  return fetch('/api/docs', {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(makeDoc(data)),
-  }).then(jsonOrReject)
-}
+export const getDoc = wrap(data => ({
+  url: `/api/docs/${data.id}`,
+  method: 'GET',
+}))
 
-export const updateDoc = data => {
-  return fetch(`/api/docs/${data.id}`, {
-    method: 'PUT',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(makeDoc(data)),
-  }).then(jsonOrReject)
-}
+export const createDoc = wrap(data => ({
+  url: '/api/docs',
+  method: 'POST',
+  body: makeDoc(data),
+}))
 
-export const deleteDoc = data => {
-  return fetch(`/api/docs/${data.id}`, {
-    method: 'DELETE',
-    headers: {
-      'Accept': 'application/json',
-    }
-  }).then(emptyOrReject)
-}
+export const updateDoc = wrap(data => ({
+  url: `/api/docs/${data.id}`,
+  method: 'PUT',
+  body: makeDoc(data),
+}))
 
-export const getDocText = data => {
-  return fetch(`/api/docs/${data.id}/text`, {
-    method: 'GET',
-    headers: {
-      'Accept': 'text/plain, application/json',
-    },
-  }).then(textOrReject)
-  .then(text => ({...data, text}));
-}
+export const deleteDoc = wrap(data => ({
+  url: `/api/docs/${data.id}`,
+  method: 'DELETE',
+}))
 
-export const putDocText = data => {
-  return fetch(`/api/docs/${data.id}/text`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'text/plain',
-      'Accept': 'text/plain, application/json',
-    },
-    body: data.text,
-  }).then(textOrReject)
-  .then(text => ({...data, text}));
-}
+export const getDocText = wrap(data => ({
+  url: `/api/docs/${data.id}/text`,
+  method: 'GET',
+  text: true,
+}))
 
-export const getDocHtml = data => {
-  return fetch(`/api/docs/${data.id}/html`, {
-    method: 'GET',
-    headers: {
-      'Accept': 'text/html, application/json',
-    },
-  }).then(textOrReject)
-  .then(html => ({...data, html}));
-}
+export const putDocText = wrap(data => ({
+  url: `/api/docs/${data.id}/text`,
+  method: 'PUT',
+  body: data.text,
+  text: true,
+}))
 
-export const getDocsTagCloud = () => {
-  return fetch('/api/docs/tags', {
-    method: 'GET',
-    headers: {
-      'Accept': 'application/json',
-    },
-  }).then(jsonOrReject);
-}
+export const getDocHtml = wrap(data => ({
+  url: `/api/docs/${data.id}/html`,
+  method: 'GET',
+  text: true,
+}))
+
+export const getDocsTagCloud = wrap(data => ({
+  url: '/api/docs/tags',
+  method: 'GET',
+}))

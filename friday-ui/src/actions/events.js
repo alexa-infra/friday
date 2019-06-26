@@ -1,7 +1,7 @@
 import * as moment from 'moment';
 import * as Actions from '../constants/events.actions';
 import * as api from '../api';
-import { createAction, _callApi, callApi } from './utils';
+import { createAction, callApi } from './utils';
 
 
 export const nextMonth = () => (dispatch, getState) => {
@@ -23,10 +23,10 @@ export const currentMonth = () => dispatch => {
   return Promise.resolve(dispatch(createAction(Actions.SELECT_MONTH, date)));
 }
 
-export const getEvents = _callApi((getState, data) => {
+export const getEvents = callApi((data, getState) => {
   const { events } = getState();
   const { firstDay, lastDay } = events;
-  return api.getEvents(firstDay, lastDay)
+  return api.getEvents({fromdate: firstDay, todate: lastDay}, getState)
 }, Actions.LIST);
 
 export const createEvent = callApi(api.createEvent, Actions.NEW);
