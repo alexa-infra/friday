@@ -11,6 +11,8 @@ export const wrap = apiFunc => (data, getState) => {
 
   if (requireAccept.includes(params.method)) {
     if (params.text)
+      headers['Accept'] = 'text/plain, application/json';
+    else if (params.html)
       headers['Accept'] = 'text/html, application/json';
     else
       headers['Accept'] = 'application/json';
@@ -19,6 +21,9 @@ export const wrap = apiFunc => (data, getState) => {
   let body = null;
   if (requireBody.includes(params.method)) {
     if (params.text) {
+      body = params.body;
+      headers['Content-Type'] = 'text/plain';
+    } else if (params.html) {
       body = params.body;
       headers['Content-Type'] = 'text/html';
     } else {
@@ -48,7 +53,7 @@ export const wrap = apiFunc => (data, getState) => {
     }
 
     if (requireAccept.includes(params.method)) {
-      if (params.text)
+      if (params.text || params.html)
         return response.text();
       else
         return response.json();

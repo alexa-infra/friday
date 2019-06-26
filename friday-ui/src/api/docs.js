@@ -58,7 +58,7 @@ export const putDocText = wrap(data => ({
 export const getDocHtml = wrap(data => ({
   url: `/api/docs/${data.id}/html`,
   method: 'GET',
-  text: true,
+  html: true,
 }))
 
 export const getDocsTagCloud = wrap(data => ({
