@@ -16,7 +16,7 @@ import { NavBar, Alerts } from '../../components'
 const Root = ({store, history}) => (
   <Provider store={store}>
     <Router history={history}>
-      <content className="theme-l5">
+      <div className="theme-l5">
         <header>
           <NavBar />
         </header>
@@ -31,7 +31,7 @@ const Root = ({store, history}) => (
             <Route path="/" component={Links} />
           </Switch>
         </main>
-      </content>
+      </div>
     </Router>
   </Provider>
 );
