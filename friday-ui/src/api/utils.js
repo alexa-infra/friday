@@ -33,7 +33,7 @@ export const wrap = apiFunc => (data, getState) => {
   }
 
   if (auth.use_headers && auth.user) {
-    headers['X-Authentication-Token'] = `Bearer ${auth.user.token}`;
+    headers['session'] = auth.user.token;
   }
 
   const request = new Request(params.url, {

@@ -1,6 +1,5 @@
 from flask import request, abort
 from webargs.flaskparser import use_args, use_kwargs
-from flask_jwt_extended import jwt_required
 from . import BaseView
 from ..models import Doc as DocModel, Tag as TagModel, DocTag
 from ..schemas import Doc as DocSchema, Tag as TagSchema, TagCloud
@@ -11,7 +10,6 @@ class DocListView(BaseView):
     # pylint: disable=no-self-use
 
     route_base = '/docs'
-    decorators = (jwt_required,)
 
     @use_kwargs(tag_args)
     @use_kwargs(pagination_args)
@@ -35,7 +33,6 @@ class DocItemView(BaseView):
     # pylint: disable=no-self-use
 
     route_base = '/docs/<int:id>'
-    decorators = (jwt_required,)
 
     def get(self, id):  # pylint: disable=redefined-builtin
         obj = DocModel.query_list().get_or_404(id)
@@ -57,7 +54,6 @@ class DocTextView(BaseView):
     # pylint: disable=no-self-use
 
     route_base = '/docs/<int:id>/text'
-    decorators = (jwt_required,)
 
     def get(self, id):  # pylint: disable=redefined-builtin
         obj = DocModel.get_or_404(id)
@@ -77,7 +73,6 @@ class DocHtmlView(BaseView):
     # pylint: disable=no-self-use
 
     route_base = '/docs/<int:id>/html'
-    decorators = (jwt_required,)
 
     def get(self, id):  # pylint: disable=redefined-builtin
         obj = DocModel.get_or_404(id)
@@ -89,7 +84,6 @@ class DocTagCloudView(BaseView):
     # pylint: disable=no-self-use
 
     route_base = '/docs/tags'
-    decorators = (jwt_required,)
 
     def get(self):
         objects = DocModel.tag_cloud()
@@ -100,7 +94,6 @@ class TagListView(BaseView):
     # pylint: disable=no-self-use
 
     route_base = '/tags'
-    decorators = (jwt_required,)
 
     def get(self):
         objects = TagModel.query.all()

@@ -1,7 +1,6 @@
 from datetime import timedelta
 from webargs import fields
 from webargs.flaskparser import use_args, use_kwargs
-from flask_jwt_extended import jwt_required
 from . import BaseView
 from ..models.event import Event as EventModel
 from ..schemas.event import Event as EventSchema, EventMatch
@@ -17,7 +16,6 @@ class EventListView(BaseView):
     # pylint: disable=no-self-use
 
     route_base = '/events'
-    decorators = (jwt_required,)
 
     @use_kwargs(eventlist_args)
     def get(self, fromdate=None, todate=None):
@@ -37,7 +35,6 @@ class EventItemView(BaseView):
     # pylint: disable=no-self-use
 
     route_base = '/events/<int:id>'
-    decorators = (jwt_required,)
 
     def get(self, id):  # pylint: disable=redefined-builtin
         obj = EventModel.get_or_404(id)
@@ -64,7 +61,6 @@ class EventRepeatView(BaseView):
     # pylint: disable=no-self-use
 
     route_base = '/events/<int:id>/repeat'
-    decorators = (jwt_required,)
 
     @use_kwargs(repeat_args)
     def post(self, id, days):  # pylint: disable=redefined-builtin

@@ -1,6 +1,6 @@
 from webargs import fields
 from webargs.flaskparser import use_kwargs
-from flask_jwt_extended import set_access_cookies, jwt_required
+from flask import session
 from . import BaseView
 from ..models.user import User as UserModel
 from ..schemas.user import User as UserSchema
@@ -16,12 +16,13 @@ class LoginView(BaseView):
     # pylint: disable=no-self-use
 
     route_base = '/users/login'
+    decorators = []
 
     @use_kwargs(login_args)
     def post(self, email, password):
         user = UserModel.authenticate(email, password)
         resp = UserSchema.jsonify(user)
-        set_access_cookies(resp, user.token)
+        session['user_id'] = user.id
         return resp, 200
 
 
@@ -29,7 +30,6 @@ class CurrentUser(BaseView):
     # pylint: disable=no-self-use
 
     route_base = '/users/current'
-    decorators = (jwt_required,)
 
     def get(self):
         user = UserModel.current_user()

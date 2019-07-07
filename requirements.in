@@ -1,7 +1,6 @@
 flask
 flask-sqlalchemy
 flask-migrate
-flask-jwt-extended
 marshmallow
 webargs
 gunicorn
@@ -11,3 +10,5 @@ Markdown
 requests
 pytest
 pil-lite
+redis
+fakeredis

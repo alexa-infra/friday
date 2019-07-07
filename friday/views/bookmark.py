@@ -1,5 +1,4 @@
 from webargs.flaskparser import use_args, use_kwargs
-from flask_jwt_extended import jwt_required
 from . import BaseView
 from ..models import Bookmark as BookmarkModel
 from ..schemas import Bookmark as BookmarkSchema
@@ -10,7 +9,6 @@ class BookmarkListView(BaseView):
     # pylint: disable=no-self-use
 
     route_base = '/bookmarks'
-    decorators = (jwt_required,)
 
     @use_kwargs(pagination_args)
     @use_kwargs(search_args)
@@ -34,7 +32,6 @@ class BookmarkItemView(BaseView):
     # pylint: disable=no-self-use
 
     route_base = '/bookmarks/<int:id>'
-    decorators = (jwt_required,)
 
     def get(self, id):  # pylint: disable=redefined-builtin
         obj = BookmarkModel.get_or_404(id)

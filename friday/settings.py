@@ -5,6 +5,8 @@ ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 UI_DIR = os.path.join(ROOT_DIR, '..', 'friday-ui', 'build')
 MIGRATIONS_DIR = os.path.join(ROOT_DIR, 'migrations')
 
+REDIS_URL = 'redis://127.0.0.1:6379/0'
+
 DEBUG = True
 SECRET_KEY = 'blah-blah-blah'
 

@@ -1,5 +1,4 @@
 from webargs.flaskparser import use_args
-from flask_jwt_extended import jwt_required
 from . import BaseView
 from ..models import Recipe as RecipeModel
 from ..schemas import Recipe as RecipeSchema
@@ -9,7 +8,6 @@ class RecipeListView(BaseView):
     # pylint: disable=no-self-use
 
     route_base = '/recipes'
-    decorators = (jwt_required,)
 
     def get(self):
         objects = RecipeModel.query_list().all()
@@ -25,7 +23,6 @@ class RecipeItemView(BaseView):
     # pylint: disable=no-self-use
 
     route_base = '/recipes/<int:id>'
-    decorators = (jwt_required,)
 
     def get(self, id):  # pylint: disable=redefined-builtin
         obj = RecipeModel.query_list().get_or_404(id)

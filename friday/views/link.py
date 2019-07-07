@@ -1,6 +1,5 @@
 from flask import redirect
 from webargs.flaskparser import use_args, use_kwargs
-from flask_jwt_extended import jwt_required
 from . import BaseView
 from ..models.link import Link as LinkModel
 from ..schemas.link import Link as LinkSchema
@@ -11,7 +10,6 @@ class LinkListView(BaseView):
     # pylint: disable=no-self-use
 
     route_base = '/links'
-    decorators = (jwt_required,)
 
     @use_kwargs(pagination_args)
     def get(self, page=1, per_page=10):
@@ -30,7 +28,6 @@ class LinkItemView(BaseView):
     # pylint: disable=no-self-use
 
     route_base = '/links/<int:id>'
-    decorators = (jwt_required,)
 
     def get(self, id):  # pylint: disable=redefined-builtin
         obj = LinkModel.get_or_404(id)
@@ -52,7 +49,6 @@ class LinkRedirectView(BaseView):
     # pylint: disable=no-self-use
 
     route_base = '/links/<int:id>/redirect'
-    # decorators = (jwt_required,)
 
     def get(self, id):  # pylint: disable=redefined-builtin
         obj = LinkModel.get_or_404(id)

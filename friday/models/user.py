@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, Text, DateTime
-from flask_jwt_extended import create_access_token, get_jwt_identity
+from flask import session
 from friday.utils import utcnow, make_password_hash, check_password_hash
 from friday.exceptions import Unauthorized
 from . import db
@@ -30,11 +30,11 @@ class User(db.Model):
 
     @property
     def token(self):
-        return create_access_token(identity=self.id)
+        return session.sid
 
     @classmethod
     def current_user(cls, raise_exception=True):
-        user_id = get_jwt_identity()
+        user_id = session.get('user_id', None)
         if user_id is None:
             if raise_exception:
                 raise Unauthorized

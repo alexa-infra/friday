@@ -1,5 +1,6 @@
 from flask import Blueprint
 from flask.views import MethodView, http_method_funcs
+from friday.session import auth_required
 from friday.utils import camel_to_snake
 
 api = Blueprint('api', __name__)
@@ -7,6 +8,7 @@ api = Blueprint('api', __name__)
 
 class BaseView(MethodView):
     route_base = None
+    decorators = (auth_required, )
 
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
