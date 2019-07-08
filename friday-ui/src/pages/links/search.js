@@ -12,7 +12,7 @@ class SearchBox extends Component {
   render() {
     const { filter } = this.props;
     return (
-      <input className="search"
+      <input className="search w-100"
              type="text"
              placeholder="Search..."
              ref={ input => { this.searchInput = input; }}

@@ -97,8 +97,10 @@ class ImageBoard extends React.Component {
 }
 
 let App = ({ items }) => (
-  <div className="App">
-    <ImageBoard images={items} desiredWidth={200} />
+  <div className="App row">
+    <div className="col">
+      <ImageBoard images={items} desiredWidth={200} />
+    </div>
   </div>
 );
 

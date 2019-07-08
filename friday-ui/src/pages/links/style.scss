@@ -1,8 +1,12 @@
 .links-page {
   text-align: center;
 
-  .search {
-    margin-top: 10px;
+  .controls {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    .search {
+      width: 100%;
+    }
   }
 
   ul.link-list {

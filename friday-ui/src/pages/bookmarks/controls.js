@@ -19,21 +19,27 @@ class Controls extends Component {
     const { search } = this.state;
     const { doSearch, showEditNew } = this.props;
     return (
-      <div className="search-box">
-        <input className="search"
-               type="text"
-               placeholder="Search..."
-               value={search || ''}
-               onChange={this.handleChangeSearch} />
-        <button type="button" onClick={() => doSearch(search)}>
-          Search
-        </button>
-        <button type="button" onClick={this.onResetSearch}>
-          Reset
-        </button>
-        <button type="button" onClick={showEditNew}>
-          New
-        </button>
+      <div className="row justify-content-center">
+        <div className="col col-sm-8 col-md-6">
+          <input className="search w-100"
+                 type="text"
+                 placeholder="Search..."
+                 value={search || ''}
+                 onChange={this.handleChangeSearch} />
+        </div>
+        <div className="col col-sm-4 col-md-2">
+          <div className="btn-group">
+            <button type="button" className="btn btn-secondary" onClick={() => doSearch(search)}>
+              <i className="fa fa-search" />
+            </button>
+            <button type="button" className="btn btn-secondary" onClick={this.onResetSearch}>
+              <i className="fa fa-undo" />
+            </button>
+            <button type="button" className="btn btn-secondary" onClick={showEditNew}>
+              <i className="fa fa-plus" />
+            </button>
+          </div>
+        </div>
       </div>
     )
   }

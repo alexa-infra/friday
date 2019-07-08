@@ -1,25 +1,11 @@
 .doc-page {
-  margin: 20px 0;
   &.list {
-    display: flex;
-    flex-flow: column nowrap;
-    .row {
-      display: flex;
-      flex-flow: column nowrap;
-      .doc {
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: space-between;
-      }
+    > .row {
       border-bottom: 1px solid #cccccc;
       &:last-child {
         border-bottom: none;
       }
-      padding: 5px;
       .doc-controls {
-        .item {
-          display: inline-block;
-        }
         * {
           &:after {
             content: "|";

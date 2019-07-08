@@ -8,10 +8,12 @@ import { events } from '../../actions';
 
 
 let EventsPage = () => (
-  <div>
-    <Calendar />
-    <EditEventModal />
-    <NewEventModal />
+  <div className="row justify-content-center">
+    <div className="col col-md-10">
+      <Calendar />
+      <EditEventModal />
+      <NewEventModal />
+    </div>
   </div>
 );
 

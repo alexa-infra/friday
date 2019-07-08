@@ -1,31 +1,20 @@
 .bookmarks-page {
-  margin: 20px 0;
 
   .bookmarks {
-    display: flex;
-    flex-flow: column nowrap;
-    margin: 10px 0;
 
     .bookmark {
-      display: flex;
-      flex-flow: column nowrap;
       border-bottom: 1px solid #cccccc;
       &:last-child {
         border-bottom: none;
       }
 
-      padding: 5px;
-
       .title {
-        display: flex;
-        flex-flow: row wrap;
         a.done {
           color: #777777;
           text-decoration: line-through;
         }
         .site {
           color: #777777;
-          margin-left: 5px;
         }
       }
       .controls {

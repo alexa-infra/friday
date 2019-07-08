@@ -5,7 +5,7 @@ const Pagination = ({page, pages, per_page, prevPage, nextPage, changePerPage}) 
   const hasNext = page < pages;
   const hasPrev = page > 1;
   return (
-    <div className="pagination">
+    <div className="pagination justify-content-center">
       <div className="buttons">
         <button type="button" onClick={prevPage}
                 disabled={!hasPrev}>

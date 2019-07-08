@@ -8,31 +8,41 @@ import Pagination from './pagination';
 
 
 const DocsList = ({items, tagCloud, tag, filterByTag}) => (
-  <div className="doc-page list">
-    <div className="controls">
-      <NavLink to='/docs/new'>New doc</NavLink>
-    </div>
-    <TagCloud tags={tagCloud} current={tag} onClick={filterByTag} />
-    {items.map(it => (
-      <div className="row" key={it.id}>
-        <div className="doc">
-          <NavLink to={`/docs/${it.id}`}>
-            <b>{it.name}</b>
-          </NavLink>
-          <TagsViewer tags={it.tags} />
+  <div className="doc-page row justify-content-center">
+    <div className="col col-md-10">
+      <div className="controls">
+        <NavLink to='/docs/new'>New doc</NavLink>
+      </div>
+      <TagCloud tags={tagCloud} current={tag} onClick={filterByTag} />
+      {items.map(it => (
+        <div className="row p-2" key={it.id}>
+          <div className="col">
+            <div className="row">
+              <div className="col">
+                <NavLink to={`/docs/${it.id}`}>
+                  <b>{it.name}</b>
+                </NavLink>
+              </div>
+              <div className="col text-right">
+                <TagsViewer tags={it.tags} />
+              </div>
+            </div>
+            <div className="row doc-controls">
+              <div className="col">
+                Created <i title={it.created.toISOString(true)}>{it.created.fromNow()}</i>
+                Updated <i title={it.updated.toISOString(true)}>{it.updated.fromNow()}</i>
+                <NavLink to={`/docs/${it.id}/edit`}>Edit</NavLink>
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="doc-controls">
-          <div className="item">
-            Created <i title={it.created.toISOString(true)}>{it.created.fromNow()}</i>
-          </div>
-          <div className="item">
-            Updated <i title={it.updated.toISOString(true)}>{it.updated.fromNow()}</i>
-          </div>
-          <NavLink to={`/docs/${it.id}/edit`}>Edit</NavLink>
+      ))}
+      <div className="row">
+        <div className="col">
+          <Pagination />
         </div>
       </div>
-    ))}
-    <Pagination />
+    </div>
   </div>
 );
 

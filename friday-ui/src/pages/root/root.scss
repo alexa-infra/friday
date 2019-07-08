@@ -4,11 +4,8 @@
   content {
     height: 100%;
 
-    display: grid;
-    grid-template-columns: 1fr minmax(240px, 740px) 1fr;
-    grid-template-rows: auto 1fr;
+    nav.navbar {
+      a { white-space: nowrap; }
+    }
   }
-
-  main { grid-column: 2; }
-  header { grid-column: 1 / -1; }
 }

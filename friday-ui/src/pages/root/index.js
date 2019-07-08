@@ -20,7 +20,7 @@ const Root = ({store, history}) => (
         <header>
           <NavBar />
         </header>
-        <main>
+        <main className="container mt-2">
           <Alerts />
           <Switch>
             <Route path="/login" component={Login} />
