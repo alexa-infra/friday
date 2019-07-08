@@ -40,6 +40,7 @@ export const wrap = apiFunc => (data, getState) => {
     method: params.method,
     headers,
     body,
+    credentials: 'same-origin',
   });
 
   return fetch(request).then(response => {
