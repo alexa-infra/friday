@@ -23,6 +23,7 @@ class LoginView(BaseView):
         user = UserModel.authenticate(email, password)
         resp = UserSchema.jsonify(user)
         session['user_id'] = user.id
+        session.permanent = True
         return resp, 200
 
 
