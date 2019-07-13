@@ -1,24 +1,17 @@
 import os
-from datetime import timedelta
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 UI_DIR = os.path.join(ROOT_DIR, '..', 'friday-ui', 'build')
-MIGRATIONS_DIR = os.path.join(ROOT_DIR, 'migrations')
+STORAGE_PATH = os.path.join(ROOT_DIR, '..', 'images2')
 
 REDIS_URL = 'redis://127.0.0.1:6379/0'
-
-DEBUG = True
-SECRET_KEY = 'blah-blah-blah'
 
 DB_PATH = os.path.join(ROOT_DIR, 'database.sqlite')
 SQLALCHEMY_DATABASE_URI = 'sqlite:///{}'.format(DB_PATH)
 #SQLALCHEMY_ECHO = True
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-SERVER_NAME = os.environ.get('SERVER_NAME', None)
-
 JSON_AS_ASCII = False
-STORAGE_PATH = os.path.join(ROOT_DIR, '..', 'images2')
 
 MAX_IMAGE_SIZE = 1024
 

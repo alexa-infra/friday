@@ -1,3 +1,4 @@
+import os
 from flask import Flask
 from flask_migrate import Migrate
 from .errors import Errors
@@ -17,15 +18,18 @@ redis = FlaskRedis()
 def make_app(settings=None):
     app = Flask(__name__, static_folder=None)
     app.config.from_object('friday.settings')
-    if settings:
+    if settings is not None:
         app.config.update(settings)
+    else:
+        app.config.from_pyfile('local_settings.py', silent=True)
+
     app.url_map.strict_slashes = False
     app.session_interface = RedisSessionInterface(redis)
 
     from .models import db
     db.init_app(app)
 
-    migrations_path = app.config['MIGRATIONS_DIR']
+    migrations_path = os.path.join(app.root_path, 'migrations')
     migrate.init_app(app, directory=migrations_path)
     errors.init_app(app)
     storage.init_app(app)
