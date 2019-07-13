@@ -183,14 +183,11 @@ class Storage:
             path = os.path.join(path, name)
             return self.storage.put(path, file, overwrite)
 
-    def remove(self, path):
-        return self.storage.delete(path)
-
-    def get_path(self, path):
-        return self.storage.get_path(path)
-
     def get_url(self, filename, external=False):
         if not self.storage.exists(filename):
             return None
         return url_for('storage', filename=filename,
                        _external=external)
+
+    def __getattr__(self, name):
+        return getattr(self.storage, name)

@@ -86,6 +86,6 @@ def remove_image(itemid, filename):
     ri = next((i for i in r.images if i.filename == filename), None)
     if not ri:
         click.echo('Image not found')
-    storage.remove(filename)
+    storage.delete(filename)
     ri.delete()
     click.echo('Done')
