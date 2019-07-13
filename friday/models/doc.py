@@ -27,7 +27,10 @@ class Doc(db.Model, TagMixin):
     def html(self):
         if not self.text:
             return ''
-        return md.convert(self.text.decode('utf-8'))
+        text = self.text
+        if isinstance(text, bytes):
+            text = text.decode('utf-8')
+        return md.convert(text)
 
     @classmethod
     def query_list(cls):
