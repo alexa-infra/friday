@@ -17,12 +17,6 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 SERVER_NAME = os.environ.get('SERVER_NAME', None)
 
-JWT_ACCESS_TOKEN_EXPIRES = timedelta(days=90)
-JWT_TOKEN_LOCATION = ('cookies', 'headers')
-JWT_ACCESS_COOKIE_PATH = '/api/'
-JWT_COOKIE_CSRF_PROTECT = False
-JWT_HEADER_NAME = 'X-Authentication-Token'
-
 JSON_AS_ASCII = False
 STORAGE_PATH = os.path.join(ROOT_DIR, '..', 'images2')
 
