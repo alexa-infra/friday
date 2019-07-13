@@ -49,7 +49,10 @@ class RedisSessionInterface(SessionInterface):
         self.prefix = prefix
 
     def generate_sid(self):
-        return _get_token()
+        while True:
+            token = _get_token()
+            if not self.redis.exists(self.prefix + token):
+                return token
 
     def get_redis_expiration_time(self, app, session):
         if session.permanent:
