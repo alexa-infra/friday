@@ -1,8 +1,9 @@
+# pylint: disable=redefined-outer-name
 import pytest
 
 from flask import Flask, session
-from friday.session import RedisSessionInterface
 from fakeredis import FakeStrictRedis
+from friday.session import RedisSessionInterface
 
 
 @pytest.fixture(scope='function')
@@ -10,6 +11,8 @@ def app():
     app = Flask(__name__)
     redis = FakeStrictRedis()
     app.session_interface = RedisSessionInterface(redis)
+
+    # pylint: disable=unused-variable
 
     @app.route('/')
     def index():
@@ -81,6 +84,7 @@ def test_session_same_value(app):
         cookie = get_cookie(client, 'session')
         session_id = cookie.value
         r = client.get('/private')
+        assert r.status_code == 200
         cookie = get_cookie(client, 'session')
         assert cookie.value == session_id
 

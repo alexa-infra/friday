@@ -27,7 +27,7 @@ _chars = string.ascii_letters + string.digits
 _get_token = partial(get_random_string, length=32, allowed_chars=_chars)
 
 
-class RedisSession(CallbackDict, SessionMixin):
+class RedisSession(CallbackDict, SessionMixin): # pylint: disable=too-many-ancestors
 
     def __init__(self, initial=None, sid=None, new=False):
         def on_update(self):
@@ -54,7 +54,7 @@ class RedisSessionInterface(SessionInterface):
             if not self.redis.exists(self.prefix + token):
                 return token
 
-    def get_redis_expiration_time(self, app, session):
+    def get_redis_expiration_time(self, app, session): # pylint: disable=no-self-use
         if session.permanent:
             return app.permanent_session_lifetime
         return timedelta(days=1)
