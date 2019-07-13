@@ -29,8 +29,8 @@ def get_recipe(itemid):
     r = Recipe.query_list().get(itemid)
     if not r:
         click.echo('Not found')
-    else:
-        click.echo(RecipeSchema.jsonify(r).get_data())
+        return
+    click.echo(RecipeSchema.jsonify(r).get_data())
 
 
 @recipe_group.command('update')
@@ -43,12 +43,14 @@ def update_recipe(itemid, itemname, name, tag):
     r = Recipe.query_list().get(itemid)
     if not r:
         click.echo('Not found')
+        return
     r.update(
         name=itemname,
         namesList=name,
         tagsList=tag,
     )
     click.echo(RecipeSchema.jsonify(r).get_data())
+
 
 @recipe_group.command('delete')
 @click.argument('itemid')
@@ -57,8 +59,10 @@ def delete_recipe(itemid):
     r = Recipe.query_list().get(itemid)
     if not r:
         click.echo('Not found')
+        return
     r.delete()
     click.echo('Done')
+
 
 @recipe_group.command('add-image')
 @click.argument('itemid')
@@ -68,6 +72,7 @@ def add_image(itemid, imageurl):
     r = Recipe.query_list().get(itemid)
     if not r:
         click.echo('Not found')
+        return
     RecipeImage.create(
         recipe=r,
         url=imageurl
@@ -83,9 +88,11 @@ def remove_image(itemid, filename):
     r = Recipe.query_list().get(itemid)
     if not r:
         click.echo('Not found')
+        return
     ri = next((i for i in r.images if i.filename == filename), None)
     if not ri:
         click.echo('Image not found')
+        return
     storage.delete(filename)
     ri.delete()
     click.echo('Done')
