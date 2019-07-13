@@ -13,7 +13,7 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 JSON_AS_ASCII = False
 
-MAX_IMAGE_SIZE = 1024
+RECIPE_THUMBNAIL_SIZE = 300
 
 STATIC_EXT = [
     '.js', '.json', '.css', '.svg', '.ttf', '.eot',

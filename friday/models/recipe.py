@@ -1,3 +1,6 @@
+import os
+from contextlib import closing
+from io import BytesIO
 from flask import current_app
 from sqlalchemy import Table, Column, Integer, Text, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
@@ -44,37 +47,71 @@ class Recipe(db.Model, TagMixin):
 
 class RecipeImage(db.Model):
     filename = Column(Text, primary_key=True)
-    height = Column(Integer, nullable=False)
-    width = Column(Integer, nullable=False)
+    _height = Column('height', Integer, nullable=False)
+    _width = Column('width', Integer, nullable=False)
     recipe_id = Column(Integer, ForeignKey('recipe.id'), nullable=False)
     recipe = relationship('Recipe', back_populates='images')
 
     @classmethod
     def create(cls, commit=True, url=None, recipe=None, **kwargs):
         filename = storage.upload(recipe.name, url)
-        path = storage.get_path(filename)
 
-        if current_app:
-            max_size = current_app.config['MAX_IMAGE_SIZE']
-        else:
-            max_size = 1024
-
-        img = Image.open(path)
-        w, h = img.size
-        if w > max_size or h > max_size:
-            img.thumbnail((max_size, max_size))
-            img.save(path)
+        with closing(storage.get(filename)) as f:
+            img = Image.open(f)
             w, h = img.size
 
         return super().create(
             commit,
             filename,
             recipe,
-            width=w,
-            height=h,
+            _width=w,
+            _height=h,
             **kwargs
         )
 
     @property
+    def width(self):
+        size = current_app.config.get('RECIPE_THUMBNAIL_SIZE', 300)
+        w, _ = self._thumbnail_size(size)
+        return w
+
+    @property
+    def height(self):
+        size = current_app.config.get('RECIPE_THUMBNAIL_SIZE', 300)
+        _, h = self._thumbnail_size(size)
+        return h
+
+    @property
     def url(self):
+        size = current_app.config.get('RECIPE_THUMBNAIL_SIZE', 300)
+        thumbnail_path = os.path.join(f'thumbnails-{size}', self.filename)
+        if not storage.exists(thumbnail_path):
+            wh = self._thumbnail_size(size)
+            self._make_thumbnail(thumbnail_path, wh)
+        return storage.get_url(thumbnail_path)
+
+    @property
+    def original_url(self):
         return storage.get_url(self.filename)
+
+    def _make_thumbnail(self, filename, size):
+        with closing(storage.get(self.filename)) as f:
+            img = Image.open(f)
+            if size != img.size:
+                img = img.resize(size)
+
+        buf = BytesIO()
+        buf.name = filename
+        img.save(buf)
+        buf.seek(0)
+        storage.put(filename, buf, overwrite=True)
+
+    def _thumbnail_size(self, size):
+        w, h = self._width, self._height
+        if w >= h >= size:
+            k = size / h
+            return int(max(w * k, 1)), int(max(h * k, 1))
+        if h > w > size:
+            k = size / w
+            return int(max(w * k, 1)), int(max(h * k, 1))
+        return w, h
