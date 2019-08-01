@@ -4,22 +4,16 @@ from flask_sqlalchemy import Pagination
 
 
 class BaseSchema(Schema):
-    class Meta:
-        # pylint: disable=too-few-public-methods
-        strict = True
-
     @classmethod
     def jsonify(cls, data):
+        schema = cls()
         if isinstance(data, Pagination):
-            schema = cls(many=True)
-            items, _ = schema.dump(data.items)
+            items = schema.dump(data.items, many=True)
             rv = dict(page=data.page, per_page=data.per_page,
                       items=items, pages=data.pages,
                       total=data.total)
-        elif isinstance(data, (list, set)):
-            schema = cls(many=True)
-            rv, _ = schema.dump(data)
+        elif isinstance(data, (list, set, tuple)):
+            rv = schema.dump(data, many=True)
         else:
-            schema = cls()
-            rv, _ = schema.dump(data)
+            rv = schema.dump(data)
         return jsonify(rv)
