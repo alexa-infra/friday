@@ -17,7 +17,7 @@ class BookmarkListView(BaseView):
         if search:
             search_term = '%{}%'.format(search)
             query = query.filter(
-                BookmarkModel.title.like(search_term))
+                BookmarkModel.slug.like(search_term))
         query = query.order_by(BookmarkModel.created.desc())
         pagination = query.paginate(page, per_page)
         return BookmarkSchema.jsonify(pagination), 200

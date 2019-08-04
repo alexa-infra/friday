@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, Text, DateTime
+from sqlalchemy.orm import validates
 from flask import session
 from friday.utils import utcnow, make_password_hash, check_password_hash
 from friday.exceptions import Unauthorized
@@ -11,11 +12,6 @@ class User(db.Model):
     password = Column(Text)
     created = Column(DateTime, default=utcnow)
     updated = Column(DateTime, default=utcnow, onupdate=utcnow)
-
-    @classmethod
-    def new(cls, email, password):
-        hashed = make_password_hash(password)
-        return cls(email=email, password=hashed)
 
     @classmethod
     def authenticate(cls, email, password):
@@ -46,8 +42,8 @@ class User(db.Model):
             raise Unauthorized
         return user
 
-    def update(self, **kwargs):
-        for k, v in kwargs.items():
-            if k == 'password':
-                v = make_password_hash(v)
-            setattr(self, k, v)
+    @validates('password')
+    def set_password_hash(self, _key, value):
+        if not value:
+            raise ValueError('password is empty')
+        return make_password_hash(value)

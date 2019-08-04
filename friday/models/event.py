@@ -1,7 +1,7 @@
 from datetime import timedelta
 import enum
 from sqlalchemy import Column, Integer, Text, Enum, Date
-from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.orm import validates
 from . import db
 
 
@@ -38,17 +38,15 @@ class Event(db.Model):
     name = Column(Text, nullable=False)
     icon = Column(Text, nullable=False)
     date = Column(Date, nullable=False)
-    _repeat = Column('repeat', Enum(Repeat), default=None)
+    repeat = Column(Enum(Repeat), default=None)
 
-    @hybrid_property
-    def repeat(self):
-        return self._repeat
-
-    @repeat.setter
-    def repeat(self, value):
+    @validates('repeat')
+    def validate_repeat(self, _key, value):
         if isinstance(value, str):
             value = Repeat[value]
-        self._repeat = value
+        elif not isinstance(value, Repeat):
+            raise AssertionError
+        return value
 
     @classmethod
     def query_all(cls):
@@ -94,18 +92,18 @@ class Event(db.Model):
         return False
 
     def check_date(self, dt):
-        if self._repeat == Repeat.daily:
+        if self.repeat == Repeat.daily:
             return True
-        if self._repeat == Repeat.weekly:
+        if self.repeat == Repeat.weekly:
             return dt.isoweekday() == self.date.isoweekday()
-        if self._repeat == Repeat.biweekly:
+        if self.repeat == Repeat.biweekly:
             start, end = get_week(self.date), get_week(dt)
             ts = end - start
             weeks = ts.days / 7
             even_week = weeks % 2 == 0
             return even_week and dt.isoweekday() == self.date.isoweekday()
-        if self._repeat == Repeat.monthly:
+        if self.repeat == Repeat.monthly:
             return dt.day == self.date.day
-        if self._repeat == Repeat.annually:
+        if self.repeat == Repeat.annually:
             return dt.day == self.date.day and dt.month == self.date.month
         return False

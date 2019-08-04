@@ -1,6 +1,6 @@
 from urllib.parse import urlparse
 from sqlalchemy import Column, Integer, Text, DateTime, Boolean
-from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.orm import validates
 from slugify import slugify
 from friday.utils import utcnow
 from . import db
@@ -8,8 +8,8 @@ from . import db
 
 class Bookmark(db.Model):
     id = Column(Integer, primary_key=True)
-    _url = Column('url', Text, nullable=False)
-    _title = Column('title', Text, nullable=False)
+    url = Column(Text, nullable=False)
+    title = Column(Text, nullable=False)
     created = Column(DateTime, nullable=False, default=utcnow)
     updated = Column(DateTime, nullable=False, default=utcnow,
                      onupdate=utcnow)
@@ -17,40 +17,23 @@ class Bookmark(db.Model):
     slug = Column(Text)
     domain = Column(Text)
 
-    @hybrid_property
-    def url(self):
-        return self._url
+    @validates('url')
+    def set_domain(self, _key, value):
+        parsed = urlparse(value)
+        netloc = str(parsed.netloc)
+        if netloc.startswith('www.'):
+            self.domain = netloc[4:]
+        else:
+            self.domain = netloc
+        return value
 
-    @url.setter
-    def url(self, value):
-        self._url = value
-        self.update_domain()
-        self.update_slug()
-
-    @hybrid_property
-    def title(self):
-        return self._title
-
-    @title.setter
-    def title(self, value):
-        self._title = value
-        self.update_slug()
-
-    @property
-    def _slug(self):
-        txt = ' '.join(filter(None, [
-            self.title,
-            self._domain,
-        ]))
-        return slugify(txt, separator=' ')
-
-    @property
-    def _domain(self):
-        d = str(urlparse(self._url).netloc)
-        return d[4:] if d.startswith('www.') else d
-
-    def update_slug(self):
-        self.slug = self._slug
-
-    def update_domain(self):
-        self.domain = self._domain
+    @validates('title', 'domain')
+    def set_slug(self, key, value):
+        if key == 'title':
+            values = (value, self.domain)
+        else:
+            values = (self.title, value)
+        values = filter(None, values)
+        txt = ' '.join(values)
+        self.slug = slugify(txt, separator=' ')
+        return value
