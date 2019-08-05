@@ -1,6 +1,6 @@
 from marshmallow import Schema
 from flask import jsonify
-from flask_sqlalchemy import Pagination
+from ..models import Pagination
 
 
 class BaseSchema(Schema):

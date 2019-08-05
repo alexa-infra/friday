@@ -1,6 +1,7 @@
 from webargs.flaskparser import use_args, use_kwargs
 from . import BaseView
 from ..models import Bookmark as BookmarkModel
+from ..models import paginate
 from ..schemas import Bookmark as BookmarkSchema
 from .utils import pagination_args, search_args
 
@@ -19,7 +20,7 @@ class BookmarkListView(BaseView):
             query = query.filter(
                 BookmarkModel.slug.like(search_term))
         query = query.order_by(BookmarkModel.created.desc())
-        pagination = query.paginate(page, per_page)
+        pagination = paginate(query, page, per_page)
         return BookmarkSchema.jsonify(pagination), 200
 
     @use_args(BookmarkSchema())

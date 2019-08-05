@@ -20,8 +20,7 @@ logger = logging.getLogger('alembic.env')
 from flask import current_app
 config.set_main_option('sqlalchemy.url',
                        current_app.config.get('SQLALCHEMY_DATABASE_URI'))
-from friday.models import db
-target_metadata = db.metadata
+from friday.models import metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
@@ -72,7 +71,7 @@ def run_migrations_online():
 
     connection = engine.connect()
     context.configure(connection=connection,
-                      target_metadata=target_metadata,
+                      target_metadata=metadata,
                       process_revision_directives=process_revision_directives,
                       **current_app.extensions['migrate'].configure_args)
 

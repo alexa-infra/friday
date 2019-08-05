@@ -2,36 +2,37 @@ import os
 from contextlib import closing
 from io import BytesIO
 from flask import current_app
-from sqlalchemy import Table, Column, Integer, Text, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, Text, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
+from sqlalchemy.orm import joinedload
 from PilLite import Image
 from friday.utils import utcnow
 from .. import storage
-from . import db
+from .base import Model
 from .tag import TagMixin
 
 
-RecipeTag = Table('recipe_tag', db.metadata,
-                  Column('tag_id', Integer, ForeignKey('tag.id'), primary_key=True),
-                  Column('recipe_id', Integer, ForeignKey('recipe.id'), primary_key=True))
+class RecipeTag(Model):
+    # pylint: disable=too-few-public-methods
+    tag_id = Column(Integer, ForeignKey('tag.id'), primary_key=True)
+    recipe_id = Column(Integer, ForeignKey('recipe.id'), primary_key=True)
 
 
-class Recipe(db.Model, TagMixin):
+class Recipe(Model, TagMixin):
     id = Column(Integer, primary_key=True)
     name = Column(Text, nullable=False)
     names = Column(Text, nullable=False)
     created = Column(DateTime, nullable=False, default=utcnow)
     updated = Column(DateTime, nullable=False, default=utcnow,
                      onupdate=utcnow)
-    tags = relationship('Tag', secondary=RecipeTag)
+    tags = relationship('Tag', secondary=RecipeTag.__table__)
     images = relationship('RecipeImage', back_populates='recipe')
 
     @classmethod
     def query_list(cls):
-        return (
-            cls.query.options(db.joinedload(Recipe.tags),
-                              db.joinedload(Recipe.images))
-        )
+        query = cls.query
+        query = query.options(joinedload(Recipe.tags), joinedload(Recipe.images))
+        return query
 
     @property
     def namesList(self):
@@ -45,7 +46,7 @@ class Recipe(db.Model, TagMixin):
             self.names = value
 
 
-class RecipeImage(db.Model):
+class RecipeImage(Model):
     filename = Column(Text, primary_key=True)
     _height = Column('height', Integer, nullable=False)
     _width = Column('width', Integer, nullable=False)

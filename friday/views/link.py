@@ -2,6 +2,7 @@ from flask import redirect
 from webargs.flaskparser import use_args, use_kwargs
 from . import BaseView
 from ..models.link import Link as LinkModel
+from ..models import paginate
 from ..schemas.link import Link as LinkSchema
 from .utils import pagination_args
 
@@ -13,9 +14,8 @@ class LinkListView(BaseView):
 
     @use_kwargs(pagination_args)
     def get(self, page=1, per_page=10):
-        pagination = (
-            LinkModel.query.order_by(LinkModel.last_access.desc())
-            .paginate(page, per_page))
+        query = LinkModel.query.order_by(LinkModel.last_access.desc())
+        pagination = paginate(query, page, per_page)
         return LinkSchema.jsonify(pagination), 200
 
     @use_args(LinkSchema())

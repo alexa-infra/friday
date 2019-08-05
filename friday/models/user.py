@@ -3,10 +3,10 @@ from sqlalchemy.orm import validates
 from flask import session
 from friday.utils import utcnow, make_password_hash, check_password_hash
 from friday.exceptions import Unauthorized
-from . import db
+from .base import Model
 
 
-class User(db.Model):
+class User(Model):
     id = Column(Integer, primary_key=True)
     email = Column(Text, unique=True)
     password = Column(Text)
@@ -16,7 +16,7 @@ class User(db.Model):
     @classmethod
     def authenticate(cls, email, password):
         user = (
-            db.session.query(cls).filter(User.email == email)
+            User.query.filter(User.email == email)
             .first())
         if not user:
             raise Unauthorized
@@ -36,7 +36,7 @@ class User(db.Model):
                 raise Unauthorized
             return None
         user = (
-            db.session.query(cls).filter(User.id == user_id)
+            cls.query.filter(User.id == user_id)
             .first())
         if user is None and raise_exception:
             raise Unauthorized
@@ -44,6 +44,7 @@ class User(db.Model):
 
     @validates('password')
     def set_password_hash(self, _key, value):
+        # pylint: disable=no-self-use
         if not value:
             raise ValueError('password is empty')
         return make_password_hash(value)

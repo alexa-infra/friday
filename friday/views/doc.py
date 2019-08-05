@@ -2,6 +2,7 @@ from flask import request, abort
 from webargs.flaskparser import use_args, use_kwargs
 from . import BaseView
 from ..models import Doc as DocModel, Tag as TagModel, DocTag
+from ..models import paginate
 from ..schemas import Doc as DocSchema, Tag as TagSchema, TagCloud
 from .utils import tag_args, pagination_args
 
@@ -20,7 +21,7 @@ class DocListView(BaseView):
             query = query.join(TagModel)
             query = query.filter(TagModel.name == tag)
         query = query.order_by(DocModel.updated.desc())
-        pagination = query.paginate(page, per_page)
+        pagination = paginate(query, page, per_page)
         return DocSchema.jsonify(pagination), 200
 
     @use_args(DocSchema())

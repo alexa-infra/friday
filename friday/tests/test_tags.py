@@ -1,5 +1,4 @@
 import pytest
-from friday.models import db
 from friday.models import Doc as DocModel
 from friday.models import Tag as TagModel
 from friday.models.doc import DocTag
@@ -53,7 +52,7 @@ def test_tags4():
 def test_tags5():
     obj = DocModel.create(name='test1', text='asdf', tagsList=['tag1', 'tag2'])
 
-    cc = db.session.query(DocTag).count()
+    cc = DocTag.query.count()
     assert cc == 2
 
     obj.delete()
@@ -63,7 +62,7 @@ def test_tags5():
     expected = ['tag1', 'tag2']
     assertCountEqual(tagNames, expected)
 
-    cc = db.session.query(DocTag).count()
+    cc = DocTag.query.count()
     assert cc == 0
 
 
@@ -71,12 +70,12 @@ def test_tags5():
 def test_tags6():
     obj = DocModel.create(name='test1', text='asdf', tagsList=['tag1', 'tag2'])
 
-    cc = db.session.query(DocTag).count()
+    cc = DocTag.query.count()
     assert cc == 2
 
     obj.update(tagsList=['tag1', 'tag2', 'tag1', 'tag2'])
 
-    cc = db.session.query(DocTag).count()
+    cc = DocTag.query.count()
     assert cc == 2
 
 
@@ -86,10 +85,10 @@ def test_tags_cloud():
     DocModel.create(name='test1', text='asdf', tagsList=['tag2', 'tag3'])
     DocModel.create(name='test1', text='asdf', tagsList=['tag2', 'tag3', 'tag4'])
 
-    cc = db.session.query(DocTag).count()
+    cc = DocTag.query.count()
     assert cc == 7
 
-    cc = db.session.query(TagModel).count()
+    cc = TagModel.query.count()
     assert cc == 4
 
     cloud = DocModel.tag_cloud()

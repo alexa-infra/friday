@@ -6,6 +6,7 @@ from .storage import Storage
 from .static_ui import StaticUI
 from .flask_redis import FlaskRedis
 from .session import RedisSessionInterface
+from .flask_sqlalchemy import FlaskSQLAlchemy
 
 
 migrate = Migrate()
@@ -13,6 +14,7 @@ errors = Errors()
 storage = Storage()
 static_ui = StaticUI()
 redis = FlaskRedis()
+sa = FlaskSQLAlchemy()
 
 
 def make_app(settings=None):
@@ -26,15 +28,15 @@ def make_app(settings=None):
     app.url_map.strict_slashes = False
     app.session_interface = RedisSessionInterface(redis)
 
-    from .models import db
-    db.init_app(app)
-
     migrations_path = os.path.join(app.root_path, 'migrations')
     migrate.init_app(app, directory=migrations_path)
     errors.init_app(app)
     storage.init_app(app)
     static_ui.init_app(app)
     redis.init_app(app)
+
+    from .models import db
+    sa.init_app(app, db)
 
     from .views import api
     app.register_blueprint(api, url_prefix='/api')

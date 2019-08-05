@@ -2,7 +2,7 @@ from datetime import timedelta
 import enum
 from sqlalchemy import Column, Integer, Text, Enum, Date
 from sqlalchemy.orm import validates
-from . import db
+from .base import Model
 
 
 def iter_days(a, b):
@@ -33,7 +33,7 @@ class Repeat(enum.Enum):
         return self.name
 
 
-class Event(db.Model):
+class Event(Model):
     id = Column(Integer, primary_key=True)
     name = Column(Text, nullable=False)
     icon = Column(Text, nullable=False)
@@ -42,6 +42,7 @@ class Event(db.Model):
 
     @validates('repeat')
     def validate_repeat(self, _key, value):
+        # pylint: disable=no-self-use
         if isinstance(value, str):
             value = Repeat[value]
         elif not isinstance(value, Repeat):
@@ -50,13 +51,13 @@ class Event(db.Model):
 
     @classmethod
     def query_all(cls):
-        return db.session.query(cls).order_by(Event.date.desc())
+        return cls.query.order_by(Event.date.desc())
 
     @classmethod
     def get_notrepeated_between(cls, a, b):
         # pylint: disable=singleton-comparison
         query = (
-            db.session.query(cls).filter(Event.repeat == None)  # noqa: E711
+            cls.query.filter(Event.repeat == None)  # noqa: E711
             .filter(Event.date >= a)
             .filter(Event.date <= b)
         )
@@ -66,7 +67,7 @@ class Event(db.Model):
     def get_repeated(cls):
         # pylint: disable=singleton-comparison
         query = (
-            db.session.query(cls).filter(Event.repeat != None)  # noqa: E711
+            cls.query.filter(Event.repeat != None)  # noqa: E711
         )
         return query.all()
 

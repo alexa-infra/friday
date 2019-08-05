@@ -1,19 +1,22 @@
 import pytest
 
-from friday import make_app
-from friday.models import db
-
-
-settings = {
-    'SQLALCHEMY_DATABASE_URI': 'sqlite:///:memory:',
-    'SQLALCHEMY_ECHO': False,
-}
+from sqlalchemy import create_engine
+from sqlalchemy.pool import StaticPool
+from friday.models import db, metadata
 
 
 @pytest.fixture
 def app():
-    the_app = make_app(settings)
-    with the_app.app_context():
-        db.create_all()
-        db.session.commit()
-        yield the_app
+    options = {
+        'poolclass': StaticPool,
+        'connect_args': {
+            'check_same_thread': False
+        }
+    }
+    engine = create_engine('sqlite:///:memory:', **options)
+    db.configure(bind=engine)
+    metadata.create_all(engine)
+    try:
+        yield
+    finally:
+        db.remove()

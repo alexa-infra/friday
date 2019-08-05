@@ -8,8 +8,6 @@ REDIS_URL = 'redis://127.0.0.1:6379/0'
 
 DB_PATH = os.path.join(ROOT_DIR, 'database.sqlite')
 SQLALCHEMY_DATABASE_URI = 'sqlite:///{}'.format(DB_PATH)
-#SQLALCHEMY_ECHO = True
-SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 JSON_AS_ASCII = False
 

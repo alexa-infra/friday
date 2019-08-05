@@ -1,27 +1,29 @@
-from sqlalchemy import Table, Column, Integer, Text, DateTime, ForeignKey, func
+from sqlalchemy import Column, Integer, Text, DateTime, ForeignKey, func
+from sqlalchemy.orm import defer, joinedload
 from sqlalchemy.orm import relationship
 from markdown import Markdown
 from friday.utils import utcnow, MarkdownStrikeExt
-from . import db
+from .base import db, Model
 from .tag import Tag, TagMixin
 
 
 md = Markdown(extensions=['markdown.extensions.tables', MarkdownStrikeExt()])
 
 
-DocTag = Table('doc_tag', db.metadata,
-               Column('tag_id', Integer, ForeignKey('tag.id'), primary_key=True),
-               Column('doc_id', Integer, ForeignKey('doc.id'), primary_key=True))
+class DocTag(Model):
+    # pylint: disable=too-few-public-methods
+    tag_id = Column(Integer, ForeignKey('tag.id'), primary_key=True)
+    doc_id = Column(Integer, ForeignKey('doc.id'), primary_key=True)
 
 
-class Doc(db.Model, TagMixin):
+class Doc(Model, TagMixin):
     id = Column(Integer, primary_key=True)
     name = Column(Text, nullable=False)
     text = Column(Text, nullable=True)
     created = Column(DateTime, nullable=False, default=utcnow)
     updated = Column(DateTime, nullable=False, default=utcnow,
                      onupdate=utcnow)
-    tags = relationship('Tag', secondary=DocTag)
+    tags = relationship('Tag', secondary=DocTag.__table__)
 
     @property
     def html(self):
@@ -34,15 +36,13 @@ class Doc(db.Model, TagMixin):
 
     @classmethod
     def query_list(cls):
-        return (
-            cls.query.options(db.defer(Doc.text),
-                              db.joinedload(Doc.tags))
-            .order_by(Doc.updated.desc())
-        )
+        query = cls.query.options(defer(Doc.text), joinedload(Doc.tags))
+        query = query.order_by(Doc.updated.desc())
+        return query
 
     @classmethod
     def tag_cloud(cls):
-        query = db.session.query(func.count('*').label('count'), Tag.name)
+        query = db.query(func.count('*').label('count'), Tag.name)
         query = query.select_from(DocTag)
         query = query.join(Tag)
         query = query.group_by(Tag.id)
