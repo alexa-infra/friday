@@ -2,6 +2,7 @@ from webargs.flaskparser import use_args
 from . import BaseView
 from ..models import Recipe as RecipeModel
 from ..schemas import Recipe as RecipeSchema
+from .utils import get_or_404
 
 
 class RecipeListView(BaseView):
@@ -25,16 +26,16 @@ class RecipeItemView(BaseView):
     route_base = '/recipes/<int:id>'
 
     def get(self, id):  # pylint: disable=redefined-builtin
-        obj = RecipeModel.query_list().get_or_404(id)
+        obj = get_or_404(RecipeModel.query_list(), id)
         return RecipeSchema.jsonify(obj), 200
 
     @use_args(RecipeSchema())
     def put(self, args, id):  # pylint: disable=redefined-builtin
-        obj = RecipeModel.query_list().get_or_404(id)
+        obj = get_or_404(RecipeModel.query_list(), id)
         obj.update(**args)
         return RecipeSchema.jsonify(obj), 200
 
     def delete(self, id):  # pylint: disable=redefined-builtin
-        obj = RecipeModel.query_list().get_or_404(id)
+        obj = get_or_404(RecipeModel.query_list(), id)
         obj.delete()
         return '', 204

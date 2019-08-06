@@ -3,7 +3,7 @@ from . import BaseView
 from ..models import Bookmark as BookmarkModel
 from ..models import paginate
 from ..schemas import Bookmark as BookmarkSchema
-from .utils import pagination_args, search_args
+from .utils import pagination_args, search_args, get_or_404
 
 
 class BookmarkListView(BaseView):
@@ -35,16 +35,16 @@ class BookmarkItemView(BaseView):
     route_base = '/bookmarks/<int:id>'
 
     def get(self, id):  # pylint: disable=redefined-builtin
-        obj = BookmarkModel.get_or_404(id)
+        obj = get_or_404(BookmarkModel, id)
         return BookmarkSchema.jsonify(obj), 200
 
     @use_args(BookmarkSchema())
     def put(self, args, id):  # pylint: disable=redefined-builtin
-        obj = BookmarkModel.get_or_404(id)
+        obj = get_or_404(BookmarkModel, id)
         obj.update(**args)
         return BookmarkSchema.jsonify(obj), 200
 
     def delete(self, id):  # pylint: disable=redefined-builtin
-        obj = BookmarkModel.get_or_404(id)
+        obj = get_or_404(BookmarkModel, id)
         obj.delete()
         return '', 204

@@ -4,7 +4,7 @@ from . import BaseView
 from ..models.link import Link as LinkModel
 from ..models import paginate
 from ..schemas.link import Link as LinkSchema
-from .utils import pagination_args
+from .utils import pagination_args, get_or_404
 
 
 class LinkListView(BaseView):
@@ -30,17 +30,17 @@ class LinkItemView(BaseView):
     route_base = '/links/<int:id>'
 
     def get(self, id):  # pylint: disable=redefined-builtin
-        obj = LinkModel.get_or_404(id)
+        obj = get_or_404(LinkModel, id)
         return LinkSchema.jsonify(obj), 200
 
     @use_args(LinkSchema())
     def put(self, args, id):  # pylint: disable=redefined-builtin
-        obj = LinkModel.get_or_404(id)
+        obj = get_or_404(LinkModel, id)
         obj.update(**args)
         return LinkSchema.jsonify(obj), 200
 
     def delete(self, id):  # pylint: disable=redefined-builtin
-        obj = LinkModel.get_or_404(id)
+        obj = get_or_404(LinkModel, id)
         obj.delete()
         return '', 204
 
@@ -51,6 +51,6 @@ class LinkRedirectView(BaseView):
     route_base = '/links/<int:id>/redirect'
 
     def get(self, id):  # pylint: disable=redefined-builtin
-        obj = LinkModel.get_or_404(id)
+        obj = get_or_404(LinkModel, id)
         obj.touch()
         return redirect(obj.url)

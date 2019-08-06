@@ -4,6 +4,7 @@ from webargs.flaskparser import use_args, use_kwargs
 from . import BaseView
 from ..models.event import Event as EventModel
 from ..schemas.event import Event as EventSchema, EventMatch
+from .utils import get_or_404
 
 
 eventlist_args = {
@@ -37,17 +38,17 @@ class EventItemView(BaseView):
     route_base = '/events/<int:id>'
 
     def get(self, id):  # pylint: disable=redefined-builtin
-        obj = EventModel.get_or_404(id)
+        obj = get_or_404(EventModel, id)
         return EventSchema.jsonify(obj), 200
 
     @use_args(EventSchema())
     def put(self, args, id):  # pylint: disable=redefined-builtin
-        obj = EventModel.get_or_404(id)
+        obj = get_or_404(EventModel, id)
         obj.update(**args)
         return EventSchema.jsonify(obj), 200
 
     def delete(self, id):  # pylint: disable=redefined-builtin
-        obj = EventModel.get_or_404(id)
+        obj = get_or_404(EventModel, id)
         obj.delete()
         return '', 204
 
@@ -64,7 +65,7 @@ class EventRepeatView(BaseView):
 
     @use_kwargs(repeat_args)
     def post(self, id, days):  # pylint: disable=redefined-builtin
-        obj = EventModel.get_or_404(id)
+        obj = get_or_404(EventModel, id)
         if obj.repeat is not None:
             return '', 400
         dt = obj.date + timedelta(days=days)

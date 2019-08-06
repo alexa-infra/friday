@@ -4,7 +4,7 @@ from . import BaseView
 from ..models import Doc as DocModel, Tag as TagModel, DocTag
 from ..models import paginate
 from ..schemas import Doc as DocSchema, Tag as TagSchema, TagCloud
-from .utils import tag_args, pagination_args
+from .utils import tag_args, pagination_args, get_or_404
 
 
 class DocListView(BaseView):
@@ -36,17 +36,17 @@ class DocItemView(BaseView):
     route_base = '/docs/<int:id>'
 
     def get(self, id):  # pylint: disable=redefined-builtin
-        obj = DocModel.query_list().get_or_404(id)
+        obj = get_or_404(DocModel.query_list(), id)
         return DocSchema.jsonify(obj), 200
 
     @use_args(DocSchema())
     def put(self, args, id):  # pylint: disable=redefined-builtin
-        obj = DocModel.query_list().get_or_404(id)
+        obj = get_or_404(DocModel.query_list(), id)
         obj.update(**args)
         return DocSchema.jsonify(obj), 200
 
     def delete(self, id):  # pylint: disable=redefined-builtin
-        obj = DocModel.query_list().get_or_404(id)
+        obj = get_or_404(DocModel.query_list(), id)
         obj.delete()
         return '', 204
 
@@ -57,12 +57,12 @@ class DocTextView(BaseView):
     route_base = '/docs/<int:id>/text'
 
     def get(self, id):  # pylint: disable=redefined-builtin
-        obj = DocModel.get_or_404(id)
+        obj = get_or_404(DocModel, id)
         headers = {'Content-Type': 'text/plain'}
         return obj.text if obj.text else '', 200, headers
 
     def put(self, id):  # pylint: disable=redefined-builtin
-        obj = DocModel.get_or_404(id)
+        obj = get_or_404(DocModel, id)
         if request.content_type != 'text/plain':
             abort(415)
         obj.update(text=request.data)
@@ -76,7 +76,7 @@ class DocHtmlView(BaseView):
     route_base = '/docs/<int:id>/html'
 
     def get(self, id):  # pylint: disable=redefined-builtin
-        obj = DocModel.get_or_404(id)
+        obj = get_or_404(DocModel, id)
         headers = {'Content-Type': 'text/html'}
         return obj.html, 200, headers
 

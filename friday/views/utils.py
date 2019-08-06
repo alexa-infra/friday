@@ -1,5 +1,7 @@
 from webargs import fields
 from slugify import slugify
+from sqlalchemy.orm import Query
+from werkzeug.exceptions import abort
 
 
 def validate_per_page(val):
@@ -33,3 +35,27 @@ search_args = {
 tag_args = {
     'tag': fields.Function(deserialize=slugify, required=False, location='query')
 }
+
+
+def get_or_404(model_or_query, ident):
+    """ only single primary keys """
+    query = model_or_query if isinstance(model_or_query, Query) else model_or_query.query
+    rv = query.get(ident)
+    if rv is None:
+        abort(404)
+    return rv
+
+
+def first_or_404(model_or_query, *args, **kwargs):
+    """ first_or_404(Model, Model.name=='bob')
+        first_or_404(Model, name='bob')
+    """
+    query = model_or_query if isinstance(model_or_query, Query) else model_or_query.query
+    if args:
+        query = query.filter(*args)
+    elif kwargs:
+        query = query.filter_by(**kwargs)
+    rv = query.first()
+    if rv is None:
+        abort(404)
+    return rv
