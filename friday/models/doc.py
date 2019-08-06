@@ -3,20 +3,20 @@ from sqlalchemy.orm import defer, joinedload
 from sqlalchemy.orm import relationship
 from markdown import Markdown
 from friday.utils import utcnow, MarkdownStrikeExt
-from .base import db, Model
+from .base import db
 from .tag import Tag, TagMixin
 
 
 md = Markdown(extensions=['markdown.extensions.tables', MarkdownStrikeExt()])
 
 
-class DocTag(Model):
+class DocTag(db.Model):
     # pylint: disable=too-few-public-methods
     tag_id = Column(Integer, ForeignKey('tag.id'), primary_key=True)
     doc_id = Column(Integer, ForeignKey('doc.id'), primary_key=True)
 
 
-class Doc(Model, TagMixin):
+class Doc(db.Model, TagMixin):
     id = Column(Integer, primary_key=True)
     name = Column(Text, nullable=False)
     text = Column(Text, nullable=True)
@@ -42,7 +42,7 @@ class Doc(Model, TagMixin):
 
     @classmethod
     def tag_cloud(cls):
-        query = db.query(func.count('*').label('count'), Tag.name)
+        query = db.session.query(func.count('*').label('count'), Tag.name)
         query = query.select_from(DocTag)
         query = query.join(Tag)
         query = query.group_by(Tag.id)

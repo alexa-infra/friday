@@ -1,6 +1,6 @@
 # flake8: noqa
 # pylint: disable=cyclic-import
-from .base import db, metadata
+from .base import db
 from .link import Link
 from .user import User
 from .event import Event, Repeat

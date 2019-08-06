@@ -1,9 +1,9 @@
 from sqlalchemy import Column, Integer, Text, DateTime
 from friday.utils import utcnow
-from .base import Model
+from .base import db
 
 
-class Link(Model):
+class Link(db.Model):
     id = Column(Integer, primary_key=True)
     url = Column(Text)
     title = Column(Text)

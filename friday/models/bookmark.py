@@ -3,10 +3,10 @@ from sqlalchemy import Column, Integer, Text, DateTime, Boolean
 from sqlalchemy.orm import validates
 from slugify import slugify
 from friday.utils import utcnow
-from .base import Model
+from .base import db
 
 
-class Bookmark(Model):
+class Bookmark(db.Model):
     id = Column(Integer, primary_key=True)
     url = Column(Text, nullable=False)
     title = Column(Text, nullable=False)

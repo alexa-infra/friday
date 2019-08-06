@@ -3,10 +3,10 @@ from sqlalchemy.orm import validates
 from flask import session
 from friday.utils import utcnow, make_password_hash, check_password_hash
 from friday.exceptions import Unauthorized
-from .base import Model
+from .base import db
 
 
-class User(Model):
+class User(db.Model):
     id = Column(Integer, primary_key=True)
     email = Column(Text, unique=True)
     password = Column(Text)

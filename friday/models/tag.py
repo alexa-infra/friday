@@ -1,10 +1,10 @@
 from sqlalchemy import Column, Integer, Text
 from sqlalchemy.ext.hybrid import hybrid_property
 from slugify import slugify
-from .base import Model
+from .base import db
 
 
-class Tag(Model):
+class Tag(db.Model):
     id = Column(Integer, primary_key=True)
     _name = Column('name', Text, nullable=False, unique=True)
 

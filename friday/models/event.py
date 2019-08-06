@@ -2,7 +2,7 @@ from datetime import timedelta
 import enum
 from sqlalchemy import Column, Integer, Text, Enum, Date
 from sqlalchemy.orm import validates
-from .base import Model
+from .base import db
 
 
 def iter_days(a, b):
@@ -33,7 +33,7 @@ class Repeat(enum.Enum):
         return self.name
 
 
-class Event(Model):
+class Event(db.Model):
     id = Column(Integer, primary_key=True)
     name = Column(Text, nullable=False)
     icon = Column(Text, nullable=False)
