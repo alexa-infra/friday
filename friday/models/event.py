@@ -44,10 +44,10 @@ class Event(db.Model):
     def validate_repeat(self, _key, value):
         # pylint: disable=no-self-use
         if isinstance(value, str):
-            value = Repeat[value]
-        elif not isinstance(value, Repeat):
-            raise AssertionError
-        return value
+            return Repeat[value]
+        elif isinstance(value, Repeat) or value is None:
+            return value
+        raise AssertionError
 
     @classmethod
     def query_all(cls):
