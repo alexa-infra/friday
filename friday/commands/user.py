@@ -15,7 +15,7 @@ def make_user(email, password):
     if not password:
         password = get_random_string()
         click.echo('New password: {}'.format(password))
-    User.create(email, password)
+    User.create(email=email, password=password)
 
 
 @user.command('change_password')

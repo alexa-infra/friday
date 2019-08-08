@@ -8,17 +8,17 @@ from sqlalchemy.orm import joinedload
 from PilLite import Image
 from friday.utils import utcnow
 from .. import storage
-from .base import db
+from .base import Model
 from .tag import TagMixin
 
 
-class RecipeTag(db.Model):
+class RecipeTag(Model):
     # pylint: disable=too-few-public-methods
     tag_id = Column(Integer, ForeignKey('tag.id'), primary_key=True)
     recipe_id = Column(Integer, ForeignKey('recipe.id'), primary_key=True)
 
 
-class Recipe(db.Model, TagMixin):
+class Recipe(Model, TagMixin):
     id = Column(Integer, primary_key=True)
     name = Column(Text, nullable=False)
     names = Column(Text, nullable=False)
@@ -46,7 +46,7 @@ class Recipe(db.Model, TagMixin):
             self.names = value
 
 
-class RecipeImage(db.Model):
+class RecipeImage(Model):
     filename = Column(Text, primary_key=True)
     _height = Column('height', Integer, nullable=False)
     _width = Column('width', Integer, nullable=False)
@@ -63,8 +63,8 @@ class RecipeImage(db.Model):
 
         return super().create(
             commit,
-            filename,
-            recipe,
+            filename=filename,
+            recipe=recipe,
             _width=w,
             _height=h,
             **kwargs

@@ -2,7 +2,7 @@ import pytest
 
 from sqlalchemy import create_engine
 from sqlalchemy.pool import StaticPool
-from friday.models import db
+from friday.models import db, metadata
 
 
 @pytest.fixture
@@ -14,9 +14,9 @@ def app():
         }
     }
     engine = create_engine('sqlite:///:memory:', **options)
-    db.configure(engine)
-    db.create_all()
+    db.configure(bind=engine)
+    metadata.create_all(engine)
     try:
         yield
     finally:
-        db.session.remove()
+        db.remove()

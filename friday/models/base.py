@@ -1,19 +1,21 @@
 from sqlalchemy.orm import scoped_session
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.engine import Engine
+from sqlalchemy.ext.declarative import as_declarative
 from sqlalchemy.ext.declarative import declared_attr
 from ..utils import camel_to_snake
 
 
 session_factory = sessionmaker()
-session = scoped_session(session_factory)
+db = scoped_session(session_factory)
 
 
-class CRUDMixin:
+@as_declarative()
+class Model:
     """Mixin that adds convenience methods for CRUD (create, read, update, delete)
        operations."""
 
-    query = session.query_property()
+    query = db.query_property()
 
     @declared_attr
     def __tablename__(cls): # pylint: disable=no-self-argument
@@ -33,15 +35,15 @@ class CRUDMixin:
 
     def save(self, commit=True):
         """Save the record."""
-        session.add(self)
+        db.add(self)
         if commit:
-            session.commit()
+            db.commit()
         return self
 
     def delete(self, commit=True):
         """Remove the record from the database."""
-        session.delete(self)
-        return commit and session.commit()
+        db.delete(self)
+        return commit and db.commit()
 
     @classmethod
     def get(cls, ident):
@@ -54,26 +56,4 @@ class CRUDMixin:
         return cls.query.filter_by(**kwargs).first()
 
 
-class DatabaseConnection:
-    def __init__(self, db_session, model):
-        self.session = db_session
-        self.Model = model
-        self.engine = None
-
-    @property
-    def metadata(self):
-        return self.Model.metadata
-
-    def configure(self, engine):
-        self.engine = engine
-        self.session.configure(bind=engine)
-
-    def create_all(self):
-        self.metadata.create_all(self.engine)
-
-    def drop_all(self):
-        self.metadata.drop_all(self.engine)
-
-
-Model = declarative_base(cls=CRUDMixin)
-db = DatabaseConnection(session, Model)
+metadata = Model.metadata

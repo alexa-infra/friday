@@ -15,12 +15,12 @@ class FlaskSQLAlchemy:
         app.config.setdefault('SQLALCHEMY_ENGINE_OPTIONS', {})
 
         engine = self.make_engine(app)
-        db.configure(engine)
+        db.configure(bind=engine)
 
         # pylint: disable=unused-variable
         @app.teardown_appcontext
         def shutdown_session(response_or_exc):
-            db.session.remove()
+            db.remove()
             return response_or_exc
 
     def make_engine(self, app):

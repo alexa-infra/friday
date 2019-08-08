@@ -2,7 +2,7 @@ from datetime import timedelta
 import enum
 from sqlalchemy import Column, Integer, Text, Enum, Date
 from sqlalchemy.orm import validates
-from .base import db
+from .base import Model
 
 
 def iter_days(a, b):
@@ -33,7 +33,7 @@ class Repeat(enum.Enum):
         return self.name
 
 
-class Event(db.Model):
+class Event(Model):
     id = Column(Integer, primary_key=True)
     name = Column(Text, nullable=False)
     icon = Column(Text, nullable=False)
@@ -45,7 +45,7 @@ class Event(db.Model):
         # pylint: disable=no-self-use
         if isinstance(value, str):
             return Repeat[value]
-        elif isinstance(value, Repeat) or value is None:
+        if isinstance(value, Repeat) or value is None:
             return value
         raise AssertionError
 
