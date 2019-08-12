@@ -2,13 +2,14 @@ from flask import Blueprint
 from flask.views import MethodView, http_method_funcs
 from friday.session import auth_required
 from friday.utils import camel_to_snake
+from typing import Optional, Tuple, Any
 
 api = Blueprint('api', __name__)
 
 
 class BaseView(MethodView):
-    route_base = None
-    decorators = (auth_required, )
+    route_base: Optional[str] = None
+    decorators: Optional[Tuple[Any]] = (auth_required, )
 
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)

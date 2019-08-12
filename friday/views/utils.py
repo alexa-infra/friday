@@ -1,16 +1,18 @@
+from typing import Any
+
 from webargs import fields
 from slugify import slugify
 from sqlalchemy.orm import Query
 from werkzeug.exceptions import abort
 
 
-def validate_per_page(val):
+def validate_per_page(val: int) -> bool:
     if val <= 0 or val > 100:
         return False
     return True
 
 
-def validate_page(val):
+def validate_page(val: int) -> bool:
     if val < 0:
         return False
     return True
@@ -37,7 +39,7 @@ tag_args = {
 }
 
 
-def get_or_404(model_or_query, ident):
+def get_or_404(model_or_query: Any, ident: Any) -> Any:
     """ only single primary keys """
     query = model_or_query if isinstance(model_or_query, Query) else model_or_query.query
     rv = query.get(ident)
@@ -46,7 +48,7 @@ def get_or_404(model_or_query, ident):
     return rv
 
 
-def first_or_404(model_or_query, *args, **kwargs):
+def first_or_404(model_or_query: Any, *args: Any, **kwargs: Any) -> Any:
     """ first_or_404(Model, Model.name=='bob')
         first_or_404(Model, name='bob')
     """

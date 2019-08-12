@@ -16,7 +16,7 @@ class LoginView(BaseView):
     # pylint: disable=no-self-use
 
     route_base = '/users/login'
-    decorators = []
+    decorators = None
 
     @use_kwargs(login_args)
     def post(self, email, password):

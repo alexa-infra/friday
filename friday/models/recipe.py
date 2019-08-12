@@ -10,6 +10,9 @@ from friday.utils import utcnow
 from .. import storage
 from .base import Model
 from .tag import TagMixin
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from .tag import Tag
 
 
 class RecipeTag(Model):
