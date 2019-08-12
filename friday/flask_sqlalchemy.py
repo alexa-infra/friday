@@ -1,30 +1,33 @@
+from typing import TYPE_CHECKING, Optional
+
 from sqlalchemy import create_engine
+if TYPE_CHECKING:
+    from flask import Flask
+    from sqlalchemy.orm import scoped_session
+    from sqlalchemy.engine import Engine
 
 
 class FlaskSQLAlchemy:
+    engine: Optional['Engine'] = None
 
-    def __init__(self, app=None, db=None):
+    def __init__(self, app: 'Flask' = None, db: 'scoped_session' = None) -> None:
         self.engine = None
-        if app:
+        if app and db:
             self.init_app(app, db)
 
-    def init_app(self, app, db):
+    def init_app(self, app: 'Flask', db: 'scoped_session') -> None:
+        if not app or not db:
+            raise ValueError
         app.extensions['sqlalchemy'] = self
 
-        app.config.setdefault('SQLALCHEMY_DATABASE_URI', 'sqlite:///:memory:')
-        app.config.setdefault('SQLALCHEMY_ENGINE_OPTIONS', {})
+        uri = app.config.setdefault('SQLALCHEMY_DATABASE_URI', 'sqlite:///:memory:')
+        options = app.config.setdefault('SQLALCHEMY_ENGINE_OPTIONS', {})
 
-        engine = self.make_engine(app)
-        db.configure(bind=engine)
+        self.engine = create_engine(uri, **options)
+        db.configure(bind=self.engine)
 
         # pylint: disable=unused-variable
         @app.teardown_appcontext
         def shutdown_session(response_or_exc):
             db.remove()
             return response_or_exc
-
-    def make_engine(self, app):
-        uri = app.config['SQLALCHEMY_DATABASE_URI']
-        options = app.config['SQLALCHEMY_ENGINE_OPTIONS']
-        self.engine = rv = create_engine(uri, **options)
-        return rv
