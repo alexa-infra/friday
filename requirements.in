@@ -1,6 +1,6 @@
 flask
 flask-migrate
-marshmallow==3.0.0rc9
+marshmallow
 webargs
 gunicorn
 bcrypt
@@ -9,5 +9,5 @@ Markdown
 requests
 pytest
 pil-lite
-redis==3.2.1
+redis
 fakeredis
