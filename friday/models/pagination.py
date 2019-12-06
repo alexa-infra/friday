@@ -14,7 +14,6 @@ def paginate(query, page, per_page):
 
 
 class Pagination:
-
     def __init__(self, query, page, per_page, total, items):
         self.query = query
         self.page = page

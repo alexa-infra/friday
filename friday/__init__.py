@@ -19,16 +19,16 @@ sa = FlaskSQLAlchemy()
 
 def make_app(settings=None):
     app = Flask(__name__, static_folder=None)
-    app.config.from_object('friday.settings')
+    app.config.from_object("friday.settings")
     if settings is not None:
         app.config.update(settings)
     else:
-        app.config.from_pyfile('local_settings.py', silent=True)
+        app.config.from_pyfile("local_settings.py", silent=True)
 
     app.url_map.strict_slashes = False
     app.session_interface = RedisSessionInterface(redis)
 
-    migrations_path = os.path.join(app.root_path, 'migrations')
+    migrations_path = os.path.join(app.root_path, "migrations")
     migrate.init_app(app, directory=migrations_path)
     errors.init_app(app)
     storage.init_app(app)
@@ -36,9 +36,11 @@ def make_app(settings=None):
     redis.init_app(app)
 
     from .models import db
+
     sa.init_app(app, db)
 
     from .views import api
-    app.register_blueprint(api, url_prefix='/api')
+
+    app.register_blueprint(api, url_prefix="/api")
 
     return app

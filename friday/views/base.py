@@ -4,19 +4,19 @@ from friday.session import auth_required
 from friday.utils import camel_to_snake
 from typing import Optional, Tuple, Any
 
-api = Blueprint('api', __name__)
+api = Blueprint("api", __name__)
 
 
 class BaseView(MethodView):
     route_base: Optional[str] = None
-    decorators: Optional[Tuple[Any]] = (auth_required, )
+    decorators: Optional[Tuple[Any]] = (auth_required,)
 
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
-        if not hasattr(cls, 'methods') or not cls.methods:
-            methods = [method.upper()
-                       for method in http_method_funcs
-                       if hasattr(cls, method)]
+        if not hasattr(cls, "methods") or not cls.methods:
+            methods = [
+                method.upper() for method in http_method_funcs if hasattr(cls, method)
+            ]
             if methods:
                 cls.methods = methods
         name = camel_to_snake(cls.__name__)

@@ -9,16 +9,15 @@ from .utils import pagination_args, search_args, get_or_404
 class BookmarkListView(BaseView):
     # pylint: disable=no-self-use
 
-    route_base = '/bookmarks'
+    route_base = "/bookmarks"
 
     @use_kwargs(pagination_args)
     @use_kwargs(search_args)
     def get(self, page=1, per_page=10, search=None):
         query = BookmarkModel.query
         if search:
-            search_term = '%{}%'.format(search)
-            query = query.filter(
-                BookmarkModel.slug.like(search_term))
+            search_term = "%{}%".format(search)
+            query = query.filter(BookmarkModel.slug.like(search_term))
         query = query.order_by(BookmarkModel.created.desc())
         pagination = paginate(query, page, per_page)
         return BookmarkSchema.jsonify(pagination), 200
@@ -32,7 +31,7 @@ class BookmarkListView(BaseView):
 class BookmarkItemView(BaseView):
     # pylint: disable=no-self-use
 
-    route_base = '/bookmarks/<int:id>'
+    route_base = "/bookmarks/<int:id>"
 
     def get(self, id):  # pylint: disable=redefined-builtin
         obj = get_or_404(BookmarkModel, id)
@@ -47,4 +46,4 @@ class BookmarkItemView(BaseView):
     def delete(self, id):  # pylint: disable=redefined-builtin
         obj = get_or_404(BookmarkModel, id)
         obj.delete()
-        return '', 204
+        return "", 204

@@ -7,4 +7,4 @@ class Doc(BaseSchema):
     name = fields.Str(required=True)
     created = fields.DateTime(dump_only=True)
     updated = fields.DateTime(dump_only=True)
-    tags = fields.List(fields.Str(), required=True, attribute='tagsList')
+    tags = fields.List(fields.Str(), required=True, attribute="tagsList")

@@ -13,25 +13,28 @@ from .utils import get_random_string
 
 
 def verify_auth_in_session():
-    if 'user_id' not in request_session:
+    if "user_id" not in request_session:
         raise Unauthorized
+
 
 def auth_required(fn):
     @wraps(fn)
     def wrapper(*args, **kwargs):
         verify_auth_in_session()
         return fn(*args, **kwargs)
+
     return wrapper
+
 
 _chars = string.ascii_letters + string.digits
 _get_token = partial(get_random_string, length=32, allowed_chars=_chars)
 
 
-class RedisSession(CallbackDict, SessionMixin): # pylint: disable=too-many-ancestors
-
+class RedisSession(CallbackDict, SessionMixin):  # pylint: disable=too-many-ancestors
     def __init__(self, initial=None, sid=None, new=False):
         def on_update(self):
             self.modified = True
+
         CallbackDict.__init__(self, initial, on_update)
         self.sid = sid
         self.new = new
@@ -42,7 +45,7 @@ class RedisSessionInterface(SessionInterface):
     serializer = json
     session_class = RedisSession
 
-    def __init__(self, redis, prefix='session:'):
+    def __init__(self, redis, prefix="session:"):
         if not redis:
             raise ValueError
         self.redis = redis
@@ -54,7 +57,7 @@ class RedisSessionInterface(SessionInterface):
             if not self.redis.exists(self.prefix + token):
                 return token
 
-    def get_redis_expiration_time(self, app, session): # pylint: disable=no-self-use
+    def get_redis_expiration_time(self, app, session):  # pylint: disable=no-self-use
         if session.permanent:
             return app.permanent_session_lifetime
         return timedelta(days=1)
@@ -82,8 +85,7 @@ class RedisSessionInterface(SessionInterface):
         if not session:
             self.redis.delete(self.prefix + session.sid)
             if session.modified:
-                response.delete_cookie(app.session_cookie_name,
-                                       domain=domain)
+                response.delete_cookie(app.session_cookie_name, domain=domain)
             return
         redis_exp = self.get_redis_expiration_time(app, session)
         cookie_exp = self.get_expiration_time(app, session)
@@ -92,10 +94,12 @@ class RedisSessionInterface(SessionInterface):
         val = self.serializer.dumps(dict(session))
         self.redis.set(self.prefix + session.sid, val)
         self.redis.expire(self.prefix + session.sid, int(redis_exp.total_seconds()))
-        response.set_cookie(app.session_cookie_name,
-                            session.sid,
-                            expires=cookie_exp,
-                            httponly=True,
-                            domain=domain,
-                            path=cookie_path,
-                            secure=cookie_secure)
+        response.set_cookie(
+            app.session_cookie_name,
+            session.sid,
+            expires=cookie_exp,
+            httponly=True,
+            domain=domain,
+            path=cookie_path,
+            secure=cookie_secure,
+        )

@@ -10,7 +10,7 @@ from .utils import pagination_args, get_or_404
 class LinkListView(BaseView):
     # pylint: disable=no-self-use
 
-    route_base = '/links'
+    route_base = "/links"
 
     @use_kwargs(pagination_args)
     def get(self, page=1, per_page=10):
@@ -27,7 +27,7 @@ class LinkListView(BaseView):
 class LinkItemView(BaseView):
     # pylint: disable=no-self-use
 
-    route_base = '/links/<int:id>'
+    route_base = "/links/<int:id>"
 
     def get(self, id):  # pylint: disable=redefined-builtin
         obj = get_or_404(LinkModel, id)
@@ -42,13 +42,13 @@ class LinkItemView(BaseView):
     def delete(self, id):  # pylint: disable=redefined-builtin
         obj = get_or_404(LinkModel, id)
         obj.delete()
-        return '', 204
+        return "", 204
 
 
 class LinkRedirectView(BaseView):
     # pylint: disable=no-self-use
 
-    route_base = '/links/<int:id>/redirect'
+    route_base = "/links/<int:id>/redirect"
 
     def get(self, id):  # pylint: disable=redefined-builtin
         obj = get_or_404(LinkModel, id)

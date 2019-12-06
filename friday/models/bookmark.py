@@ -11,29 +11,28 @@ class Bookmark(Model):
     url = Column(Text, nullable=False)
     title = Column(Text, nullable=False)
     created = Column(DateTime, nullable=False, default=utcnow)
-    updated = Column(DateTime, nullable=False, default=utcnow,
-                     onupdate=utcnow)
+    updated = Column(DateTime, nullable=False, default=utcnow, onupdate=utcnow)
     readed = Column(Boolean, nullable=False, default=False)
     slug = Column(Text)
     domain = Column(Text)
 
-    @validates('url')
+    @validates("url")
     def set_domain(self, _key, value):
         parsed = urlparse(value)
         netloc = str(parsed.netloc)
-        if netloc.startswith('www.'):
+        if netloc.startswith("www."):
             self.domain = netloc[4:]
         else:
             self.domain = netloc
         return value
 
-    @validates('title', 'domain')
+    @validates("title", "domain")
     def set_slug(self, key, value):
-        if key == 'title':
+        if key == "title":
             values = (value, self.domain)
         else:
             values = (self.title, value)
         values = filter(None, values)
-        txt = ' '.join(values)
-        self.slug = slugify(txt, separator=' ')
+        txt = " ".join(values)
+        self.slug = slugify(txt, separator=" ")
         return value

@@ -12,8 +12,8 @@ class RecipeImage(BaseSchema):
 class Recipe(BaseSchema):
     id = fields.Int(dump_only=True)
     name = fields.Str(required=True)
-    names = fields.List(fields.Str(), required=True, attribute='namesList')
+    names = fields.List(fields.Str(), required=True, attribute="namesList")
     created = fields.DateTime(dump_only=True)
     updated = fields.DateTime(dump_only=True)
-    tags = fields.List(fields.Str(), required=True, attribute='tagsList')
+    tags = fields.List(fields.Str(), required=True, attribute="tagsList")
     images = fields.List(fields.Nested(RecipeImage), dump_only=True)

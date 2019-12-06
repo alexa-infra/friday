@@ -10,7 +10,7 @@ from .utils import tag_args, pagination_args, get_or_404
 class DocListView(BaseView):
     # pylint: disable=no-self-use
 
-    route_base = '/docs'
+    route_base = "/docs"
 
     @use_kwargs(tag_args)
     @use_kwargs(pagination_args)
@@ -33,7 +33,7 @@ class DocListView(BaseView):
 class DocItemView(BaseView):
     # pylint: disable=no-self-use
 
-    route_base = '/docs/<int:id>'
+    route_base = "/docs/<int:id>"
 
     def get(self, id):  # pylint: disable=redefined-builtin
         obj = get_or_404(DocModel.query_list(), id)
@@ -48,43 +48,43 @@ class DocItemView(BaseView):
     def delete(self, id):  # pylint: disable=redefined-builtin
         obj = get_or_404(DocModel.query_list(), id)
         obj.delete()
-        return '', 204
+        return "", 204
 
 
 class DocTextView(BaseView):
     # pylint: disable=no-self-use
 
-    route_base = '/docs/<int:id>/text'
+    route_base = "/docs/<int:id>/text"
 
     def get(self, id):  # pylint: disable=redefined-builtin
         obj = get_or_404(DocModel, id)
-        headers = {'Content-Type': 'text/plain'}
-        return obj.text if obj.text else '', 200, headers
+        headers = {"Content-Type": "text/plain"}
+        return obj.text if obj.text else "", 200, headers
 
     def put(self, id):  # pylint: disable=redefined-builtin
         obj = get_or_404(DocModel, id)
-        if request.content_type != 'text/plain':
+        if request.content_type != "text/plain":
             abort(415)
         obj.update(text=request.data)
-        headers = {'Content-Type': 'text/plain'}
+        headers = {"Content-Type": "text/plain"}
         return obj.text, 200, headers
 
 
 class DocHtmlView(BaseView):
     # pylint: disable=no-self-use
 
-    route_base = '/docs/<int:id>/html'
+    route_base = "/docs/<int:id>/html"
 
     def get(self, id):  # pylint: disable=redefined-builtin
         obj = get_or_404(DocModel, id)
-        headers = {'Content-Type': 'text/html'}
+        headers = {"Content-Type": "text/html"}
         return obj.html, 200, headers
 
 
 class DocTagCloudView(BaseView):
     # pylint: disable=no-self-use
 
-    route_base = '/docs/tags'
+    route_base = "/docs/tags"
 
     def get(self):
         objects = DocModel.tag_cloud()
@@ -94,7 +94,7 @@ class DocTagCloudView(BaseView):
 class TagListView(BaseView):
     # pylint: disable=no-self-use
 
-    route_base = '/tags'
+    route_base = "/tags"
 
     def get(self):
         objects = TagModel.query.all()

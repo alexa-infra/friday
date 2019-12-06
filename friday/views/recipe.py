@@ -8,7 +8,7 @@ from .utils import get_or_404
 class RecipeListView(BaseView):
     # pylint: disable=no-self-use
 
-    route_base = '/recipes'
+    route_base = "/recipes"
 
     def get(self):
         objects = RecipeModel.query_list().all()
@@ -23,7 +23,7 @@ class RecipeListView(BaseView):
 class RecipeItemView(BaseView):
     # pylint: disable=no-self-use
 
-    route_base = '/recipes/<int:id>'
+    route_base = "/recipes/<int:id>"
 
     def get(self, id):  # pylint: disable=redefined-builtin
         obj = get_or_404(RecipeModel.query_list(), id)
@@ -38,4 +38,4 @@ class RecipeItemView(BaseView):
     def delete(self, id):  # pylint: disable=redefined-builtin
         obj = get_or_404(RecipeModel.query_list(), id)
         obj.delete()
-        return '', 204
+        return "", 204

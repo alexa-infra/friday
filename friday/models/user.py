@@ -15,9 +15,7 @@ class User(Model):
 
     @classmethod
     def authenticate(cls, email, password):
-        user = (
-            User.query.filter(User.email == email)
-            .first())
+        user = User.query.filter(User.email == email).first()
         if not user:
             raise Unauthorized
         if not check_password_hash(password, user.password):
@@ -30,21 +28,19 @@ class User(Model):
 
     @classmethod
     def current_user(cls, raise_exception=True):
-        user_id = session.get('user_id', None)
+        user_id = session.get("user_id", None)
         if user_id is None:
             if raise_exception:
                 raise Unauthorized
             return None
-        user = (
-            cls.query.filter(User.id == user_id)
-            .first())
+        user = cls.query.filter(User.id == user_id).first()
         if user is None and raise_exception:
             raise Unauthorized
         return user
 
-    @validates('password')
+    @validates("password")
     def set_password_hash(self, _key, value):
         # pylint: disable=no-self-use
         if not value:
-            raise ValueError('password is empty')
+            raise ValueError("password is empty")
         return make_password_hash(value)

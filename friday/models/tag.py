@@ -6,7 +6,7 @@ from .base import Model
 
 class Tag(Model):
     id = Column(Integer, primary_key=True)
-    _name = Column('name', Text, nullable=False, unique=True)
+    _name = Column("name", Text, nullable=False, unique=True)
 
     @hybrid_property
     def name(self):
@@ -32,8 +32,7 @@ class Tag(Model):
             item.tags.append(tag)
 
 
-class TagMixin: # pylint: disable=too-few-public-methods
-
+class TagMixin:  # pylint: disable=too-few-public-methods
     @property
     def tagsList(self):
         return [tag.name for tag in self.tags]

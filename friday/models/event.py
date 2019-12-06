@@ -40,7 +40,7 @@ class Event(Model):
     date = Column(Date, nullable=False)
     repeat = Column(Enum(Repeat), default=None)
 
-    @validates('repeat')
+    @validates("repeat")
     def validate_repeat(self, _key, value):
         # pylint: disable=no-self-use
         if isinstance(value, str):
@@ -66,9 +66,7 @@ class Event(Model):
     @classmethod
     def get_repeated(cls):
         # pylint: disable=singleton-comparison
-        query = (
-            cls.query.filter(Event.repeat != None)  # noqa: E711
-        )
+        query = cls.query.filter(Event.repeat != None)  # noqa: E711
         return query.all()
 
     @classmethod
@@ -76,8 +74,10 @@ class Event(Model):
         not_repeated = cls.get_notrepeated_between(a, b)
         repeated = cls.get_repeated()
         matched = [
-            (dt, event) for event in repeated
-            for dt in iter_days(a, b) if event.check_date(dt)
+            (dt, event)
+            for event in repeated
+            for dt in iter_days(a, b)
+            if event.check_date(dt)
         ]
         allmatches = [(x.date, x) for x in not_repeated] + matched
         return list(map(lambda it: dict(date=it[0], event=it[1]), allmatches))

@@ -11,14 +11,15 @@ from .. import storage
 from .base import Model
 from .tag import TagMixin
 from typing import TYPE_CHECKING
+
 if TYPE_CHECKING:
     from .tag import Tag
 
 
 class RecipeTag(Model):
     # pylint: disable=too-few-public-methods
-    tag_id = Column(Integer, ForeignKey('tag.id'), primary_key=True)
-    recipe_id = Column(Integer, ForeignKey('recipe.id'), primary_key=True)
+    tag_id = Column(Integer, ForeignKey("tag.id"), primary_key=True)
+    recipe_id = Column(Integer, ForeignKey("recipe.id"), primary_key=True)
 
 
 class Recipe(Model, TagMixin):
@@ -26,10 +27,9 @@ class Recipe(Model, TagMixin):
     name = Column(Text, nullable=False)
     names = Column(Text, nullable=False)
     created = Column(DateTime, nullable=False, default=utcnow)
-    updated = Column(DateTime, nullable=False, default=utcnow,
-                     onupdate=utcnow)
-    tags = relationship('Tag', secondary=RecipeTag.__table__)
-    images = relationship('RecipeImage', back_populates='recipe')
+    updated = Column(DateTime, nullable=False, default=utcnow, onupdate=utcnow)
+    tags = relationship("Tag", secondary=RecipeTag.__table__)
+    images = relationship("RecipeImage", back_populates="recipe")
 
     @classmethod
     def query_list(cls):
@@ -39,22 +39,22 @@ class Recipe(Model, TagMixin):
 
     @property
     def namesList(self):
-        return list(map(str.strip, self.names.split(',')))
+        return list(map(str.strip, self.names.split(",")))
 
     @namesList.setter
     def namesList(self, value):
         if isinstance(value, (list, set, tuple)):
-            self.names = ','.join(value)
+            self.names = ",".join(value)
         elif isinstance(value, str):
             self.names = value
 
 
 class RecipeImage(Model):
     filename = Column(Text, primary_key=True)
-    _height = Column('height', Integer, nullable=False)
-    _width = Column('width', Integer, nullable=False)
-    recipe_id = Column(Integer, ForeignKey('recipe.id'), nullable=False)
-    recipe = relationship('Recipe', back_populates='images')
+    _height = Column("height", Integer, nullable=False)
+    _width = Column("width", Integer, nullable=False)
+    recipe_id = Column(Integer, ForeignKey("recipe.id"), nullable=False)
+    recipe = relationship("Recipe", back_populates="images")
 
     @classmethod
     def create(cls, commit=True, url=None, recipe=None, **kwargs):
@@ -65,30 +65,25 @@ class RecipeImage(Model):
             w, h = img.size
 
         return super().create(
-            commit,
-            filename=filename,
-            recipe=recipe,
-            _width=w,
-            _height=h,
-            **kwargs
+            commit, filename=filename, recipe=recipe, _width=w, _height=h, **kwargs
         )
 
     @property
     def width(self):
-        size = current_app.config.get('RECIPE_THUMBNAIL_SIZE', 300)
+        size = current_app.config.get("RECIPE_THUMBNAIL_SIZE", 300)
         w, _ = self._thumbnail_size(size)
         return w
 
     @property
     def height(self):
-        size = current_app.config.get('RECIPE_THUMBNAIL_SIZE', 300)
+        size = current_app.config.get("RECIPE_THUMBNAIL_SIZE", 300)
         _, h = self._thumbnail_size(size)
         return h
 
     @property
     def url(self):
-        size = current_app.config.get('RECIPE_THUMBNAIL_SIZE', 300)
-        thumbnail_path = os.path.join(f'thumbnails-{size}', self.filename)
+        size = current_app.config.get("RECIPE_THUMBNAIL_SIZE", 300)
+        thumbnail_path = os.path.join(f"thumbnails-{size}", self.filename)
         if not storage.exists(thumbnail_path):
             wh = self._thumbnail_size(size)
             self._make_thumbnail(thumbnail_path, wh)

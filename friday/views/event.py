@@ -8,15 +8,15 @@ from .utils import get_or_404
 
 
 eventlist_args = {
-    'fromdate': fields.Date(required=False, location='query'),
-    'todate': fields.Date(required=False, location='query'),
+    "fromdate": fields.Date(required=False, location="query"),
+    "todate": fields.Date(required=False, location="query"),
 }
 
 
 class EventListView(BaseView):
     # pylint: disable=no-self-use
 
-    route_base = '/events'
+    route_base = "/events"
 
     @use_kwargs(eventlist_args)
     def get(self, fromdate=None, todate=None):
@@ -35,7 +35,7 @@ class EventListView(BaseView):
 class EventItemView(BaseView):
     # pylint: disable=no-self-use
 
-    route_base = '/events/<int:id>'
+    route_base = "/events/<int:id>"
 
     def get(self, id):  # pylint: disable=redefined-builtin
         obj = get_or_404(EventModel, id)
@@ -50,25 +50,24 @@ class EventItemView(BaseView):
     def delete(self, id):  # pylint: disable=redefined-builtin
         obj = get_or_404(EventModel, id)
         obj.delete()
-        return '', 204
+        return "", 204
 
 
 repeat_args = {
-    'days': fields.Int(required=True),
+    "days": fields.Int(required=True),
 }
 
 
 class EventRepeatView(BaseView):
     # pylint: disable=no-self-use
 
-    route_base = '/events/<int:id>/repeat'
+    route_base = "/events/<int:id>/repeat"
 
     @use_kwargs(repeat_args)
     def post(self, id, days):  # pylint: disable=redefined-builtin
         obj = get_or_404(EventModel, id)
         if obj.repeat is not None:
-            return '', 400
+            return "", 400
         dt = obj.date + timedelta(days=days)
-        new_obj = EventModel.create(
-            name=obj.name, icon=obj.icon, date=dt)
+        new_obj = EventModel.create(name=obj.name, icon=obj.icon, date=dt)
         return EventSchema.jsonify(new_obj), 201

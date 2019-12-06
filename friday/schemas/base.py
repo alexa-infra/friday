@@ -9,9 +9,13 @@ class BaseSchema(Schema):
         schema = cls()
         if isinstance(data, Pagination):
             items = schema.dump(data.items, many=True)
-            rv = dict(page=data.page, per_page=data.per_page,
-                      items=items, pages=data.pages,
-                      total=data.total)
+            rv = dict(
+                page=data.page,
+                per_page=data.per_page,
+                items=items,
+                pages=data.pages,
+                total=data.total,
+            )
         elif isinstance(data, (list, set, tuple)):
             rv = schema.dump(data, many=True)
         else:

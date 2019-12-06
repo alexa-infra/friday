@@ -18,7 +18,7 @@ class Model:
     query = db.query_property()
 
     @declared_attr
-    def __tablename__(cls): # pylint: disable=no-self-argument
+    def __tablename__(cls):  # pylint: disable=no-self-argument
         return camel_to_snake(cls.__name__)
 
     @classmethod

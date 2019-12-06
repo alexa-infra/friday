@@ -7,13 +7,8 @@ from friday.models import db, metadata
 
 @pytest.fixture
 def app():
-    options = {
-        'poolclass': StaticPool,
-        'connect_args': {
-            'check_same_thread': False
-        }
-    }
-    engine = create_engine('sqlite:///:memory:', **options)
+    options = {"poolclass": StaticPool, "connect_args": {"check_same_thread": False}}
+    engine = create_engine("sqlite:///:memory:", **options)
     db.configure(bind=engine)
     metadata.create_all(engine)
     try:
