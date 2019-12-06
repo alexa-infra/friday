@@ -17,7 +17,7 @@ URL_REGEXP = re.compile(r"^(http|https)://")
 
 
 def is_url(path):
-    return re.match(URL_REGEXP, path)
+    return bool(re.match(URL_REGEXP, path))
 
 
 def extract_url_filename(path):
@@ -166,8 +166,8 @@ class Storage:
             try:
                 filename = self.storage.get_path(filename)
             except StorageError:
-                return 404, "Not found"
-            return send_file(filename, conditional=True)
+                return "Not found", 404
+            return send_file(filename, conditional=True, cache_timeout=31536000)
 
     def upload(self, path, file, name=None, overwrite=False):
         if not name:

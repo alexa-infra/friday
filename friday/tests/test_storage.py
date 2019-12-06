@@ -18,61 +18,44 @@ from friday.storage import (
 from friday.storage import LocalStorage
 
 
-def test_is_url():
-    assert is_url("http://google.com")
-    assert is_url("https://github.com")
-    assert not is_url("ftp://my-server.com")
-    assert not is_url("ftps://my-server.com")
-    assert not is_url("blah-blah-blah")
+@pytest.mark.parametrize("url,valid", (
+    ("http://google.com", True),
+    ("https://github.com", True),
+    ("ftp://my-server.com", False),
+    ("ftps://my-server.com", False),
+    ("blah-blah-blah", False),
+))
+def test_is_url(url, valid):
+    assert is_url(url) == valid
 
 
-def test_extract_url_filename():
-    result = extract_url_filename("https://google.com/a/index.html")
-    expected = "index.html"
-    assert result == expected
+@pytest.mark.parametrize("url,filename", (
+    ("https://google.com/a/index.html", "index.html"),
+    ("blah-blah-blah", None),
+    ("https://google.com/a/index.html?q=123", "index.html"),
+))
+def test_extract_url_filename(url, filename):
+    assert extract_url_filename(url) == filename
 
 
-def test_extract_url_filename_incorrect():
-    result = extract_url_filename("blah-blah-blah")
-    expected = None
-    assert result == expected
+@pytest.mark.parametrize("filename,name,ext", (
+    ("hello-world.txt", "hello-world", ".txt"),
+    ("hello-world", "hello-world", ""),
+    ("hello-world.tar.gz", "hello-world", ".tar.gz"),
+    ("hello-world.txt.zip", "hello-world.txt", ".zip"),
+))
+def test_get_file_extension(filename, name, ext):
+    assert get_file_extension(filename) == (name, ext)
 
 
-def test_extract_url_filename_query():
-    result = extract_url_filename("https://google.com/a/index.html?q=123")
-    expected = "index.html"
-    assert result == expected
-
-
-def test_get_file_extension():
-    result = get_file_extension("hello-world.txt")
-    expected = ("hello-world", ".txt")
-    assert result == expected
-
-
-def test_get_file_extension_noext():
-    result = get_file_extension("hello-world")
-    expected = ("hello-world", "")
-    assert result == expected
-
-
-def test_get_file_extension_tar_gz():
-    result = get_file_extension("hello-world.tar.gz")
-    expected = ("hello-world", ".tar.gz")
-    assert result == expected
-
-
-def test_get_file_extension_double_ext():
-    result = get_file_extension("hello-world.txt.zip")
-    expected = ("hello-world.txt", ".zip")
-    assert result == expected
-
-
-def test_is_sub_path():
-    assert is_sub_path("/a/b/c/data.txt", "/a/b")
-    assert is_sub_path("/a/b/c/data.txt", "/a/b/c")
-    assert not is_sub_path("/a/b/c/data.txt", "/x/y/z")
-    assert not is_sub_path("/a/b", "/a/b")
+@pytest.mark.parametrize("path_a,path_b,valid", (
+    ("/a/b/c/data.txt", "/a/b", True),
+    ("/a/b/c/data.txt", "/a/b/c", True),
+    ("/a/b/c/data.txt", "/x/y/z", False),
+    ("/a/b", "/a/b", False),
+))
+def test_is_sub_path(path_a, path_b, valid):
+    assert is_sub_path(path_a, path_b) == valid
 
 
 @pytest.fixture
