@@ -7,3 +7,4 @@ requests-mock
 pip-tools
 mypy
 sqlalchemy-stubs
+black
