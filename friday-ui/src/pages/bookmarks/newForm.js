@@ -1,15 +1,20 @@
 import React from 'react';
 import Modal from 'react-bootstrap/Modal';
-import { reduxForm } from 'redux-form';
+import { Form } from 'react-final-form'
 import { connect } from 'react-redux';
 import { bookmarks } from '../../actions';
 import { FormFields } from './editForm';
 
 
 let NewBookmarkForm = props => {
-  const { handleSubmit, show, hideEdit } = props;
+  const { show, hideEdit, onSubmit, newItem } = props;
   return (
     <Modal show={show} onHide={hideEdit}>
+      <Form
+        enableReinitialize={true}
+        onSubmit={onSubmit}
+        initialValues={newItem}>
+      {({handleSubmit}) => (
       <form onSubmit={handleSubmit}>
         <Modal.Header closeButton>
           <Modal.Title>New bookmark</Modal.Title>
@@ -23,18 +28,15 @@ let NewBookmarkForm = props => {
           </button>
         </Modal.Footer>
       </form>
+      )}
+      </Form>
     </Modal>
   );
 }
 
-NewBookmarkForm = reduxForm({
-  form: 'new-bookmark',
-  enableReinitialize: true,
-})(NewBookmarkForm);
-
 NewBookmarkForm = connect(
   state => ({
-    initialValues: state.bookmarks.newItem,
+    newItem: state.bookmarks.newItem,
     show: state.bookmarks.newItem !== null,
   }),
   dispatch => {

@@ -1,11 +1,14 @@
 import React from 'react';
-import { Field, reduxForm } from 'redux-form';
+import { Form, Field } from 'react-final-form'
 import { renderTags } from './tags';
 
 
 let NewDocForm = props => {
-  const { handleSubmit } = props;
+  const { onSubmit } = props;
   return (
+    <Form
+      onSubmit={onSubmit}>
+    {({handleSubmit}) => (
     <form onSubmit={handleSubmit}>
       <div className="form-group">
         <label htmlFor="name">Name</label>
@@ -24,11 +27,9 @@ let NewDocForm = props => {
         Create
       </button>
     </form>
+    )}
+    </Form>
   );
 }
-
-NewDocForm = reduxForm({
-  form: 'new-doc',
-})(NewDocForm);
 
 export default NewDocForm;

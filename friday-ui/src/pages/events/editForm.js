@@ -1,19 +1,19 @@
 import React from 'react';
 import Modal from 'react-bootstrap/Modal';
-import { Field, reduxForm, getFormValues } from 'redux-form';
+import { Form, Field } from 'react-final-form';
 import { connect } from 'react-redux'
 import * as moment from 'moment';
 import { events } from '../../actions';
 
 
 const RepeatInDays = props => {
-  const { formValues, repeatIn } = props;
+  const { currentItem, repeatIn } = props;
   return (
     <div className="form-group">
       <label htmlFor="repeatIn">Repeat In</label>
       <div className="field">
         <Field name="repeatIn" component="input" type="number" />
-        <button type="button" onClick={() => repeatIn(formValues)}>
+        <button type="button" onClick={() => repeatIn(currentItem)}>
           Repeat
         </button>
       </div>
@@ -52,9 +52,14 @@ export const FormFields = props => (
 );
 
 let EventForm = props => {
-  const { handleSubmit, show, hideEdit, initialValues, deleteEvent } = props;
+  const { show, hideEdit, currentItem, deleteEvent, onSubmit } = props;
   return (
     <Modal show={show} onHide={hideEdit}>
+      <Form
+        enableReinitialize={true}
+        onSubmit={onSubmit}
+        initialValues={currentItem}>
+      {({handleSubmit, initialValues}) => (
       <form onSubmit={handleSubmit}>
         <Modal.Header closeButton>
           <Modal.Title>Edit event</Modal.Title>
@@ -73,20 +78,16 @@ let EventForm = props => {
           </button>
         </Modal.Footer>
       </form>
+      )}
+      </Form>
     </Modal>
   );
 };
 
-EventForm = reduxForm({
-  form: 'event',
-  enableReinitialize: true,
-})(EventForm);
-
 EventForm = connect(
   state => ({
-    initialValues: { ...state.events.currentItem, repeatIn: 24 },
+    currentItem: { ...state.events.currentItem, repeatIn: 24 },
     show: state.events.currentItem !== null,
-    formValues: getFormValues('event')(state),
   }),
   dispatch => {
     const getEvents = () => dispatch(events.getEvents());

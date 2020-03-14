@@ -1,11 +1,16 @@
 import React from 'react';
-import { Field, reduxForm } from 'redux-form';
+import { Form, Field } from 'react-final-form';
 import { renderTags } from './tags';
 
 
 let DocForm = props => {
-  const { handleSubmit, initialValues, onDelete } = props;
+  const { initialValues, onSubmit, onDelete } = props;
   return (
+    <Form
+      enableReinitialize={true}
+      onSubmit={onSubmit}
+      initialValues={initialValues}>
+    {({handleSubmit}) => (
     <form onSubmit={handleSubmit}>
       <Field name="id" component="input" type="hidden" />
       <div className="form-group">
@@ -28,12 +33,9 @@ let DocForm = props => {
         Save
       </button>
     </form>
+    )}
+    </Form>
   );
 }
-
-DocForm = reduxForm({
-  form: 'doc',
-  enableReinitialize: true,
-})(DocForm);
 
 export default DocForm;

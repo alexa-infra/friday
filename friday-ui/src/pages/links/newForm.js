@@ -1,16 +1,18 @@
 import React from 'react';
 import Modal from 'react-bootstrap/Modal';
-import { reduxForm } from 'redux-form';
+import { Form } from 'react-final-form';
 import { connect } from 'react-redux';
 import { FormFields } from './editForm';
 import { links } from '../../actions';
 
 
 let NewLinkForm = props => {
-  const { handleSubmit, pristine, submitting, show, hideEdit } = props;
-  const disabled = pristine || submitting;
+  const { show, hideEdit, onSubmit } = props;
   return (
     <Modal show={show} onHide={hideEdit}>
+      <Form
+        onSubmit={onSubmit}>
+      {({handleSubmit, pristine, submitting}) => (
       <form onSubmit={handleSubmit}>
         <Modal.Header closeButton>
           <Modal.Title>New link</Modal.Title>
@@ -19,18 +21,16 @@ let NewLinkForm = props => {
           <FormFields />
         </Modal.Body>
         <Modal.Footer>
-          <button type="submit" disabled={disabled}>
+          <button type="submit" disabled={pristine || submitting}>
             Create
           </button>
         </Modal.Footer>
       </form>
+      )}
+      </Form>
     </Modal>
   );
 };
-
-NewLinkForm = reduxForm({
-  form: 'new-link',
-})(NewLinkForm);
 
 NewLinkForm = connect(
   state => ({

@@ -1,15 +1,20 @@
 import React from 'react';
 import Modal from 'react-bootstrap/Modal';
-import { reduxForm } from 'redux-form';
+import { Form } from 'react-final-form'
 import { connect } from 'react-redux';
 import { FormFields } from './editForm';
 import { events } from '../../actions';
 
 
 let NewEventForm = props => {
-  const { handleSubmit, show, hideEdit } = props;
+  const { show, hideEdit, newItem, onSubmit } = props;
   return (
     <Modal show={show} onHide={hideEdit}>
+      <Form
+        enableReinitialize={true}
+        initialValues={newItem}
+        onSubmit={onSubmit}>
+      {({handleSubmit}) => (
       <form onSubmit={handleSubmit}>
         <Modal.Header closeButton>
           <Modal.Title>Create event</Modal.Title>
@@ -23,18 +28,15 @@ let NewEventForm = props => {
           </button>
         </Modal.Footer>
       </form>
+      )}
+      </Form>
     </Modal>
   );
 };
 
-NewEventForm = reduxForm({
-  form: 'new-event',
-  enableReinitialize: true,
-})(NewEventForm);
-
 NewEventForm = connect(
   state => ({
-    initialValues: { date: state.events.newEventDate },
+    newItem: { date: state.events.newEventDate },
     show: state.events.newEventDate !== null,
   }),
   dispatch => ({

@@ -7,7 +7,6 @@ import bookmarks from './bookmarks';
 import docs from './docs';
 import tags from './tags';
 import recipes from './recipes';
-import { reducer as formReducer } from 'redux-form';
 
 const reducers = combineReducers({
   links: links,
@@ -16,7 +15,6 @@ const reducers = combineReducers({
   events: events,
   bookmarks: bookmarks,
   docs: docs,
-  form: formReducer,
   tags: tags,
   recipes: recipes,
 })

@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { TagsViewer, TagsEdit } from './tags.js';
-import { Field, reduxForm } from 'redux-form'
+import { Form, Field } from 'react-final-form';
 import './docs.scss';
 
 
@@ -11,8 +11,13 @@ const renderTags = ({ input }) => (
 );
 
 let DocForm = props => {
-  const { handleSubmit } = props;
+  const { initialValues, onSubmit } = props;
   return (
+    <Form
+      enableReinitialize={true}
+      onSubmit={onSubmit}
+      initialValues={initialValues}>
+    {({handleSubmit}) => (
     <form onSubmit={handleSubmit}>
       <Field name="id" component="input" type="hidden" />
       <div className="form-group">
@@ -31,17 +36,17 @@ let DocForm = props => {
         Save
       </button>
     </form>
+    )}
+    </Form>
   );
 }
 
-DocForm = reduxForm({
-  form: 'doc',
-  enableReinitialize: true,
-})(DocForm);
-
 let NewDocForm = props => {
-  const { handleSubmit } = props;
+  const { onSubmit } = props;
   return (
+    <Form
+      onSubmit={onSubmit}>
+    {({handleSubmit}) => (
     <form onSubmit={handleSubmit}>
       <div className="form-group">
         <label htmlFor="name">Name</label>
@@ -59,12 +64,10 @@ let NewDocForm = props => {
         Create
       </button>
     </form>
+    )}
+    </Form>
   );
 }
-
-NewDocForm = reduxForm({
-  form: 'new-doc',
-})(NewDocForm);
 
 const DocsList = ({items, create}) => (
   <div className="doc-page list">

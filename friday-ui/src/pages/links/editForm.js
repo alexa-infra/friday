@@ -1,6 +1,6 @@
 import React from 'react';
 import Modal from 'react-bootstrap/Modal';
-import { Field, reduxForm } from 'redux-form';
+import { Form, Field } from 'react-final-form';
 import { connect } from 'react-redux';
 import { links } from '../../actions';
 
@@ -19,9 +19,14 @@ export const FormFields = () => (
 );
 
 let LinkForm = props => {
-  const { handleSubmit, show, hideEdit, deleteLink, initialValues } = props;
+  const { show, hideEdit, deleteLink, currentItem, onSubmit } = props;
   return (
     <Modal show={show} onHide={hideEdit}>
+      <Form
+        enableReinitialize={true}
+        initialValues={currentItem}
+        onSubmit={onSubmit}>
+      {({handleSubmit}) => (
       <form onSubmit={handleSubmit}>
         <Modal.Header closeButton>
           <Modal.Title>Edit</Modal.Title>
@@ -31,7 +36,7 @@ let LinkForm = props => {
           <FormFields />
         </Modal.Body>
         <Modal.Footer>
-          <button type="button" onClick={() => deleteLink(initialValues)}>
+          <button type="button" onClick={() => deleteLink(currentItem)}>
             Delete
           </button>
           <button type="submit">
@@ -39,18 +44,15 @@ let LinkForm = props => {
           </button>
         </Modal.Footer>
       </form>
+      )}
+      </Form>
     </Modal>
   );
 };
 
-LinkForm = reduxForm({
-  form: 'link',
-  enableReinitialize: true,
-})(LinkForm);
-
 LinkForm = connect(
   state => ({
-    initialValues: state.links.currentItem,
+    currentItem: state.links.currentItem,
     show: state.links.currentItem !== null,
   }),
   dispatch => {
