@@ -1,5 +1,7 @@
+from functools import partial
 from flask import Blueprint
 from flask.views import MethodView, http_method_funcs
+from webargs.flaskparser import FlaskParser
 from friday.session import auth_required
 from friday.utils import camel_to_snake
 from typing import Optional, Tuple, Any
@@ -27,3 +29,13 @@ class BaseView(MethodView):
         view = cls.as_view(name)
         route_base = cls.route_base
         app.add_url_rule(route_base, view_func=view)
+
+
+class Parser(FlaskParser):
+    DEFAULT_VALIDATION_STATUS = 422
+
+
+parser = Parser()
+use_kwargs = partial(parser.use_args, as_kwargs=True)
+use_args = parser.use_args
+query_args = partial(parser.use_args, location='query', as_kwargs=True)

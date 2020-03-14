@@ -1,6 +1,5 @@
 from flask import request, abort
-from webargs.flaskparser import use_args, use_kwargs
-from . import BaseView
+from . import BaseView, use_args, use_kwargs
 from ..models import Doc as DocModel, Tag as TagModel, DocTag
 from ..models import paginate
 from ..schemas import Doc as DocSchema, Tag as TagSchema, TagCloud
@@ -12,9 +11,8 @@ class DocListView(BaseView):
 
     route_base = "/docs"
 
-    @use_kwargs(tag_args)
-    @use_kwargs(pagination_args)
-    def get(self, page=1, per_page=10, tag=None):
+    @use_kwargs({**pagination_args, **tag_args}, location="query")
+    def get(self, page, per_page, tag):
         query = DocModel.query_list()
         if tag:
             query = query.join(DocTag)
@@ -24,7 +22,7 @@ class DocListView(BaseView):
         pagination = paginate(query, page, per_page)
         return DocSchema.jsonify(pagination), 200
 
-    @use_args(DocSchema())
+    @use_args(DocSchema(), location="json")
     def post(self, args):
         obj = DocModel.create(**args)
         return DocSchema.jsonify(obj), 200
@@ -39,7 +37,7 @@ class DocItemView(BaseView):
         obj = get_or_404(DocModel.query_list(), id)
         return DocSchema.jsonify(obj), 200
 
-    @use_args(DocSchema())
+    @use_args(DocSchema(), location="json")
     def put(self, args, id):  # pylint: disable=redefined-builtin
         obj = get_or_404(DocModel.query_list(), id)
         obj.update(**args)

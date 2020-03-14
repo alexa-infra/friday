@@ -1,5 +1,4 @@
-from webargs.flaskparser import use_args, use_kwargs
-from . import BaseView
+from . import BaseView, use_args, use_kwargs
 from ..models import Bookmark as BookmarkModel
 from ..models import paginate
 from ..schemas import Bookmark as BookmarkSchema
@@ -11,8 +10,7 @@ class BookmarkListView(BaseView):
 
     route_base = "/bookmarks"
 
-    @use_kwargs(pagination_args)
-    @use_kwargs(search_args)
+    @use_kwargs({**pagination_args, **search_args}, location="query")
     def get(self, page=1, per_page=10, search=None):
         query = BookmarkModel.query
         if search:
@@ -22,7 +20,7 @@ class BookmarkListView(BaseView):
         pagination = paginate(query, page, per_page)
         return BookmarkSchema.jsonify(pagination), 200
 
-    @use_args(BookmarkSchema())
+    @use_args(BookmarkSchema(), location="json")
     def post(self, args):
         obj = BookmarkModel.create(**args)
         return BookmarkSchema.jsonify(obj), 201
@@ -37,7 +35,7 @@ class BookmarkItemView(BaseView):
         obj = get_or_404(BookmarkModel, id)
         return BookmarkSchema.jsonify(obj), 200
 
-    @use_args(BookmarkSchema())
+    @use_args(BookmarkSchema(), location="json")
     def put(self, args, id):  # pylint: disable=redefined-builtin
         obj = get_or_404(BookmarkModel, id)
         obj.update(**args)

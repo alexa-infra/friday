@@ -1,5 +1,4 @@
-from webargs.flaskparser import use_args
-from . import BaseView
+from . import BaseView, use_args
 from ..models import Recipe as RecipeModel
 from ..schemas import Recipe as RecipeSchema
 from .utils import get_or_404
@@ -14,7 +13,7 @@ class RecipeListView(BaseView):
         objects = RecipeModel.query_list().all()
         return RecipeSchema.jsonify(objects), 200
 
-    @use_args(RecipeSchema())
+    @use_args(RecipeSchema(), location="json")
     def post(self, args):
         obj = RecipeModel.create(**args)
         return RecipeSchema.jsonify(obj), 200
@@ -29,7 +28,7 @@ class RecipeItemView(BaseView):
         obj = get_or_404(RecipeModel.query_list(), id)
         return RecipeSchema.jsonify(obj), 200
 
-    @use_args(RecipeSchema())
+    @use_args(RecipeSchema(), location="json")
     def put(self, args, id):  # pylint: disable=redefined-builtin
         obj = get_or_404(RecipeModel.query_list(), id)
         obj.update(**args)

@@ -1,15 +1,14 @@
 from datetime import timedelta
 from webargs import fields
-from webargs.flaskparser import use_args, use_kwargs
-from . import BaseView
+from . import BaseView, use_args, use_kwargs
 from ..models.event import Event as EventModel
 from ..schemas.event import Event as EventSchema, EventMatch
 from .utils import get_or_404
 
 
 eventlist_args = {
-    "fromdate": fields.Date(required=False, location="query"),
-    "todate": fields.Date(required=False, location="query"),
+    "fromdate": fields.Date(required=False),
+    "todate": fields.Date(required=False),
 }
 
 
@@ -18,15 +17,15 @@ class EventListView(BaseView):
 
     route_base = "/events"
 
-    @use_kwargs(eventlist_args)
-    def get(self, fromdate=None, todate=None):
+    @use_kwargs(eventlist_args, location="query")
+    def get(self, fromdate, todate):
         if fromdate and todate:
             matches = EventModel.get_between(fromdate, todate)
             return EventMatch.jsonify(matches), 200
         objects = EventModel.query_all().all()
         return EventSchema.jsonify(objects), 200
 
-    @use_args(EventSchema())
+    @use_args(EventSchema(), location="json")
     def post(self, args):
         obj = EventModel.create(**args)
         return EventSchema.jsonify(obj), 201
@@ -41,7 +40,7 @@ class EventItemView(BaseView):
         obj = get_or_404(EventModel, id)
         return EventSchema.jsonify(obj), 200
 
-    @use_args(EventSchema())
+    @use_args(EventSchema(), location="json")
     def put(self, args, id):  # pylint: disable=redefined-builtin
         obj = get_or_404(EventModel, id)
         obj.update(**args)
@@ -63,7 +62,7 @@ class EventRepeatView(BaseView):
 
     route_base = "/events/<int:id>/repeat"
 
-    @use_kwargs(repeat_args)
+    @use_kwargs(repeat_args, location="json")
     def post(self, id, days):  # pylint: disable=redefined-builtin
         obj = get_or_404(EventModel, id)
         if obj.repeat is not None:

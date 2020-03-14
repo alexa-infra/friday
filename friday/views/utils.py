@@ -19,9 +19,9 @@ def validate_page(val: int) -> bool:
 
 
 pagination_args = {
-    "page": fields.Int(required=False, location="query", validate=validate_page),
+    "page": fields.Int(required=False, validate=validate_page, missing=1),
     "per_page": fields.Int(
-        required=False, location="query", validate=validate_per_page
+        required=False, validate=validate_per_page, missing=10
     ),
 }
 
@@ -31,13 +31,13 @@ clear_search = lambda txt: slugify(txt, separator=" ")
 
 search_args = {
     "search": fields.Function(
-        deserialize=clear_search, required=False, location="query"
+        deserialize=clear_search, required=False, missing=None
     ),
 }
 
 
 tag_args = {
-    "tag": fields.Function(deserialize=slugify, required=False, location="query")
+    "tag": fields.Function(deserialize=slugify, required=False, missing=None)
 }
 
 
