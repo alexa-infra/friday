@@ -2,7 +2,7 @@ import React from 'react';
 import Modal from 'react-bootstrap/Modal';
 import { Form, Field } from 'react-final-form';
 import { connect } from 'react-redux';
-import { bookmarks } from '../../actions';
+import { selectEditDialog, updateBookmark, getBookmarks, hideEdit, deleteBookmark } from '../../features/bookmarks';
 
 
 export const FormFields = () => (
@@ -23,7 +23,7 @@ export const FormFields = () => (
 );
 
 let BookmarkForm = props => {
-  const { show, hideEdit, deleteItem, currentItem, onSubmit } = props;
+  const { show, hideEdit, item: currentItem, deleteItem, onSubmit } = props;
   return (
     <Modal show={show} onHide={hideEdit}>
       <Form
@@ -56,16 +56,13 @@ let BookmarkForm = props => {
 }
 
 BookmarkForm = connect(
-  state => ({
-    currentItem: state.bookmarks.currentItem,
-    show: state.bookmarks.currentItem !== null,
-  }),
+  selectEditDialog,
   dispatch => {
-    const reloadBookmarks = () => dispatch(bookmarks.getBookmarks());
+    const reloadBookmarks = () => dispatch(getBookmarks());
     return {
-      hideEdit: () => dispatch(bookmarks.hideEdit()),
-      onSubmit: item => dispatch(bookmarks.updateBookmark(item)).then(reloadBookmarks),
-      deleteItem: item => dispatch(bookmarks.deleteBookmark(item)).then(reloadBookmarks),
+      hideEdit: () => dispatch(hideEdit()),
+      onSubmit: item => dispatch(updateBookmark(item)).then(reloadBookmarks),
+      deleteItem: item => dispatch(deleteBookmark(item)).then(reloadBookmarks),
     };
   }
 )(BookmarkForm);

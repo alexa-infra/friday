@@ -1,16 +1,15 @@
 import { connect } from 'react-redux';
-import { bookmarks } from '../../actions';
+import { selectPagination, nextPage, prevPage, setPerPage } from '../../features/bookmarks';
 import { Pagination } from '../../components';
 
 
 export default connect(
-  state => state.bookmarks,
+  selectPagination,
   dispatch => {
-    const reloadBookmarks = () => dispatch(bookmarks.getBookmarks());
     return {
-      nextPage: () => dispatch(bookmarks.nextPage()).then(reloadBookmarks),
-      prevPage: () => dispatch(bookmarks.prevPage()).then(reloadBookmarks),
-      changePerPage: val => dispatch(bookmarks.perPage(val)).then(reloadBookmarks),
+      nextPage: () => dispatch(nextPage()),
+      prevPage: () => dispatch(prevPage()),
+      changePerPage: val => dispatch(setPerPage(val)),
     };
   },
 )(Pagination);

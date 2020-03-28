@@ -1,17 +1,6 @@
-import { applyMiddleware, createStore, compose } from 'redux';
-import { createBrowserHistory } from 'history';
-import { logger } from 'redux-logger';
-import thunk from 'redux-thunk';
-import reducers from '../reducers';
+import { configureStore } from "@reduxjs/toolkit";
+import reducers from '../features';
 
-const configureStore = (initialState = {}) => {
-  const middleware = applyMiddleware(thunk,
-                                     logger);
-  const makeStore = compose(middleware)(createStore);
-  const store = makeStore(reducers, initialState);
-  return store;
-};
-
-export default configureStore;
-
-export const history = createBrowserHistory();
+export const store = configureStore({
+  reducer: reducers,
+});

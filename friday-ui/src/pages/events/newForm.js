@@ -3,11 +3,11 @@ import Modal from 'react-bootstrap/Modal';
 import { Form } from 'react-final-form'
 import { connect } from 'react-redux';
 import { FormFields } from './editForm';
-import { events } from '../../actions';
+import { getEvents, hideNew, createEvent, selectNewDialog } from '../../features/events';
 
 
 let NewEventForm = props => {
-  const { show, hideEdit, newItem, onSubmit } = props;
+  const { show, hideEdit, item: newItem, onSubmit } = props;
   return (
     <Modal show={show} onHide={hideEdit}>
       <Form
@@ -35,16 +35,15 @@ let NewEventForm = props => {
 };
 
 NewEventForm = connect(
-  state => ({
-    newItem: { date: state.events.newEventDate },
-    show: state.events.newEventDate !== null,
-  }),
-  dispatch => ({
-    onSubmit: values => dispatch(events.createEvent(values)).then(
-      () => dispatch(events.getEvents())
-    ),
-    hideEdit: () => dispatch(events.hideEdit()),
-  })
+  selectNewDialog,
+  dispatch => {
+    const reload = () => dispatch(getEvents());
+    const hide = () => dispatch(hideNew());
+    return {
+      onSubmit: values => dispatch(createEvent(values)).then(reload).then(hide),
+      hideEdit: hide,
+    };
+  }
 )(NewEventForm);
 
 export default NewEventForm;

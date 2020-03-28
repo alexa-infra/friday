@@ -3,9 +3,8 @@
 const requireAccept = ['GET', 'PUT', 'POST', 'PATCH'];
 const requireBody = ['PUT', 'POST', 'PATCH'];
 
-export const wrap = apiFunc => (data, getState) => {
-  const params = apiFunc(data, getState);
-  const { auth } = getState();
+export const wrap = apiFunc => data => {
+  const params = apiFunc(data);
 
   let headers = {};
 
@@ -32,10 +31,6 @@ export const wrap = apiFunc => (data, getState) => {
     }
   }
 
-  if (auth.use_headers && auth.user) {
-    headers['session'] = auth.user.token;
-  }
-
   const request = new Request(params.url, {
     method: params.method,
     headers,
@@ -48,7 +43,7 @@ export const wrap = apiFunc => (data, getState) => {
     if (!response.ok) {
       return Promise.reject({
         name: 'ResponseError',
-        message: '',
+        message: response.statusText,
         status: response.status,
       })
     }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withOnLoad } from '../components';
-import { recipes as Actions } from '../actions';
+import { getRecipes } from '../features/recipes';
 import './kueche.scss';
 
 
@@ -109,7 +109,7 @@ App = withOnLoad(App, props => props.onLoad());
 App = connect(
   state => state.recipes,
   dispatch => ({
-    onLoad: () => dispatch(Actions.getRecipes()),
+    onLoad: () => dispatch(getRecipes()),
   })
 )(App);
 

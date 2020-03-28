@@ -2,7 +2,7 @@ import React from 'react';
 import Modal from 'react-bootstrap/Modal';
 import { Form, Field } from 'react-final-form';
 import { connect } from 'react-redux';
-import { links } from '../../actions';
+import { getLinks, updateLink, deleteLink, hideEdit, selectEditDialog } from '../../features/links';
 
 
 export const FormFields = () => (
@@ -19,14 +19,14 @@ export const FormFields = () => (
 );
 
 let LinkForm = props => {
-  const { show, hideEdit, deleteLink, currentItem, onSubmit } = props;
+  const { show, hideEdit, deleteLink, item: currentItem, onSubmit, loading } = props;
   return (
     <Modal show={show} onHide={hideEdit}>
       <Form
         enableReinitialize={true}
         initialValues={currentItem}
         onSubmit={onSubmit}>
-      {({handleSubmit}) => (
+      {({handleSubmit, submitting}) => (
       <form onSubmit={handleSubmit}>
         <Modal.Header closeButton>
           <Modal.Title>Edit</Modal.Title>
@@ -36,10 +36,10 @@ let LinkForm = props => {
           <FormFields />
         </Modal.Body>
         <Modal.Footer>
-          <button type="button" onClick={() => deleteLink(currentItem)}>
+          <button type="button" onClick={() => deleteLink(currentItem)} disabled={submitting || loading}>
             Delete
           </button>
-          <button type="submit">
+          <button type="submit" disabled={submitting || loading}>
             Save
           </button>
         </Modal.Footer>
@@ -51,16 +51,13 @@ let LinkForm = props => {
 };
 
 LinkForm = connect(
-  state => ({
-    currentItem: state.links.currentItem,
-    show: state.links.currentItem !== null,
-  }),
+  selectEditDialog,
   dispatch => {
-    const getLinks = () => dispatch(links.getLinks());
+    const reload = () => dispatch(getLinks());
     return {
-      onSubmit: item => dispatch(links.updateLink(item)).then(getLinks),
-      deleteLink: item => dispatch(links.deleteLink(item)).then(getLinks),
-      hideEdit: () => dispatch(links.hideEdit()),
+      onSubmit: item => dispatch(updateLink(item)).then(reload),
+      deleteLink: item => dispatch(deleteLink(item)).then(reload),
+      hideEdit: () => dispatch(hideEdit()),
     };
   }
 )(LinkForm);

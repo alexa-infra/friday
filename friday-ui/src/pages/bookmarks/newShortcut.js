@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { bookmarks } from '../../actions';
+import { showNew } from '../../features/bookmarks';
 
 
 class BookmarksAddShortcut extends Component {
@@ -20,7 +20,7 @@ class BookmarksAddShortcut extends Component {
 BookmarksAddShortcut = connect(
   null,
   dispatch => ({
-    showEditNew: val => dispatch(bookmarks.showNew(val)),
+    showEditNew: val => dispatch(showNew(val)),
   })
 )(BookmarksAddShortcut);
 

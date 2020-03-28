@@ -4,7 +4,7 @@ import Calendar from './calendar';
 import EditEventModal from './editForm';
 import NewEventModal from './newForm';
 import { withOnLoad } from '../../components';
-import { events } from '../../actions';
+import { currentMonth } from '../../features/events';
 
 
 let EventsPage = () => (
@@ -22,9 +22,8 @@ EventsPage = withOnLoad(EventsPage, props => props.initCalendar());
 EventsPage = connect(
   null,
   dispatch => {
-    const getEvents = () => dispatch(events.getEvents());
     return {
-      initCalendar: () => dispatch(events.currentMonth()).then(getEvents),
+      initCalendar: () => dispatch(currentMonth()),
     };
   }
 )(EventsPage);

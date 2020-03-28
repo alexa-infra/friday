@@ -1,21 +1,19 @@
 import { wrap } from './utils'
 
 
-const formatDate = dt => dt.format('YYYY-MM-DD');
-
 const formatEventData = ({name, icon, date, repeat}) => {
   return {
     name: name,
     icon: icon,
     repeat: repeat === 'none' ? null : repeat,
-    date: formatDate(date),
+    date: date,
   }
 }
 
 const searchParams = ({fromdate, todate}) => {
   const params = new URLSearchParams();
-  params.append('fromdate', formatDate(fromdate));
-  params.append('todate', formatDate(todate));
+  params.append('fromdate', fromdate);
+  params.append('todate', todate);
   return params.toString()
 }
 

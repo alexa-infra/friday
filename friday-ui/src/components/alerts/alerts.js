@@ -1,8 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
-import { Alerts } from '../../constants';
 import { connect } from 'react-redux';
-import { alerts } from '../../actions';
+import { dismiss, Alerts } from '../../features/alerts';
 import './alerts.scss';
 
 
@@ -42,7 +41,7 @@ AlertList = connect(
     items: state.alerts,
   }),
   dispatch => ({
-    dismissAlert: item => dispatch(alerts.dismissAlert(item.id)),
+    dismissAlert: item => dispatch(dismiss(item.id)),
   })
 )(AlertList);
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { bookmarks } from '../../actions';
+import { showNew, setFilter, selectPagination } from '../../features/bookmarks';
 
 
 class Controls extends Component {
@@ -25,7 +25,8 @@ class Controls extends Component {
                  type="text"
                  placeholder="Search..."
                  value={search || ''}
-                 onChange={this.handleChangeSearch} />
+                 onChange={this.handleChangeSearch}
+                 onKeyPress={e => e.key === 'Enter' ? doSearch(search) : null}/>
         </div>
         <div className="col col-sm-4 col-md-2">
           <div className="btn-group">
@@ -46,16 +47,11 @@ class Controls extends Component {
 }
 
 Controls = connect(
-  state => ({
-    search: state.bookmarks.search,
-  }),
-  dispatch => {
-    const reloadBookmarks = () => dispatch(bookmarks.getBookmarks());
-    return {
-      doSearch: val => dispatch(bookmarks.filterBookmarks(val)).then(reloadBookmarks),
-      showEditNew: () => dispatch(bookmarks.showNew()),
-    };
-  }
+  selectPagination,
+  dispatch => ({
+    doSearch: val => dispatch(setFilter(val)),
+    showEditNew: () => dispatch(showNew()),
+  })
 )(Controls);
 
 export default Controls;

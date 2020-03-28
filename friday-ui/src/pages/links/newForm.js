@@ -3,11 +3,11 @@ import Modal from 'react-bootstrap/Modal';
 import { Form } from 'react-final-form';
 import { connect } from 'react-redux';
 import { FormFields } from './editForm';
-import { links } from '../../actions';
+import { getLinks, hideNew, createLink, selectNewDialog } from '../../features/links';
 
 
 let NewLinkForm = props => {
-  const { show, hideEdit, onSubmit } = props;
+  const { show, hideEdit, onSubmit, loading } = props;
   return (
     <Modal show={show} onHide={hideEdit}>
       <Form
@@ -21,7 +21,7 @@ let NewLinkForm = props => {
           <FormFields />
         </Modal.Body>
         <Modal.Footer>
-          <button type="submit" disabled={pristine || submitting}>
+          <button type="submit" disabled={pristine || submitting || loading}>
             Create
           </button>
         </Modal.Footer>
@@ -33,14 +33,12 @@ let NewLinkForm = props => {
 };
 
 NewLinkForm = connect(
-  state => ({
-    show: state.links.newLink,
-  }),
+  selectNewDialog,
   dispatch => {
-    const getLinks = () => dispatch(links.getLinks());
+    const reload = () => dispatch(getLinks());
     return {
-      onSubmit: item => dispatch(links.createLink(item)).then(getLinks),
-      hideEdit: () => dispatch(links.hideEdit()),
+      onSubmit: item => dispatch(createLink(item)).then(reload),
+      hideEdit: () => dispatch(hideNew()),
     };
   }
 )(NewLinkForm);

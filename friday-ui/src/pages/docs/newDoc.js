@@ -1,27 +1,36 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import NewDocForm from './newDocForm';
-import { docs } from '../../actions';
-import { history } from '../../store';
+import { createDoc, selectCurrent, getNew } from '../../features/docs';
+import withOnLoad from '../../components/withOnLoad';
 
 
-const DocNew = props => (
-  <article className="doc-page new">
-    <div className="controls">
-      <NavLink to="/docs">Back</NavLink>
-    </div>
-    <NewDocForm onSubmit={values => props.create(values)} />
-  </article>
+const DocNew = ({ onSubmit, item, saved }) => {
+  if (item === null) {
+    return saved ? (<Redirect to="/docs" />) : null;
+  }
+
+  return (
+    <article className="doc-page new">
+      <div className="controls">
+        <NavLink to="/docs">Back</NavLink>
+      </div>
+      <NewDocForm onSubmit={onSubmit} />
+    </article>
+  );
+}
+
+let DocNewContainer = withOnLoad(
+  DocNew, props => props.onLoad()
 );
 
-const DocNewContainer = connect(
-  null,
+DocNewContainer = connect(
+  selectCurrent,
   dispatch => ({
-    create: data => dispatch(docs.createDoc(data)).then(
-        ({ id }) => dispatch(docs.updateDocText({...data, id }))
-      ).then(() => history.push('/docs')),
+    onSubmit: data => dispatch(createDoc(data)),
+    onLoad: () => dispatch(getNew()),
   })
-)(DocNew);
+)(DocNewContainer);
 
 export default DocNewContainer;

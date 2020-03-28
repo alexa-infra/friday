@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
-import { bookmarks } from '../../actions';
+import { selectList, getBookmarks, showEdit, markReadBookmark, deleteBookmark } from '../../features/bookmarks';
 
 
 const Bookmark = ({item, onEdit, onMarkRead, onDelete}) => {
@@ -56,13 +56,15 @@ let BookmarkList = ({items, showEdit, markRead, deleteItem}) => (
 );
 
 BookmarkList = connect(
-  state => state.bookmarks,
+  state => ({
+    items: selectList(state),
+  }),
   dispatch => {
-    const reloadBookmarks = () => dispatch(bookmarks.getBookmarks());
+    const reload = () => dispatch(getBookmarks());
     return {
-      showEdit: item => dispatch(bookmarks.showEdit(item)),
-      markRead: item => dispatch(bookmarks.markReadBookmark(item)).then(reloadBookmarks),
-      deleteItem: item => dispatch(bookmarks.deleteBookmark(item)).then(reloadBookmarks),
+      showEdit: item => dispatch(showEdit(item)),
+      markRead: item => dispatch(markReadBookmark(item)).then(reload),
+      deleteItem: item => dispatch(deleteBookmark(item)).then(reload),
     };
   }
 )(BookmarkList);

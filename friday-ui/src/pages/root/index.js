@@ -1,6 +1,6 @@
 import React from 'react'
-import { Provider } from 'react-redux'
-import { Router, Route, Switch } from 'react-router'
+import { Provider, useSelector, connect } from 'react-redux'
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
 import './root.scss'
 
 import Docs from '../docs';
@@ -10,12 +10,35 @@ import Links from '../links';
 import Bookmarks from '../bookmarks';
 import Recipes from '../kueche';
 
-import { NavBar, Alerts } from '../../components'
+import { NavBar, Alerts, withOnLoad } from '../../components'
+import { selectAuthorized, currentUser } from '../../features/auth';
 
 
-const Root = ({store, history}) => (
+function PrivateRoute({ component: Component, ...rest }) {
+  const isAuthenticated = useSelector(selectAuthorized);
+  return (
+    <Route
+      {...rest}
+      render={({ location }) =>
+        isAuthenticated ? (
+          <Component />
+        ) : (
+          <Redirect
+            to={{
+              pathname: "/login",
+              state: { from: location }
+            }}
+          />
+        )
+      }
+    />
+  );
+}
+
+
+let Root = ({store}) => (
   <Provider store={store}>
-    <Router history={history}>
+    <Router>
       <div className="theme-l5">
         <header>
           <NavBar />
@@ -24,16 +47,25 @@ const Root = ({store, history}) => (
           <Alerts />
           <Switch>
             <Route path="/login" component={Login} />
-            <Route path="/events" component={Events} />
-            <Route path="/bookmarks" component={Bookmarks} />
-            <Route path="/docs" component={Docs} />
-            <Route path="/recipes" component={Recipes} />
-            <Route path="/" component={Links} />
+            <PrivateRoute path="/events" component={Events} />
+            <PrivateRoute path="/bookmarks" component={Bookmarks} />
+            <PrivateRoute path="/docs" component={Docs} />
+            <PrivateRoute path="/recipes" component={Recipes} />
+            <PrivateRoute path="/" component={Links} />
           </Switch>
         </main>
       </div>
     </Router>
   </Provider>
 );
+
+Root = withOnLoad(Root, props => props.onLoad());
+
+Root = connect(
+  null,
+  dispatch => ({
+    onLoad: () => dispatch(currentUser()),
+  })
+)(Root);
 
 export default Root;

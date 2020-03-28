@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { links } from '../../actions';
+import { filterItems } from '../../features/links';
 
 
 class SearchBox extends Component {
@@ -27,7 +27,7 @@ SearchBox = connect(
     filter: state.links.filter,
   }),
   dispatch => ({
-    doSearch: text => dispatch(links.filterItems(text)),
+    doSearch: text => dispatch(filterItems(text)),
   })
 )(SearchBox);
 

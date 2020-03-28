@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { links } from '../../actions';
+import { selectList, showEdit } from '../../features/links';
 
 
 const Link = ({ id, url, title }) => (
@@ -37,9 +37,9 @@ let LinkList = ({ items, editMode, showEdit }) => (
 );
 
 LinkList = connect(
-  state => state.links,
+  selectList,
   dispatch => ({
-    showEdit: item => dispatch(links.showEdit(item)),
+    showEdit: item => dispatch(showEdit(item)),
   })
 )(LinkList);
 

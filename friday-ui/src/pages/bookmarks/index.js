@@ -8,7 +8,7 @@ import Pagination from './pagination';
 import BrowserBookmark from './browserBookmark';
 import EditForm from './editForm';
 import NewForm from './newForm';
-import { bookmarks } from '../../actions';
+import { getBookmarks } from '../../features/bookmarks';
 import { withOnLoad } from '../../components';
 import './style.scss';
 
@@ -29,7 +29,7 @@ BookmarksPage = withOnLoad(BookmarksPage, props => props.onLoad());
 BookmarksPage = connect(
   null,
   dispatch => ({
-    onLoad: () => dispatch(bookmarks.getBookmarks()),
+    onLoad: () => dispatch(getBookmarks()),
   })
 )(BookmarksPage);
 

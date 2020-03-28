@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { TagsViewer, TagCloud } from './tags';
 import { connect } from 'react-redux';
-import { docs } from '../../actions';
+import { selectList, selectCurrentTag, selectDocTags, getDocs, getDocTags, filterByTag } from '../../features/docs';
 import withOnLoad from '../../components/withOnLoad';
 import Pagination from './pagination';
 
@@ -48,14 +48,17 @@ const DocsList = ({items, tagCloud, tag, filterByTag}) => (
 
 let DocsListContainer = withOnLoad(DocsList, props => props.loadAll());
 DocsListContainer = connect(
-  state => state.docs,
+  state => ({
+    tagCloud: selectDocTags(state),
+    tag: selectCurrentTag(state),
+    items: selectList(state)
+  }),
   dispatch => ({
-    loadAll: () => dispatch(docs.getDocs()).then(
-      () => dispatch(docs.getDocsTagCloud())
-    ),
-    filterByTag: tag => dispatch(docs.filterByTag(tag)).then(
-      () => dispatch(docs.getDocs())
-    ),
+    loadAll: () => {
+      dispatch(getDocs());
+      dispatch(getDocTags());
+    },
+    filterByTag: tag => dispatch(filterByTag(tag)),
   }),
 )(DocsListContainer);
 

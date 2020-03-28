@@ -4,7 +4,7 @@ import List from './list';
 import EditModal from './editForm';
 import NewModal from './newForm';
 import { connect } from 'react-redux';
-import { links } from '../../actions';
+import { getLinks } from '../../features/links';
 import { withOnLoad } from '../../components';
 import './style.scss';
 
@@ -23,7 +23,7 @@ LinksPage = withOnLoad(LinksPage, props => props.onLoad());
 LinksPage = connect(
   null,
   dispatch => ({
-    onLoad: () => dispatch(links.getLinks()),
+    onLoad: () => dispatch(getLinks()),
   })
 )(LinksPage);
 

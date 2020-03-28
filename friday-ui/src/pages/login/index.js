@@ -1,10 +1,3 @@
-import LoginForm from './form';
-import { connect } from 'react-redux';
-import { auth } from '../../actions';
+import { LoginForm } from './form';
 
-
-const mapDispatch = dispatch => ({
-  onSubmit: ({name, password}) => dispatch(auth.login(name, password)),
-});
-
-export default connect(null, mapDispatch)(LoginForm);
+export default LoginForm;

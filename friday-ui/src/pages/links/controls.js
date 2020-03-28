@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { links } from '../../actions';
+//import { links } from '../../actions';
 import SearchBox from './search';
 import classNames from 'classnames';
+import { toggleEditMode, showNew } from '../../features/links';
 
 
 let EditModeButton = ({editMode, toggleEditMode}) => (
@@ -13,10 +14,10 @@ let EditModeButton = ({editMode, toggleEditMode}) => (
 
 EditModeButton = connect(
   state => ({
-    editMode: state.links.editMode,
+    editMode: state.links.items.editMode,
   }),
   dispatch => ({
-    toggleEditMode: () => dispatch(links.toggleEditMode()),
+    toggleEditMode: () => dispatch(toggleEditMode()),
   })
 )(EditModeButton);
 
@@ -29,7 +30,7 @@ let NewLinkButton = ({showNew}) => (
 NewLinkButton = connect(
   null,
   dispatch => ({
-    showNew: () => dispatch(links.showNew()),
+    showNew: () => dispatch(showNew()),
   })
 )(NewLinkButton);
 

@@ -2,12 +2,12 @@ import React from 'react';
 import Modal from 'react-bootstrap/Modal';
 import { Form } from 'react-final-form'
 import { connect } from 'react-redux';
-import { bookmarks } from '../../actions';
+import { selectNewDialog, createBookmark, getBookmarks, hideNew } from '../../features/bookmarks';
 import { FormFields } from './editForm';
 
 
 let NewBookmarkForm = props => {
-  const { show, hideEdit, onSubmit, newItem } = props;
+  const { show, hideEdit, onSubmit, item: newItem } = props;
   return (
     <Modal show={show} onHide={hideEdit}>
       <Form
@@ -35,15 +35,12 @@ let NewBookmarkForm = props => {
 }
 
 NewBookmarkForm = connect(
-  state => ({
-    newItem: state.bookmarks.newItem,
-    show: state.bookmarks.newItem !== null,
-  }),
+  selectNewDialog,
   dispatch => {
-    const reloadBookmarks = () => dispatch(bookmarks.getBookmarks());
+    const reloadBookmarks = () => dispatch(getBookmarks());
     return {
-      hideEdit: () => dispatch(bookmarks.hideEdit()),
-      onSubmit: item => dispatch(bookmarks.createBookmark(item)).then(reloadBookmarks),
+      hideEdit: () => dispatch(hideNew()),
+      onSubmit: item => dispatch(createBookmark(item)).then(reloadBookmarks),
     };
   }
 )(NewBookmarkForm);

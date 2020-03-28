@@ -1,16 +1,22 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { docs } from '../../actions';
+import { selectCurrent, getDocHtml } from '../../features/docs';
 import { TagsViewer } from './tags';
 import withOnLoad from '../../components/withOnLoad';
 
 
 const createMarkup = html => ({__html: html});
 
-const DocView = props => {
-  const { doc } = props;
-  const { id, name, html, tags } = doc || {};
+const DocView = ({ item }) => {
+  if (item === null) {
+    return null;
+  }
+
+  const { id, name, html, tags } = item;
+  if (html === undefined)
+    return null;
+
   return (
     <div className="doc-page view">
       <div className="controls">
@@ -32,18 +38,14 @@ let DocViewContainer = withOnLoad(
   DocView,
   props => {
     const { match } = props;
-    const data = { id: match.params.id };
-    props.loadHtml(data);
+    props.loadHtml(match.params.id);
   }
 );
+
 DocViewContainer = connect(
-  state => ({
-    doc: state.docs.currentItem,
-  }),
+  selectCurrent,
   dispatch => ({
-    loadHtml: data => dispatch(docs.getDoc(data)).then(
-      () => dispatch(docs.getDocHtml(data))
-    ),
+    loadHtml: id => dispatch(getDocHtml(id)),
   })
 )(DocViewContainer);
 

@@ -2,18 +2,17 @@ import React from 'react';
 import Modal from 'react-bootstrap/Modal';
 import { Form, Field } from 'react-final-form';
 import { connect } from 'react-redux'
-import * as moment from 'moment';
-import { events } from '../../actions';
+import { getEvents, hideEdit, updateEvent, repeatEvent, deleteEvent, selectEditDialog } from '../../features/events';
 
 
 const RepeatInDays = props => {
-  const { currentItem, repeatIn } = props;
+  const { values, repeatIn } = props;
   return (
     <div className="form-group">
       <label htmlFor="repeatIn">Repeat In</label>
       <div className="field">
         <Field name="repeatIn" component="input" type="number" />
-        <button type="button" onClick={() => repeatIn(currentItem)}>
+        <button type="button" onClick={() => repeatIn(values)}>
           Repeat
         </button>
       </div>
@@ -25,9 +24,7 @@ export const FormFields = props => (
   <React.Fragment>
     <div className="form-group">
       <label htmlFor="date">Date</label>
-      <Field name="date" component="input" type="text" disabled
-             format={v => v != null ? v.format('YYYY-MM-DD') : null}
-             parse={v => v != null ? moment(v, 'YYYY-MM-DD') : null} />
+      <Field name="date" component="input" type="text" disabled />
     </div>
     <div className="form-group">
       <label htmlFor="name">Name</label>
@@ -52,14 +49,14 @@ export const FormFields = props => (
 );
 
 let EventForm = props => {
-  const { show, hideEdit, currentItem, deleteEvent, onSubmit } = props;
+  const { show, hideEdit, item: currentItem, deleteEvent, onSubmit } = props;
   return (
     <Modal show={show} onHide={hideEdit}>
       <Form
         enableReinitialize={true}
         onSubmit={onSubmit}
-        initialValues={currentItem}>
-      {({handleSubmit, initialValues}) => (
+        initialValues={{...currentItem, repeatIn: 21}}>
+      {({handleSubmit, initialValues, values}) => (
       <form onSubmit={handleSubmit}>
         <Modal.Header closeButton>
           <Modal.Title>Edit event</Modal.Title>
@@ -67,7 +64,7 @@ let EventForm = props => {
         <Modal.Body>
           <Field name="id" component="input" type="hidden" />
           <FormFields />
-          <RepeatInDays {...props} />
+          <RepeatInDays values={values} {...props} />
         </Modal.Body>
         <Modal.Footer>
           <button type="button" onClick={() => deleteEvent(initialValues)}>
@@ -85,17 +82,15 @@ let EventForm = props => {
 };
 
 EventForm = connect(
-  state => ({
-    currentItem: { ...state.events.currentItem, repeatIn: 24 },
-    show: state.events.currentItem !== null,
-  }),
+  selectEditDialog,
   dispatch => {
-    const getEvents = () => dispatch(events.getEvents());
+    const reload = () => dispatch(getEvents());
+    const hide = () => dispatch(hideEdit());
     return {
-      onSubmit: item => dispatch(events.updateEvent(item)).then(getEvents),
-      repeatIn: item => dispatch(events.repeatEvent(item)).then(getEvents),
-      deleteEvent: item => dispatch(events.deleteEvent(item)).then(getEvents),
-      hideEdit: () => dispatch(events.hideEdit()),
+      onSubmit: item => dispatch(updateEvent(item)).then(reload).then(hide),
+      repeatIn: item => dispatch(repeatEvent(item)).then(reload).then(hide),
+      deleteEvent: item => dispatch(deleteEvent(item)).then(reload).then(hide),
+      hideEdit: hideEdit,
     };
   }
 )(EventForm);
