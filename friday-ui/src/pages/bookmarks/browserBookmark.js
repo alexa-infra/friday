@@ -1,8 +1,8 @@
 import React from 'react';
 
 
-const getBookmarkScript = () => {
-  return `javascript:(function(){
+const bookmarkScript = 
+  `javascript:(function(){
     var redirect = '${document.location.origin}/bookmarks/add?';
     var searchString = new URLSearchParams();
     searchString.append('title', document.title);
@@ -10,10 +10,15 @@ const getBookmarkScript = () => {
     redirect += searchString.toString();
     window.open(redirect, '_blank');
   })()`;
-}
+
+const bookmarkHtml =
+  `<a href="${bookmarkScript}">Bookmark</a>`;
+
+const createMarkup = html => ({__html: html});
 
 const BrowserBookmark = () => (
-  <a href={getBookmarkScript()}>Bookmark</a>
+  <div dangerouslySetInnerHTML={createMarkup(bookmarkHtml)}>
+  </div>
 );
 
 export default BrowserBookmark;
