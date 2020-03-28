@@ -1,8 +1,9 @@
-import { createSlice, createSelector, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createSelector } from '@reduxjs/toolkit';
 import * as api from '../api';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { selectDialog } from './links';
+import { createAsyncThunk } from './utils';
 
 dayjs.extend(relativeTime);
 

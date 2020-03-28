@@ -1,6 +1,7 @@
-import { createSlice, createAsyncThunk, createSelector } from '@reduxjs/toolkit';
+import { createSlice, createSelector } from '@reduxjs/toolkit';
 import { combineReducers } from 'redux';
 import * as api from '../api';
+import { createAsyncThunk } from './utils';
 import dayjs from 'dayjs';
 
 export const getDocs = createAsyncThunk('docs/list',

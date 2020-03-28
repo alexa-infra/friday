@@ -1,25 +1,12 @@
-import { createSlice, createSelector, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createSelector } from '@reduxjs/toolkit';
+import { createAsyncThunk } from './utils';
 import * as api from '../api';
 
 
-export const getLinks = createAsyncThunk('links/list',
-  async () => {
-    const response = await api.getLinks();
-    return response.items;
-  }
-);
-
-export const createLink = createAsyncThunk('links/new',
-  async item => await api.createLink(item)
-);
-
-export const updateLink = createAsyncThunk('links/update',
-  async item => await api.updateLink(item)
-);
-
-export const deleteLink = createAsyncThunk('links/delete',
-  async item => await api.deleteLink(item)
-);
+export const getLinks = createAsyncThunk('links/list', api.getLinks);
+export const createLink = createAsyncThunk('links/new', api.createLink);
+export const updateLink = createAsyncThunk('links/update', api.updateLink);
+export const deleteLink = createAsyncThunk('links/delete', api.deleteLink);
 
 const searchField = text => text.replace(/\s+/g, ' ').toLowerCase();
 
@@ -81,7 +68,7 @@ const linksSlice = createSlice({
     },
     [getLinks.fulfilled]: (state, action) => {
       if (state.loading === 'pending') {
-        const data = action.payload;
+        const { items: data } = action.payload;
         state.items = data.map(
           x => ({
             ...x,

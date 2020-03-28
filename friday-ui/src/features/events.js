@@ -1,5 +1,6 @@
-import { createSlice, createSelector, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createSelector } from '@reduxjs/toolkit';
 import * as api from '../api';
+import { createAsyncThunk } from './utils';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';

@@ -1,15 +1,19 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import * as api from '../api';
+import * as alerts from './alerts';
 
 
 export const login = createAsyncThunk(
   'auth/login',
-  async args => await api.login(args)
+  async (args, { dispatch }) => {
+    const response = await api.login(args)
+    dispatch(alerts.success('Logged in'));
+    return response;
+  }
 )
 
 export const currentUser = createAsyncThunk(
-  'auth/current-user',
-  async () => await api.currentUser()
+  'auth/current-user', api.currentUser
 )
 
 const authSlice = createSlice({
@@ -19,6 +23,9 @@ const authSlice = createSlice({
     user: {},
   },
   reducers: {
+    unauthorized(state, action) {
+      state.user = null;
+    }
   },
   extraReducers: {
     [login.pending]: (state, action) => {
@@ -33,8 +40,6 @@ const authSlice = createSlice({
         state.user = action.payload;
         state.loading = 'idle';
       }
-      //dispatch(alerts.success('Logged in'));
-      //history.push('/');
     },
     [login.rejected]: (state, action) => {
       if (state.loading === 'pending') {
@@ -65,6 +70,8 @@ const authSlice = createSlice({
 });
 
 export default authSlice.reducer;
+
+export const { unauthorized } = authSlice.actions;
 
 export const selectAuthorized = state => state.auth.user !== null;
 
