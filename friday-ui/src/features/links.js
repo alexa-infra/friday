@@ -8,7 +8,7 @@ export const createLink = createAsyncThunk('links/new', api.createLink);
 export const updateLink = createAsyncThunk('links/update', api.updateLink);
 export const deleteLink = createAsyncThunk('links/delete', api.deleteLink);
 
-const searchField = text => text.replace(/\s+/g, ' ').toLowerCase();
+const searchField = (text) => text.replace(/\s+/g, ' ').toLowerCase();
 
 const linksSlice = createSlice({
   name: 'links',
@@ -57,7 +57,7 @@ const linksSlice = createSlice({
     },
     filterItems(state, action) {
       state.filter = action.payload;
-    }
+    },
   },
   extraReducers: {
     [getLinks.pending]: (state, action) => {
@@ -70,10 +70,10 @@ const linksSlice = createSlice({
       if (state.loading === 'pending') {
         const { items: data } = action.payload;
         state.items = data.map(
-          x => ({
+          (x) => ({
             ...x,
-            slug: searchField(x.title)
-          })
+            slug: searchField(x.title),
+          }),
         );
         state.loading = 'idle';
       }
@@ -135,30 +135,29 @@ const linksSlice = createSlice({
         state.editDialog.loading = 'idle';
       }
     },
-  }
+  },
 });
 
 export default linksSlice.reducer;
 
-const filterTerm = term => item => {
-  if (!item.slug)
-    return false;
+const filterTerm = (term) => (item) => {
+  if (!item.slug) return false;
   return ~item.slug.indexOf(term);
-}
+};
 
 const selectLinks = createSelector(
-  state => state.links.items,
-  state => state.links.filter,
-  (items, term) => items.filter(filterTerm(term))
+  (state) => state.links.items,
+  (state) => state.links.filter,
+  (items, term) => items.filter(filterTerm(term)),
 );
 
 export const selectList = createSelector(
   selectLinks,
-  state => state.links.editMode,
-  (items, editMode) => ({ items, editMode })
+  (state) => state.links.editMode,
+  (items, editMode) => ({ items, editMode }),
 );
 
-export const selectDialog = dialog => ({
+export const selectDialog = (dialog) => ({
   item: dialog.item,
   error: dialog.error,
   loading: dialog.loading === 'pending',
@@ -166,13 +165,15 @@ export const selectDialog = dialog => ({
 });
 
 export const selectEditDialog = createSelector(
-  state => state.links.editDialog,
-  selectDialog
+  (state) => state.links.editDialog,
+  selectDialog,
 );
 
 export const selectNewDialog = createSelector(
-  state => state.links.newDialog,
-  selectDialog
+  (state) => state.links.newDialog,
+  selectDialog,
 );
 
-export const { toggleEditMode, filterItems, showNew, hideNew, showEdit, hideEdit } = linksSlice.actions;
+export const {
+  toggleEditMode, filterItems, showNew, hideNew, showEdit, hideEdit,
+} = linksSlice.actions;

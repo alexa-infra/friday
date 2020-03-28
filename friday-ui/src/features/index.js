@@ -15,6 +15,6 @@ const reducers = combineReducers({
   bookmarks,
   docs,
   recipes,
-})
+});
 
 export default reducers;

@@ -6,15 +6,15 @@ import * as alerts from './alerts';
 export const login = createAsyncThunk(
   'auth/login',
   async (args, { dispatch }) => {
-    const response = await api.login(args)
+    const response = await api.login(args);
     dispatch(alerts.success('Logged in'));
     return response;
-  }
-)
+  },
+);
 
 export const currentUser = createAsyncThunk(
-  'auth/current-user', api.currentUser
-)
+  'auth/current-user', api.currentUser,
+);
 
 const authSlice = createSlice({
   name: 'auth',
@@ -25,7 +25,7 @@ const authSlice = createSlice({
   reducers: {
     unauthorized(state, action) {
       state.user = null;
-    }
+    },
   },
   extraReducers: {
     [login.pending]: (state, action) => {
@@ -65,14 +65,14 @@ const authSlice = createSlice({
         state.error = action.error;
         state.loading = 'idle';
       }
-    }
-  }
+    },
+  },
 });
 
 export default authSlice.reducer;
 
 export const { unauthorized } = authSlice.actions;
 
-export const selectAuthorized = state => state.auth.user !== null;
+export const selectAuthorized = (state) => state.auth.user !== null;
 
-export const selectLoading = state => state.auth.loading === 'pending';
+export const selectLoading = (state) => state.auth.loading === 'pending';

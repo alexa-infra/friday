@@ -1,13 +1,15 @@
 import { connect } from 'react-redux';
-import { selectPagination, nextPage, prevPage, setPerPage } from '../../features/docs';
+import {
+  selectPagination, nextPage, prevPage, setPerPage,
+} from '../../features/docs';
 import { Pagination } from '../../components';
 
 
 export default connect(
   selectPagination,
-  dispatch => ({
+  (dispatch) => ({
     nextPage: () => dispatch(nextPage()),
     prevPage: () => dispatch(prevPage()),
-    changePerPage: val => dispatch(setPerPage(val)),
+    changePerPage: (val) => dispatch(setPerPage(val)),
   }),
 )(Pagination);

@@ -24,20 +24,20 @@ let BookmarksPage = () => (
   </div>
 );
 
-BookmarksPage = withOnLoad(BookmarksPage, props => props.onLoad());
+BookmarksPage = withOnLoad(BookmarksPage, (props) => props.onLoad());
 
 BookmarksPage = connect(
   null,
-  dispatch => ({
+  (dispatch) => ({
     onLoad: () => dispatch(getBookmarks()),
-  })
+  }),
 )(BookmarksPage);
 
-const RouteContainer = props => (
+const RouteContainer = (props) => (
   <Switch>
     <Route path="/bookmarks/add" component={BookmarksAddShortcut} />
     <Route path="/bookmarks" component={BookmarksPage} />
   </Switch>
 );
 
-export default RouteContainer
+export default RouteContainer;

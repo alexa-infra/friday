@@ -6,16 +6,17 @@ import { TagsViewer } from './tags';
 import withOnLoad from '../../components/withOnLoad';
 
 
-const createMarkup = html => ({__html: html});
+const createMarkup = (html) => ({ __html: html });
 
 const DocView = ({ item }) => {
   if (item === null) {
     return null;
   }
 
-  const { id, name, html, tags } = item;
-  if (html === undefined)
-    return null;
+  const {
+    id, name, html, tags,
+  } = item;
+  if (html === undefined) return null;
 
   return (
     <div className="doc-page view">
@@ -27,26 +28,27 @@ const DocView = ({ item }) => {
         <b>{name}</b>
       </div>
       <TagsViewer tags={tags} />
-      <div className="markdown-body"
-           dangerouslySetInnerHTML={createMarkup(html)}>
-      </div>
+      <div
+        className="markdown-body"
+        dangerouslySetInnerHTML={createMarkup(html)}
+      />
     </div>
   );
-}
+};
 
 let DocViewContainer = withOnLoad(
   DocView,
-  props => {
+  (props) => {
     const { match } = props;
     props.loadHtml(match.params.id);
-  }
+  },
 );
 
 DocViewContainer = connect(
   selectCurrent,
-  dispatch => ({
-    loadHtml: id => dispatch(getDocHtml(id)),
-  })
+  (dispatch) => ({
+    loadHtml: (id) => dispatch(getDocHtml(id)),
+  }),
 )(DocViewContainer);
 
 export default DocViewContainer;

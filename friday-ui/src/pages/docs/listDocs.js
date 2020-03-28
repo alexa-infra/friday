@@ -1,20 +1,24 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { TagsViewer, TagCloud } from './tags';
 import { connect } from 'react-redux';
-import { selectList, selectCurrentTag, selectDocTags, getDocs, getDocTags, filterByTag } from '../../features/docs';
+import { TagsViewer, TagCloud } from './tags';
+import {
+  selectList, selectCurrentTag, selectDocTags, getDocs, getDocTags, filterByTag,
+} from '../../features/docs';
 import withOnLoad from '../../components/withOnLoad';
 import Pagination from './pagination';
 
 
-const DocsList = ({items, tagCloud, tag, filterByTag}) => (
+const DocsList = ({
+  items, tagCloud, tag, filterByTag,
+}) => (
   <div className="doc-page row justify-content-center">
     <div className="col col-md-10">
       <div className="controls">
-        <NavLink to='/docs/new'>New doc</NavLink>
+        <NavLink to="/docs/new">New doc</NavLink>
       </div>
       <TagCloud tags={tagCloud} current={tag} onClick={filterByTag} />
-      {items.map(it => (
+      {items.map((it) => (
         <div className="row p-2" key={it.id}>
           <div className="col">
             <div className="row">
@@ -29,8 +33,12 @@ const DocsList = ({items, tagCloud, tag, filterByTag}) => (
             </div>
             <div className="row doc-controls">
               <div className="col">
-                Created <i title={it.created.toISOString(true)}>{it.created.fromNow()}</i>
-                Updated <i title={it.updated.toISOString(true)}>{it.updated.fromNow()}</i>
+                Created
+                {' '}
+                <i title={it.created.toISOString(true)}>{it.created.fromNow()}</i>
+                Updated
+                {' '}
+                <i title={it.updated.toISOString(true)}>{it.updated.fromNow()}</i>
                 <NavLink to={`/docs/${it.id}/edit`}>Edit</NavLink>
               </div>
             </div>
@@ -46,19 +54,19 @@ const DocsList = ({items, tagCloud, tag, filterByTag}) => (
   </div>
 );
 
-let DocsListContainer = withOnLoad(DocsList, props => props.loadAll());
+let DocsListContainer = withOnLoad(DocsList, (props) => props.loadAll());
 DocsListContainer = connect(
-  state => ({
+  (state) => ({
     tagCloud: selectDocTags(state),
     tag: selectCurrentTag(state),
-    items: selectList(state)
+    items: selectList(state),
   }),
-  dispatch => ({
+  (dispatch) => ({
     loadAll: () => {
       dispatch(getDocs());
       dispatch(getDocTags());
     },
-    filterByTag: tag => dispatch(filterByTag(tag)),
+    filterByTag: (tag) => dispatch(filterByTag(tag)),
   }),
 )(DocsListContainer);
 

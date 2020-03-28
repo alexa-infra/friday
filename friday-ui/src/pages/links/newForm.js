@@ -3,30 +3,35 @@ import Modal from 'react-bootstrap/Modal';
 import { Form } from 'react-final-form';
 import { connect } from 'react-redux';
 import { FormFields } from './editForm';
-import { getLinks, hideNew, createLink, selectNewDialog } from '../../features/links';
+import {
+  getLinks, hideNew, createLink, selectNewDialog,
+} from '../../features/links';
 
 
-let NewLinkForm = props => {
-  const { show, hideEdit, onSubmit, loading } = props;
+let NewLinkForm = (props) => {
+  const {
+    show, hideEdit, onSubmit, loading,
+  } = props;
   return (
     <Modal show={show} onHide={hideEdit}>
       <Form
-        onSubmit={onSubmit}>
-      {({handleSubmit, pristine, submitting}) => (
-      <form onSubmit={handleSubmit}>
-        <Modal.Header closeButton>
-          <Modal.Title>New link</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <FormFields />
-        </Modal.Body>
-        <Modal.Footer>
-          <button type="submit" disabled={pristine || submitting || loading}>
-            Create
-          </button>
-        </Modal.Footer>
-      </form>
-      )}
+        onSubmit={onSubmit}
+      >
+        {({ handleSubmit, pristine, submitting }) => (
+          <form onSubmit={handleSubmit}>
+            <Modal.Header closeButton>
+              <Modal.Title>New link</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <FormFields />
+            </Modal.Body>
+            <Modal.Footer>
+              <button type="submit" disabled={pristine || submitting || loading}>
+                Create
+              </button>
+            </Modal.Footer>
+          </form>
+        )}
       </Form>
     </Modal>
   );
@@ -34,13 +39,13 @@ let NewLinkForm = props => {
 
 NewLinkForm = connect(
   selectNewDialog,
-  dispatch => {
+  (dispatch) => {
     const reload = () => dispatch(getLinks());
     return {
-      onSubmit: item => dispatch(createLink(item)).then(reload),
+      onSubmit: (item) => dispatch(createLink(item)).then(reload),
       hideEdit: () => dispatch(hideNew()),
     };
-  }
+  },
 )(NewLinkForm);
 
 export default NewLinkForm;

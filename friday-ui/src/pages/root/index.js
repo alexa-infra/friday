@@ -1,7 +1,9 @@
-import React from 'react'
-import { Provider, useSelector, connect } from 'react-redux'
-import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
-import './root.scss'
+import React from 'react';
+import { Provider, useSelector, connect } from 'react-redux';
+import {
+  BrowserRouter as Router, Route, Switch, Redirect,
+} from 'react-router-dom';
+import './root.scss';
 
 import Docs from '../docs';
 import Login from '../login';
@@ -10,7 +12,7 @@ import Links from '../links';
 import Bookmarks from '../bookmarks';
 import Recipes from '../kueche';
 
-import { NavBar, Alerts, withOnLoad } from '../../components'
+import { NavBar, Alerts, withOnLoad } from '../../components';
 import { selectAuthorized, currentUser } from '../../features/auth';
 
 
@@ -19,24 +21,22 @@ function PrivateRoute({ component: Component, ...rest }) {
   return (
     <Route
       {...rest}
-      render={({ location }) =>
-        isAuthenticated ? (
-          <Component />
-        ) : (
-          <Redirect
-            to={{
-              pathname: "/login",
-              state: { from: location }
-            }}
-          />
-        )
-      }
+      render={({ location }) => (isAuthenticated ? (
+        <Component />
+      ) : (
+        <Redirect
+          to={{
+            pathname: '/login',
+            state: { from: location },
+          }}
+        />
+      ))}
     />
   );
 }
 
 
-let Root = ({store}) => (
+let Root = ({ store }) => (
   <Provider store={store}>
     <Router>
       <div className="theme-l5">
@@ -59,13 +59,13 @@ let Root = ({store}) => (
   </Provider>
 );
 
-Root = withOnLoad(Root, props => props.onLoad());
+Root = withOnLoad(Root, (props) => props.onLoad());
 
 Root = connect(
   null,
-  dispatch => ({
+  (dispatch) => ({
     onLoad: () => dispatch(currentUser()),
-  })
+  }),
 )(Root);
 
 export default Root;

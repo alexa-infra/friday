@@ -12,16 +12,17 @@ class BookmarksAddShortcut extends Component {
     const url = searchParams.get('url');
     showEditNew({ title, url });
   }
+
   render() {
-    return <Redirect to="/bookmarks" />
+    return <Redirect to="/bookmarks" />;
   }
 }
 
 BookmarksAddShortcut = connect(
   null,
-  dispatch => ({
-    showEditNew: val => dispatch(showNew(val)),
-  })
+  (dispatch) => ({
+    showEditNew: (val) => dispatch(showNew(val)),
+  }),
 )(BookmarksAddShortcut);
 
 export default BookmarksAddShortcut;

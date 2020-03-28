@@ -4,8 +4,7 @@ import * as api from '../api';
 
 
 export const getTags = createAsyncThunk('tags/list',
-  async () => await api.getTags()
-);
+  async () => await api.getTags());
 
 const tagsSlice = createSlice({
   name: 'tags',
@@ -40,6 +39,6 @@ const tagsSlice = createSlice({
 export default tagsSlice.reducer;
 
 export const selectTags = createSelector(
-  state => state.tags,
-  tags => tags.map(tag => tag.name)
+  (state) => state.tags,
+  (tags) => tags.map((tag) => tag.name),
 );

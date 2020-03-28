@@ -19,18 +19,18 @@ const DocNew = ({ onSubmit, item, saved }) => {
       <NewDocForm onSubmit={onSubmit} />
     </article>
   );
-}
+};
 
 let DocNewContainer = withOnLoad(
-  DocNew, props => props.onLoad()
+  DocNew, (props) => props.onLoad(),
 );
 
 DocNewContainer = connect(
   selectCurrent,
-  dispatch => ({
-    onSubmit: data => dispatch(createDoc(data)),
+  (dispatch) => ({
+    onSubmit: (data) => dispatch(createDoc(data)),
     onLoad: () => dispatch(getNew()),
-  })
+  }),
 )(DocNewContainer);
 
 export default DocNewContainer;

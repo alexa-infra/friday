@@ -1,9 +1,9 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import Controls from './controls';
 import List from './list';
 import EditModal from './editForm';
 import NewModal from './newForm';
-import { connect } from 'react-redux';
 import { getLinks } from '../../features/links';
 import { withOnLoad } from '../../components';
 import './style.scss';
@@ -18,13 +18,13 @@ let LinksPage = () => (
   </div>
 );
 
-LinksPage = withOnLoad(LinksPage, props => props.onLoad());
+LinksPage = withOnLoad(LinksPage, (props) => props.onLoad());
 
 LinksPage = connect(
   null,
-  dispatch => ({
+  (dispatch) => ({
     onLoad: () => dispatch(getLinks()),
-  })
+  }),
 )(LinksPage);
 
 export default LinksPage;

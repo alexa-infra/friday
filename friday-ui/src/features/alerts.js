@@ -19,17 +19,17 @@ const alertsSlice = createSlice({
         state.push(action.payload);
       },
       prepare(type, text) {
-        return { payload: { type, id: alertId++, message: text }};
-      }
+        return { payload: { type, id: alertId++, message: text } };
+      },
     },
     dismiss: {
       reducer(state, action) {
         const { id } = action.payload;
-        state.splice(state.findIndex(x => x.id === id), 1);
+        state.splice(state.findIndex((x) => x.id === id), 1);
       },
       prepare(id) {
-        return { payload: { id }};
-      }
+        return { payload: { id } };
+      },
     },
   },
 });
@@ -38,14 +38,13 @@ export default alertsSlice.reducer;
 
 export const { add, dismiss } = alertsSlice.actions;
 
-export const showAlert = (type, message, opts={}) => dispatch => {
-  const { timeout, hide } = Object.assign({timeout: 3000, hide: true}, opts);
+export const showAlert = (type, message, opts = {}) => (dispatch) => {
+  const { timeout, hide } = { timeout: 3000, hide: true, ...opts };
   const addAction = add(type, message);
   const { id } = addAction.payload;
   dispatch(addAction);
-  if (hide)
-    setTimeout(() => dispatch(dismiss(id)), timeout);
-}
+  if (hide) setTimeout(() => dispatch(dismiss(id)), timeout);
+};
 
 export const dismissAlert = dismiss;
 export const success = (msg, opts) => showAlert(Alerts.SUCCESS, msg, opts);

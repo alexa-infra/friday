@@ -1,20 +1,16 @@
 
-
 const requireAccept = ['GET', 'PUT', 'POST', 'PATCH'];
 const requireBody = ['PUT', 'POST', 'PATCH'];
 
-export const wrap = apiFunc => data => {
+export const wrap = (apiFunc) => (data) => {
   const params = apiFunc(data);
 
-  let headers = {};
+  const headers = {};
 
   if (requireAccept.includes(params.method)) {
-    if (params.text)
-      headers['Accept'] = 'text/plain, application/json';
-    else if (params.html)
-      headers['Accept'] = 'text/html, application/json';
-    else
-      headers['Accept'] = 'application/json';
+    if (params.text) headers.Accept = 'text/plain, application/json';
+    else if (params.html) headers.Accept = 'text/html, application/json';
+    else headers.Accept = 'application/json';
   }
 
   let body = null;
@@ -38,22 +34,19 @@ export const wrap = apiFunc => data => {
     credentials: 'same-origin',
   });
 
-  return fetch(request).then(response => {
-
+  return fetch(request).then((response) => {
     if (!response.ok) {
       return Promise.reject({
         name: 'ResponseError',
         message: response.statusText,
         status: response.status,
-      })
+      });
     }
 
     if (requireAccept.includes(params.method)) {
-      if (params.text || params.html)
-        return response.text();
-      else
-        return response.json();
+      if (params.text || params.html) return response.text();
+      return response.json();
     }
     return {};
-  })
-}
+  });
+};

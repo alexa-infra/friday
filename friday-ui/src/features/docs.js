@@ -1,29 +1,27 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit';
 import { combineReducers } from 'redux';
+import dayjs from 'dayjs';
 import * as api from '../api';
 import { createAsyncThunk } from './utils';
-import dayjs from 'dayjs';
 
 export const getDocs = createAsyncThunk('docs/list',
-  async (arg, {getState}) => {
+  async (arg, { getState }) => {
     const pagination = selectPagination(getState());
     return await api.getDocs(pagination);
-  }
-);
+  });
 export const getDocTags = createAsyncThunk('doc-tags/list',
-  async () => await api.getDocsTagCloud()
-);
+  async () => await api.getDocsTagCloud());
 const _getDoc = createAsyncThunk('doc/get', api.getDoc);
 const _getDocText = createAsyncThunk('doc/getText', api.getDocText);
 const _getDocHtml = createAsyncThunk('doc/getHtml', api.getDocHtml);
 export const createDoc = createAsyncThunk('doc/create',
-  async arg => {
+  async (arg) => {
     const { text } = arg;
     const { id } = await api.createDoc(arg);
     return await api.putDocText({ id, text });
   });
 export const updateDoc = createAsyncThunk('doc/update',
-  async arg => {
+  async (arg) => {
     const { id, text } = arg;
     await api.updateDoc(arg);
     return await api.putDocText({ id, text });
@@ -45,8 +43,7 @@ const docsSlice = createSlice({
   reducers: {
     setPage(state, action) {
       const page = action.payload;
-      if (page > 0 && page <= state.pages)
-        state.page = page;
+      if (page > 0 && page <= state.pages) state.page = page;
     },
     setPerPage(state, action) {
       const per_page = action.payload;
@@ -57,7 +54,7 @@ const docsSlice = createSlice({
     },
     filterByTag(state, action) {
       state.tag = action.payload;
-    }
+    },
   },
   extraReducers: {
     [getDocs.pending]: (state, action) => {
@@ -81,8 +78,8 @@ const docsSlice = createSlice({
         state.error = action.error;
         state.loading = 'idle';
       }
-    }
-  }
+    },
+  },
 });
 
 const setPending = (state, action) => {
@@ -90,14 +87,14 @@ const setPending = (state, action) => {
     state.error = null;
     state.loading = 'pending';
   }
-}
+};
 
 const setError = (state, action) => {
   if (state.loading === 'pending') {
     state.error = action.error;
     state.loading = 'idle';
   }
-}
+};
 
 const docSlice = createSlice({
   name: 'doc',
@@ -203,31 +200,31 @@ export default combineReducers({
 });
 
 export const selectPagination = createSelector(
-  state => state.docs.list,
-  state => ({
+  (state) => state.docs.list,
+  (state) => ({
     page: state.page,
     pages: state.pages,
     per_page: state.per_page,
     tag: state.tag,
-  })
+  }),
 );
 
 export const selectCurrentTag = createSelector(
   selectPagination,
-  pagination => pagination.tag
+  (pagination) => pagination.tag,
 );
 
 export const selectList = createSelector(
-  state => state.docs.list.items,
-  items => items.map(x => ({
+  (state) => state.docs.list.items,
+  (items) => items.map((x) => ({
     ...x,
     created: dayjs(x.created),
     updated: dayjs(x.updated),
-  }))
+  })),
 );
 
-export const selectCurrent = state => state.docs.current;
-export const selectDocTags = state => state.docs.tags.items;
+export const selectCurrent = (state) => state.docs.current;
+export const selectDocTags = (state) => state.docs.tags.items;
 
 const { setPerPage: _setPerPage, setPage: _setPage, filterByTag: _filterByTag } = docsSlice.actions;
 
@@ -235,30 +232,26 @@ export const nextPage = () => (dispatch, getState) => {
   const pagination = selectPagination(getState());
   dispatch(_setPage(pagination.page + 1));
   return dispatch(getDocs());
-}
+};
 
 export const prevPage = () => (dispatch, getState) => {
   const pagination = selectPagination(getState());
   dispatch(_setPage(pagination.page - 1));
   return dispatch(getDocs());
-}
+};
 
-export const setPerPage = value => dispatch => {
+export const setPerPage = (value) => (dispatch) => {
   dispatch(_setPerPage(value));
   return dispatch(getDocs());
-}
+};
 
-export const filterByTag = value => dispatch => {
+export const filterByTag = (value) => (dispatch) => {
   dispatch(_filterByTag(value));
   return dispatch(getDocs());
-}
+};
 
-export const getDocHtml = id => dispatch => {
-  return dispatch(_getDoc({ id })).then(() => dispatch(_getDocHtml({ id })));
-}
+export const getDocHtml = (id) => (dispatch) => dispatch(_getDoc({ id })).then(() => dispatch(_getDocHtml({ id })));
 
-export const getDocText = id => dispatch => {
-  return dispatch(_getDoc({ id })).then(() => dispatch(_getDocText({ id })));
-}
+export const getDocText = (id) => (dispatch) => dispatch(_getDoc({ id })).then(() => dispatch(_getDocText({ id })));
 
 export const { getNew } = docSlice.actions;

@@ -1,7 +1,7 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit';
-import * as api from '../api';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import * as api from '../api';
 import { selectDialog } from './links';
 import { createAsyncThunk } from './utils';
 
@@ -10,10 +10,10 @@ dayjs.extend(relativeTime);
 
 export const getBookmarks = createAsyncThunk(
   'bookmarks/list',
-  async (arg, {getState}) => {
+  async (arg, { getState }) => {
     const pagination = selectPagination(getState());
     return await api.getBookmarks(pagination);
-  }
+  },
 );
 
 export const createBookmark = createAsyncThunk('bookmarks/new', api.createBookmark);
@@ -45,8 +45,7 @@ const bookmarksSlice = createSlice({
   reducers: {
     setPage(state, action) {
       const page = action.payload;
-      if (page > 0 && page <= state.pages)
-        state.page = page;
+      if (page > 0 && page <= state.pages) state.page = page;
     },
     setPerPage(state, action) {
       const per_page = action.payload;
@@ -155,66 +154,68 @@ const bookmarksSlice = createSlice({
         state.editDialog.loading = 'idle';
       }
     },
-  }
+  },
 });
 
 export default bookmarksSlice.reducer;
 
 export const selectPagination = createSelector(
-  state => state.bookmarks,
-  state => ({
+  (state) => state.bookmarks,
+  (state) => ({
     search: state.search,
     page: state.page,
     pages: state.pages,
     per_page: state.per_page,
-  })
+  }),
 );
 
-export const { showNew, hideNew, showEdit, hideEdit } = bookmarksSlice.actions;
+export const {
+  showNew, hideNew, showEdit, hideEdit,
+} = bookmarksSlice.actions;
 const { setPerPage: _setPerPage, setFilter: _setFilter, setPage: _setPage } = bookmarksSlice.actions;
 
 export const nextPage = () => (dispatch, getState) => {
   const pagination = selectPagination(getState());
   dispatch(_setPage(pagination.page + 1));
   return dispatch(getBookmarks());
-}
+};
 
 export const prevPage = () => (dispatch, getState) => {
   const pagination = selectPagination(getState());
   dispatch(_setPage(pagination.page - 1));
   return dispatch(getBookmarks());
-}
+};
 
-export const setPerPage = value => dispatch => {
+export const setPerPage = (value) => (dispatch) => {
   dispatch(_setPerPage(value));
   return dispatch(getBookmarks());
-}
+};
 
-export const setFilter = value => dispatch => {
+export const setFilter = (value) => (dispatch) => {
   dispatch(_setFilter(value));
   return dispatch(getBookmarks());
-}
+};
 
-export const markReadBookmark = data => dispatch => {
-  const newData = {...data, readed: !data.readed};
+export const markReadBookmark = (data) => (dispatch) => {
+  const newData = { ...data, readed: !data.readed };
   return dispatch(updateBookmark(newData));
-}
+};
 
 export const selectList = createSelector(
-  state => state.bookmarks.items,
-  items => items.map(it => ({
+  (state) => state.bookmarks.items,
+  (items) => items.map((it) => ({
     ...it,
     created: dayjs(it.created),
     updated: dayjs(it.updated),
-  }))
+  })),
 );
 
 export const selectEditDialog = createSelector(
-  state => state.bookmarks.editDialog,
-  selectDialog
+  (state) => state.bookmarks.editDialog,
+  selectDialog,
 );
 
 export const selectNewDialog = createSelector(
-  state => state.bookmarks.newDialog,
-  selectDialog
+  (state) => state.bookmarks.newDialog,
+  selectDialog,
 );

@@ -17,15 +17,13 @@ let EventsPage = () => (
   </div>
 );
 
-EventsPage = withOnLoad(EventsPage, props => props.initCalendar());
+EventsPage = withOnLoad(EventsPage, (props) => props.initCalendar());
 
 EventsPage = connect(
   null,
-  dispatch => {
-    return {
-      initCalendar: () => dispatch(currentMonth()),
-    };
-  }
+  (dispatch) => ({
+    initCalendar: () => dispatch(currentMonth()),
+  }),
 )(EventsPage);
 
 export default EventsPage;

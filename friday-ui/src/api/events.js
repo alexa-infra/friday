@@ -1,46 +1,46 @@
-import { wrap } from './utils'
+import { wrap } from './utils';
 
 
-const formatEventData = ({name, icon, date, repeat}) => {
-  return {
-    name: name,
-    icon: icon,
-    repeat: repeat === 'none' ? null : repeat,
-    date: date,
-  }
-}
+const formatEventData = ({
+  name, icon, date, repeat,
+}) => ({
+  name,
+  icon,
+  repeat: repeat === 'none' ? null : repeat,
+  date,
+});
 
-const searchParams = ({fromdate, todate}) => {
+const searchParams = ({ fromdate, todate }) => {
   const params = new URLSearchParams();
   params.append('fromdate', fromdate);
   params.append('todate', todate);
-  return params.toString()
-}
+  return params.toString();
+};
 
-export const getEvents = wrap(data => ({
-  url: '/api/events?' + searchParams(data),
+export const getEvents = wrap((data) => ({
+  url: `/api/events?${searchParams(data)}`,
   method: 'GET',
-}))
+}));
 
-export const createEvent = wrap(data => ({
+export const createEvent = wrap((data) => ({
   url: '/api/events',
   method: 'POST',
   body: formatEventData(data),
-}))
+}));
 
-export const updateEvent = wrap(data => ({
+export const updateEvent = wrap((data) => ({
   url: `/api/events/${data.id}`,
   method: 'PUT',
   body: formatEventData(data),
-}))
+}));
 
-export const deleteEvent = wrap(data => ({
+export const deleteEvent = wrap((data) => ({
   url: `/api/events/${data.id}`,
   method: 'DELETE',
-}))
+}));
 
-export const repeatEvent = wrap(data => ({
+export const repeatEvent = wrap((data) => ({
   url: `/api/events/${data.id}/repeat`,
   method: 'POST',
-  body: {days: data.repeatIn},
-}))
+  body: { days: data.repeatIn },
+}));
