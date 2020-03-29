@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { TagsViewer, TagCloud } from './tags';
 import {
@@ -15,7 +15,9 @@ const DocsList = ({
   <div className="doc-page row justify-content-center">
     <div className="col col-md-10">
       <div className="controls">
-        <NavLink to="/docs/new">New doc</NavLink>
+        <Link to="/docs/new">
+          <button>New doc</button>
+        </Link>
       </div>
       <TagCloud tags={tagCloud} current={tag} onClick={filterByTag} />
       {items.map((it) => (

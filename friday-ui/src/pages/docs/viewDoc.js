@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { selectCurrent, getDocHtml } from '../../features/docs';
 import { TagsViewer } from './tags';
@@ -21,8 +21,12 @@ const DocView = ({ item }) => {
   return (
     <div className="doc-page view">
       <div className="controls">
-        <NavLink to={`/docs/${id}/edit`}>Edit</NavLink>
-        <NavLink to="/docs">Back</NavLink>
+        <Link to={`/docs/${id}/edit`}>
+          <button>Edit</button>
+        </Link>
+        <Link to="/docs">
+          <button>Back</button>
+        </Link>
       </div>
       <div className="header">
         <b>{name}</b>

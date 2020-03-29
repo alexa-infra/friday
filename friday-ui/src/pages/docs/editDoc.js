@@ -1,7 +1,8 @@
 import React from 'react';
-import { NavLink, Redirect } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import { Form, Field } from 'react-final-form';
 import { connect } from 'react-redux';
-import DocForm from './docForm';
+import { renderTags } from './tags';
 import {
   selectCurrent, getDocText, updateDoc, deleteDoc,
 } from '../../features/docs';
@@ -14,19 +15,56 @@ const DocEdit = ({
   if (item === null) {
     return saved ? (<Redirect to="/docs" />) : null;
   }
+  const deleteConfirm = (e) => {
+    if (window.confirm('Are you sure you want to delete this item'))
+      onDelete(item);
+  }
 
   return (
     <article className="doc-page edit">
-      <div className="controls">
-        <NavLink to={`/docs/${item.id}/edit`}>Edit Text</NavLink>
-        <NavLink to={`/docs/${item.id}`}>View</NavLink>
-        <NavLink to="/docs">Back</NavLink>
-      </div>
-      <DocForm
+      <Form
+        enableReinitialize
         onSubmit={onUpdate}
         initialValues={item}
-        onDelete={onDelete}
-      />
+      >
+        {({ handleSubmit }) => (
+          <form onSubmit={handleSubmit}>
+            <div className="controls">
+              <button type="submit">
+                Save
+              </button>
+              <button type="button" onClick={deleteConfirm}>
+                Delete
+              </button>
+              <Link to={`/docs/${item.id}`}>
+                <button>View</button>
+              </Link>
+              <Link to="/docs">
+                <button>Back</button>
+              </Link>
+            </div>
+            <Field name="id" component="input" type="hidden" />
+            <div className="form-group">
+              <label htmlFor="name">Name</label>
+              <Field name="name" component="input" type="text" />
+            </div>
+            <div className="form-group">
+              <label htmlFor="tags">Tags</label>
+              <Field name="tags" component={renderTags} />
+            </div>
+            <div className="form-group">
+              <label htmlFor="text">Text</label>
+              <Field
+                name="text"
+                component="textarea"
+                wrap="off"
+                className="form-control"
+                rows={15}
+              />
+            </div>
+          </form>
+        )}
+      </Form>
     </article>
   );
 };
