@@ -54,6 +54,10 @@ let EventForm = (props) => {
   const {
     show, hideEdit, item: currentItem, deleteEvent, onSubmit,
   } = props;
+  const deleteConfirm = () => {
+    if (window.confirm('Are you sure you want to delete this event?'))
+      deleteEvent(currentItem);
+  }
   return (
     <Modal show={show} onHide={hideEdit}>
       <Form
@@ -72,7 +76,7 @@ let EventForm = (props) => {
               <RepeatInDays values={values} {...props} />
             </Modal.Body>
             <Modal.Footer>
-              <button type="button" onClick={() => deleteEvent(initialValues)}>
+              <button type="button" onClick={deleteConfirm}>
                 Delete
               </button>
               <button type="submit">
@@ -90,12 +94,11 @@ EventForm = connect(
   selectEditDialog,
   (dispatch) => {
     const reload = () => dispatch(getEvents());
-    const hide = () => dispatch(hideEdit());
     return {
-      onSubmit: (item) => dispatch(updateEvent(item)).then(reload).then(hide),
-      repeatIn: (item) => dispatch(repeatEvent(item)).then(reload).then(hide),
-      deleteEvent: (item) => dispatch(deleteEvent(item)).then(reload).then(hide),
-      hideEdit,
+      onSubmit: (item) => dispatch(updateEvent(item)).then(reload),
+      repeatIn: (item) => dispatch(repeatEvent(item)).then(reload),
+      deleteEvent: (item) => dispatch(deleteEvent(item)).then(reload),
+      hideEdit: () => dispatch(hideEdit()),
     };
   },
 )(EventForm);

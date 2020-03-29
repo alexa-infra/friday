@@ -60,10 +60,10 @@ export const getEvents = createAsyncThunk(
     });
   },
 );
-export const createEvent = createAsyncThunk('events/new', async (item) => await api.createEvent(item));
-export const updateEvent = createAsyncThunk('events/edit', async (item) => await api.updateEvent(item));
-export const deleteEvent = createAsyncThunk('events/delete', async (item) => await api.deleteEvent(item));
-export const repeatEvent = createAsyncThunk('events/repeat', async (item) => await api.repeatEvent(item));
+export const createEvent = createAsyncThunk('events/new', api.createEvent);
+export const updateEvent = createAsyncThunk('events/edit', api.updateEvent);
+export const deleteEvent = createAsyncThunk('events/delete', api.deleteEvent);
+export const repeatEvent = createAsyncThunk('events/repeat', api.repeatEvent);
 
 const eventsSlice = createSlice({
   name: 'events',
