@@ -57,10 +57,16 @@ const bookmarksSlice = createSlice({
     setFilter(state, action) {
       state.search = action.payload;
     },
-    showEdit(state, action) {
-      if (state.editDialog.item === null) {
-        state.editDialog.item = action.payload;
-        state.editDialog.error = null;
+    showEdit:  {
+      reducer(state, action) {
+        if (state.editDialog.item === null) {
+          state.editDialog.item = action.payload;
+          state.editDialog.error = null;
+        }
+      },
+      prepare(item) {
+        const { created, updated, ...rest } = item;
+        return { payload: rest };
       }
     },
     hideEdit(state, action) {
