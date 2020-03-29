@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { configureStore } from '@reduxjs/toolkit';
 import recipes from './recipes';
 import auth from './auth';
 import alerts from './alerts';
@@ -7,7 +8,7 @@ import events from './events';
 import bookmarks from './bookmarks';
 import docs from './docs';
 
-const reducers = combineReducers({
+export const reducers = combineReducers({
   links,
   alerts,
   auth,
@@ -17,4 +18,8 @@ const reducers = combineReducers({
   recipes,
 });
 
-export default reducers;
+export const store = configureStore({
+  reducer: reducers,
+});
+
+export default store;
