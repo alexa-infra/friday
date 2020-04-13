@@ -9,7 +9,10 @@ import withOnLoad from '../../components/withOnLoad';
 
 const DocNew = ({ onSubmit, item, saved }) => {
   if (item === null) {
-    return saved ? (<Redirect to="/docs" />) : null;
+    return null;
+  }
+  if (saved) {
+    return <Redirect to={`/docs/${item.id}`} />
   }
 
   return (

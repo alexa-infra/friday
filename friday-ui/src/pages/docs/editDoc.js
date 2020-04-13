@@ -15,6 +15,9 @@ const DocEdit = ({
   if (item === null) {
     return saved ? (<Redirect to="/docs" />) : null;
   }
+  if (saved) {
+    return <Redirect to={`/docs/${item.id}`} />
+  }
   const deleteConfirm = (e) => {
     if (window.confirm('Are you sure you want to delete this item'))
       onDelete(item);

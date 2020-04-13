@@ -17,8 +17,9 @@ const _getDocHtml = createAsyncThunk('doc/getHtml', api.getDocHtml);
 export const createDoc = createAsyncThunk('doc/create',
   async (arg) => {
     const { text } = arg;
-    const { id } = await api.createDoc(arg);
-    return await api.putDocText({ id, text });
+    const newDoc = await api.createDoc(arg);
+    await api.putDocText({ id: newDoc.id, text });
+    return newDoc;
   });
 export const updateDoc = createAsyncThunk('doc/update',
   async (arg) => {
@@ -118,6 +119,7 @@ const docSlice = createSlice({
       if (state.loading === 'idle') {
         state.item = action.meta.arg;
         state.loading = 'pending';
+        state.saved = false;
       }
     },
     [_getDoc.rejected]: setError,
@@ -148,7 +150,6 @@ const docSlice = createSlice({
     [updateDoc.fulfilled]: (state, action) => {
       if (state.loading === 'pending') {
         state.loading = 'idle';
-        state.item = null;
         state.saved = true;
       }
     },
@@ -157,8 +158,8 @@ const docSlice = createSlice({
     [createDoc.fulfilled]: (state, action) => {
       if (state.loading === 'pending') {
         state.loading = 'idle';
-        state.item = null;
         state.saved = true;
+        state.item.id = action.payload.id;
       }
     },
     [deleteDoc.pending]: setPending,
