@@ -50,3 +50,5 @@ export const wrap = (apiFunc) => (data) => {
     return {};
   });
 };
+
+export const later = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
