@@ -38,9 +38,11 @@ const DocsList = ({
                 Created
                 {' '}
                 <i title={it.created.toISOString(true)}>{it.created.fromNow()}</i>
+                {' '}
                 Updated
                 {' '}
                 <i title={it.updated.toISOString(true)}>{it.updated.fromNow()}</i>
+                {' '}
                 <NavLink to={`/docs/${it.id}/edit`}>Edit</NavLink>
               </div>
             </div>

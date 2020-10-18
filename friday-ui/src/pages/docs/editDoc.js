@@ -4,13 +4,13 @@ import { Form, Field } from 'react-final-form';
 import { connect } from 'react-redux';
 import { renderTags } from './tags';
 import {
-  selectCurrent, getDocText, updateDoc, deleteDoc,
+  selectCurrent, getDocText, updateDoc, deleteDoc, setWrap
 } from '../../features/docs';
 import withOnLoad from '../../components/withOnLoad';
 
 
 const DocEdit = ({
-  onUpdate, onDelete, item, saved,
+  onUpdate, onDelete, item, saved, wrap, onSetWrap
 }) => {
   if (item === null) {
     return saved ? (<Redirect to="/docs" />) : null;
@@ -56,11 +56,15 @@ const DocEdit = ({
               <Field name="tags" component={renderTags} />
             </div>
             <div className="form-group">
+              <label htmlFor="wrap">Wrap</label>{' '}
+              <input type="checkbox" checked={wrap} name="wrap" onChange={onSetWrap} />
+            </div>
+            <div className="form-group">
               <label htmlFor="text">Text</label>
               <Field
                 name="text"
                 component="textarea"
-                wrap="off"
+                wrap={wrap ? 'on' : 'off'}
                 className="form-control"
                 rows={15}
               />
@@ -86,6 +90,7 @@ DocEditContainer = connect(
     onLoad: (id) => dispatch(getDocText(id)),
     onUpdate: (data) => dispatch(updateDoc(data)),
     onDelete: (data) => dispatch(deleteDoc(data)),
+    onSetWrap: () => dispatch(setWrap()),
   }),
 )(DocEditContainer);
 

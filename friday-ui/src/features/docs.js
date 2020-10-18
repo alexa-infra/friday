@@ -104,10 +104,14 @@ const docSlice = createSlice({
     error: null,
     item: null,
     saved: false,
+    wrap: false,
   },
   reducers: {
     getNew(state, action) {
       state.item = {};
+    },
+    setWrap(state, action) {
+      state.wrap = !state.wrap;
     },
   },
   extraReducers: {
@@ -255,4 +259,4 @@ export const getDocHtml = (id) => (dispatch) => dispatch(_getDoc({ id })).then((
 
 export const getDocText = (id) => (dispatch) => dispatch(_getDoc({ id })).then(() => dispatch(_getDocText({ id })));
 
-export const { getNew } = docSlice.actions;
+export const { getNew, setWrap } = docSlice.actions;
