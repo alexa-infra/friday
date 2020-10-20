@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withOnLoad } from '../components';
 import { getRecipes } from '../features/recipes';
-import './kueche.scss';
 
 
 const Image = (props) => {

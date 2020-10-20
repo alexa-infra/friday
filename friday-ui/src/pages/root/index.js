@@ -3,7 +3,6 @@ import { Provider, useSelector, connect } from 'react-redux';
 import {
   BrowserRouter as Router, Route, Switch, Redirect,
 } from 'react-router-dom';
-import './root.scss';
 
 import Docs from '../docs';
 import Login from '../login';

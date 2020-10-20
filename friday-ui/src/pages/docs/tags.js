@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
-import './tags.scss';
 
 
 const Tag = ({tag, onRemove, onClick, mark, disabled}) => (

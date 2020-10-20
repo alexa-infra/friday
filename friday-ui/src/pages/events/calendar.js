@@ -1,7 +1,5 @@
 import React from 'react';
 import classNames from 'classnames';
-import './calendar.scss';
-import 'font-awesome/css/font-awesome.css';
 import { connect } from 'react-redux';
 import {
   nextMonth, prevMonth, showEdit, showNew, selectCalendar,

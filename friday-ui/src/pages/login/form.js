@@ -1,6 +1,5 @@
 import React from 'react';
 import { Form, Field } from 'react-final-form';
-import './form.scss';
 import { useLocation, Redirect } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, selectLoading, selectAuthorized } from '../../features/auth';

@@ -10,7 +10,6 @@ import EditForm from './editForm';
 import NewForm from './newForm';
 import { getBookmarks } from '../../features/bookmarks';
 import { withOnLoad } from '../../components';
-import './style.scss';
 
 
 let BookmarksPage = () => (

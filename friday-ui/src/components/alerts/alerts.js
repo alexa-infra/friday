@@ -2,7 +2,6 @@ import React from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { dismiss, Alerts } from '../../features/alerts';
-import './alerts.scss';
 
 
 const Alert = ({ item, onDismissAlert }) => {

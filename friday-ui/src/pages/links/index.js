@@ -6,7 +6,6 @@ import EditModal from './editForm';
 import NewModal from './newForm';
 import { getLinks } from '../../features/links';
 import { withOnLoad } from '../../components';
-import './style.scss';
 
 
 let LinksPage = () => (

@@ -3,8 +3,6 @@ import DocNew from './newDoc';
 import DocEdit from './editDoc';
 import DocView from './viewDoc';
 import DocsList from './listDocs';
-import './docs.scss';
-import './github-markdown.css';
 import { Route, Switch } from 'react-router-dom';
 
 const DocsPage = () => (
