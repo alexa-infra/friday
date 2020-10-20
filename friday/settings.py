@@ -1,15 +1,15 @@
 import os
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-UI_DIR = os.path.join(ROOT_DIR, "..", "friday-ui", "build")
-STORAGE_PATH = os.path.join(ROOT_DIR, "..", "images2")
+UI_DIR = os.environ.get("UI_PATH", os.path.join(ROOT_DIR, "../friday-ui/build"))
+STORAGE_PATH = os.environ.get("STORAGE_PATH", os.path.join(ROOT_DIR, "../images2"))
+REDIS_URL = os.environ.get("REDIS_URL", ":fake:")
+SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL", "sqlite:///database.sqlite")
 
-REDIS_URL = "redis://127.0.0.1:6379/0"
-
-DB_PATH = os.path.join(ROOT_DIR, "database.sqlite")
-SQLALCHEMY_DATABASE_URI = "sqlite:///{}".format(DB_PATH)
+DEBUG = False
 
 JSON_AS_ASCII = False
+JSONIFY_PRETTYPRINT_REGULAR = True
 
 RECIPE_THUMBNAIL_SIZE = 300
 

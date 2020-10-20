@@ -22,8 +22,6 @@ def make_app(settings=None):
     app.config.from_object("friday.settings")
     if settings is not None:
         app.config.update(settings)
-    else:
-        app.config.from_pyfile("local_settings.py", silent=True)
 
     app.url_map.strict_slashes = False
     app.session_interface = RedisSessionInterface(redis)
