@@ -83,3 +83,14 @@ build/favicon.ico: $(JS_DIR)/favicon.ico
 	@cp $< $@
 
 all: build/styles.css build/bundle.js build/app.js build/index.html build/favicon.ico build/manifest.json $(FA_DST)
+
+build/styles.min.css: build/styles.css
+	@npx postcss -o build/styles.min.css build/styles.css --use cssnano
+
+build/app.min.js: build/app.js
+	@npx babel --presets minify --out-file build/app.min.js build/app.js
+
+build/bundle.min.js: build/bundle.js
+	@npx babel --presets minify --out-file build/bundle.min.js build/bundle.js
+
+minify: build/styles.min.css build/bundle.min.js build/app.min.js
