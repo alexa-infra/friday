@@ -1,6 +1,5 @@
 import { wrap } from './utils';
 
-
 const formatData = (data) => {
   const { url, title, readed } = data;
   return { url, title, readed };

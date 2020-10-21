@@ -7,7 +7,6 @@ import {
   getLinks, hideNew, createLink, selectNewDialog,
 } from '../../features/links';
 
-
 let NewLinkForm = (props) => {
   const {
     show, hideEdit, onSubmit, loading,

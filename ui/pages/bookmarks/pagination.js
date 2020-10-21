@@ -4,7 +4,6 @@ import {
 } from '../../features/bookmarks';
 import { Pagination } from '../../components';
 
-
 export default connect(
   selectPagination,
   (dispatch) => ({

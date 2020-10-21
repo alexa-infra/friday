@@ -11,7 +11,6 @@ import NewForm from './newForm';
 import { getBookmarks } from '../../features/bookmarks';
 import { withOnLoad } from '../../components';
 
-
 let BookmarksPage = () => (
   <div className="bookmarks-page">
     <Controls />
@@ -32,7 +31,7 @@ BookmarksPage = connect(
   }),
 )(BookmarksPage);
 
-const RouteContainer = (props) => (
+const RouteContainer = () => (
   <Switch>
     <Route path="/bookmarks/add" component={BookmarksAddShortcut} />
     <Route path="/bookmarks" component={BookmarksPage} />

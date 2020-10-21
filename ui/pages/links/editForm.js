@@ -6,7 +6,6 @@ import {
   getLinks, updateLink, deleteLink, hideEdit, selectEditDialog,
 } from '../../features/links';
 
-
 export const FormFields = () => (
   <>
     <div className="form-group">

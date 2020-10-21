@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { selectList, showEdit } from '../../features/links';
 
-
 const Link = ({ id, url, title }) => (
   <a
     className="link"
@@ -13,7 +12,7 @@ const Link = ({ id, url, title }) => (
   </a>
 );
 
-const LinkEdit = ({ url, title, showEdit }) => (
+const LinkEdit = ({ title, showEdit }) => (
   <button
     type="button"
     className="link-button"

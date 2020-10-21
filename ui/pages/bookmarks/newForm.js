@@ -7,7 +7,6 @@ import {
 } from '../../features/bookmarks';
 import { FormFields } from './editForm';
 
-
 let NewBookmarkForm = (props) => {
   const {
     show, hideEdit, onSubmit, item: newItem,

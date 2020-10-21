@@ -1,6 +1,5 @@
 import React from 'react';
 
-
 const Pagination = ({
   page, pages, per_page, prevPage, nextPage, changePerPage,
 }) => {

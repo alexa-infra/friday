@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-
 export const Alerts = {
   SUCCESS: 'SUCCESS',
   INFO: 'INFO',

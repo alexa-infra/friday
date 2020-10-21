@@ -5,7 +5,6 @@ import classNames from 'classnames';
 import SearchBox from './search';
 import { toggleEditMode, showNew } from '../../features/links';
 
-
 let EditModeButton = ({ editMode, toggleEditMode }) => (
   <button type="button" className={classNames('btn', { 'btn-primary': editMode, 'btn-secondary': !editMode })} onClick={toggleEditMode}>
     <i className="fa fa-edit" />

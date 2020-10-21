@@ -5,7 +5,6 @@ import { selectCurrent, getDocHtml } from '../../features/docs';
 import { TagsViewer } from './tags';
 import withOnLoad from '../../components/withOnLoad';
 
-
 const createMarkup = (html) => ({ __html: html });
 
 const DocView = ({ item }) => {

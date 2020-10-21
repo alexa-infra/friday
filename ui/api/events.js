@@ -1,6 +1,5 @@
 import { wrap } from './utils';
 
-
 const formatEventData = ({
   name, icon, date, repeat,
 }) => ({

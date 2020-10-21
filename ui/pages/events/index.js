@@ -6,7 +6,6 @@ import NewEventModal from './newForm';
 import { withOnLoad } from '../../components';
 import { currentMonth } from '../../features/events';
 
-
 let EventsPage = () => (
   <div className="row justify-content-center">
     <div className="col col-md-10">

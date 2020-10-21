@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { withOnLoad } from '../components';
 import { getRecipes } from '../features/recipes';
 
-
 const Image = (props) => {
   const left = Math.floor(props.cw / 2 - props.nw / 2);
   const top = Math.floor(props.ch / 2 - props.nh / 2);
@@ -51,7 +50,7 @@ class ImageBoard extends React.Component {
     window.removeEventListener('resize', this.handleResize, false);
   }
 
-  handleResize(e) {
+  handleResize() {
     this.setState({ containerWidth: Math.floor(this.el.clientWidth) });
   }
 

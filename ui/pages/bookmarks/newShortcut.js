@@ -3,7 +3,6 @@ import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { showNew } from '../../features/bookmarks';
 
-
 class BookmarksAddShortcut extends Component {
   componentDidMount() {
     const { location, showEditNew } = this.props;
@@ -18,11 +17,11 @@ class BookmarksAddShortcut extends Component {
   }
 }
 
-BookmarksAddShortcut = connect(
+const BookmarksAddShortcutContainer = connect(
   null,
   (dispatch) => ({
     showEditNew: (val) => dispatch(showNew(val)),
   }),
 )(BookmarksAddShortcut);
 
-export default BookmarksAddShortcut;
+export default BookmarksAddShortcutContainer;

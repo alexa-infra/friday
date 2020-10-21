@@ -5,7 +5,6 @@ import {
   selectList, getBookmarks, showEdit, markReadBookmark, deleteBookmark,
 } from '../../features/bookmarks';
 
-
 const Bookmark = ({
   item, onEdit, onMarkRead, onDelete,
 }) => {

@@ -4,7 +4,6 @@ import { useLocation, Redirect } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, selectLoading, selectAuthorized } from '../../features/auth';
 
-
 export const LoginForm = () => {
   const location = useLocation();
   const { from } = location.state || { from: { pathname: '/' } };

@@ -7,7 +7,6 @@ import {
   getEvents, hideNew, createEvent, selectNewDialog,
 } from '../../features/events';
 
-
 let NewEventForm = (props) => {
   const {
     show, hideEdit, item: newItem, onSubmit,

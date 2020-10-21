@@ -3,7 +3,6 @@ import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { dismiss, Alerts } from '../../features/alerts';
 
-
 const Alert = ({ item, onDismissAlert }) => {
   const { message, type } = item;
   return (

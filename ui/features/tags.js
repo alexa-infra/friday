@@ -2,7 +2,6 @@ import { createSlice, createSelector } from '@reduxjs/toolkit';
 import { createAsyncThunk } from './utils';
 import * as api from '../api';
 
-
 export const getTags = createAsyncThunk('tags/list',
   async () => await api.getTags());
 
@@ -15,7 +14,7 @@ const tagsSlice = createSlice({
   },
   reducers: {},
   extraReducers: {
-    [getTags.pending]: (state, action) => {
+    [getTags.pending]: (state) => {
       if (state.loading === 'idle') {
         state.error = null;
         state.loading = 'pending';

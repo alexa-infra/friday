@@ -1,4 +1,3 @@
-
 const requireAccept = ['GET', 'PUT', 'POST', 'PATCH'];
 const requireBody = ['PUT', 'POST', 'PATCH'];
 

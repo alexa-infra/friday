@@ -7,7 +7,6 @@ import NewModal from './newForm';
 import { getLinks } from '../../features/links';
 import { withOnLoad } from '../../components';
 
-
 let LinksPage = () => (
   <div className="links-page">
     <Controls />

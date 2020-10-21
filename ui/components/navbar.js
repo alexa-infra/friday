@@ -3,8 +3,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import { LinkContainer } from 'react-router-bootstrap';
 
-
-export default () => (
+const NavBarComponent = () => (
   <Navbar bg="dark" variant="dark">
     <LinkContainer to="/">
       <Navbar.Brand>Reader</Navbar.Brand>
@@ -25,3 +24,5 @@ export default () => (
     </Nav>
   </Navbar>
 );
+
+export default NavBarComponent;

@@ -1,6 +1,5 @@
 import React from 'react';
 
-
 const bookmarkScript = `javascript:(function(){
     var redirect = '${document.location.origin}/bookmarks/add?';
     var searchString = new URLSearchParams();

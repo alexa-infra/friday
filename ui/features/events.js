@@ -11,7 +11,6 @@ dayjs.extend(customParseFormat);
 dayjs.extend(isSameOrBefore);
 dayjs.extend(isoWeek);
 
-
 function* iterDays(start, end) {
   let it = start;
   while (it.isSameOrBefore(end, 'day')) {
@@ -97,7 +96,7 @@ const eventsSlice = createSlice({
         state.newDialog.error = null;
       }
     },
-    hideNew(state, action) {
+    hideNew(state) {
       if (state.newDialog.item !== null) {
         state.newDialog.item = null;
       }
@@ -108,14 +107,14 @@ const eventsSlice = createSlice({
         state.editDialog.error = null;
       }
     },
-    hideEdit(state, action) {
+    hideEdit(state) {
       if (state.editDialog.item !== null) {
         state.editDialog.item = null;
       }
     },
   },
   extraReducers: {
-    [getEvents.pending]: (state, action) => {
+    [getEvents.pending]: (state) => {
       if (state.loading === 'idle') {
         state.error = null;
         state.loading = 'pending';
@@ -133,13 +132,13 @@ const eventsSlice = createSlice({
         state.loading = 'idle';
       }
     },
-    [createEvent.pending]: (state, action) => {
+    [createEvent.pending]: (state) => {
       if (state.newDialog.loading === 'idle') {
         state.newDialog.error = null;
         state.newDialog.loading = 'pending';
       }
     },
-    [createEvent.fulfilled]: (state, action) => {
+    [createEvent.fulfilled]: (state) => {
       if (state.newDialog.loading === 'pending') {
         state.newDialog.item = null;
         state.newDialog.loading = 'idle';
@@ -151,13 +150,13 @@ const eventsSlice = createSlice({
         state.newDialog.loading = 'idle';
       }
     },
-    [updateEvent.pending]: (state, action) => {
+    [updateEvent.pending]: (state) => {
       if (state.editDialog.loading === 'idle') {
         state.editDialog.error = null;
         state.editDialog.loading = 'pending';
       }
     },
-    [updateEvent.fulfilled]: (state, action) => {
+    [updateEvent.fulfilled]: (state) => {
       if (state.editDialog.loading === 'pending') {
         state.editDialog.item = null;
         state.editDialog.loading = 'idle';
@@ -169,13 +168,13 @@ const eventsSlice = createSlice({
         state.editDialog.loading = 'idle';
       }
     },
-    [deleteEvent.pending]: (state, action) => {
+    [deleteEvent.pending]: (state) => {
       if (state.editDialog.loading === 'idle') {
         state.editDialog.error = null;
         state.editDialog.loading = 'pending';
       }
     },
-    [deleteEvent.fulfilled]: (state, action) => {
+    [deleteEvent.fulfilled]: (state) => {
       if (state.editDialog.loading === 'pending') {
         state.editDialog.item = null;
         state.editDialog.loading = 'idle';
@@ -187,13 +186,13 @@ const eventsSlice = createSlice({
         state.editDialog.loading = 'idle';
       }
     },
-    [repeatEvent.pending]: (state, action) => {
+    [repeatEvent.pending]: (state) => {
       if (state.editDialog.loading === 'idle') {
         state.editDialog.error = null;
         state.editDialog.loading = 'pending';
       }
     },
-    [repeatEvent.fulfilled]: (state, action) => {
+    [repeatEvent.fulfilled]: (state) => {
       if (state.editDialog.loading === 'pending') {
         state.editDialog.item = null;
         state.editDialog.loading = 'idle';

@@ -1,6 +1,5 @@
 import { wrap } from './utils';
 
-
 export const login = wrap(({ email, password }) => ({
   url: '/api/users/login',
   method: 'POST',

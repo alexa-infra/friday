@@ -2,7 +2,6 @@ import { createSlice } from '@reduxjs/toolkit';
 import { createAsyncThunk } from './utils';
 import * as api from '../api';
 
-
 const getRandomElement = (arr) => {
   const idx = Math.floor(Math.random() * arr.length);
   return arr[idx];
@@ -36,12 +35,12 @@ const recipesSlice = createSlice({
     originalItems: [],
   },
   reducers: {
-    shuffleRecipes(state, action) {
+    shuffleRecipes(state) {
       state.items = remap(state.originalItems);
     },
   },
   extraReducers: {
-    [getRecipes.pending]: (state, action) => {
+    [getRecipes.pending]: (state) => {
       if (state.loading === 'idle') {
         state.loading = 'pending';
         state.items = [];

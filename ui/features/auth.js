@@ -2,7 +2,6 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import * as api from '../api';
 import * as alerts from './alerts';
 
-
 export const login = createAsyncThunk(
   'auth/login',
   async (args, { dispatch }) => {
@@ -23,12 +22,12 @@ const authSlice = createSlice({
     user: {},
   },
   reducers: {
-    unauthorized(state, action) {
+    unauthorized(state) {
       state.user = null;
     },
   },
   extraReducers: {
-    [login.pending]: (state, action) => {
+    [login.pending]: (state) => {
       if (state.loading === 'idle') {
         state.loading = 'pending';
         state.error = null;
@@ -47,7 +46,7 @@ const authSlice = createSlice({
         state.loading = 'idle';
       }
     },
-    [currentUser.pending]: (state, action) => {
+    [currentUser.pending]: (state) => {
       if (state.loading === 'idle') {
         state.loading = 'pending';
         state.error = null;

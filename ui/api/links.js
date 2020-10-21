@@ -1,6 +1,5 @@
 import { wrap } from './utils';
 
-
 const formatLinkData = ({ url, title }) => ({ url, title });
 
 export const getLinks = wrap(() => ({

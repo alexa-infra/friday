@@ -2,7 +2,6 @@ import { createSlice, createAsyncThunk as _createAsyncThunk } from '@reduxjs/too
 import * as alerts from './alerts';
 import { unauthorized } from './auth';
 
-
 export const handleErrors = (err) => (dispatch) => {
   if (err.status !== undefined) {
     dispatch(alerts.error(err.message || err.status));
@@ -22,14 +21,16 @@ export const createAsyncThunk = (type, payloadCreator) => _createAsyncThunk(type
   }
 });
 
-export const makeCRUD = (name, { create, read, update, remove }) => ({
+export const makeCRUD = (name, {
+  create, read, update, remove,
+}) => ({
   listSlice: makeListSlice(name, read),
   newDialogSlice: makeNewDialogSlice(name, create),
   editDialogSlice: makeEditDialogSlice(name, update, remove),
 });
 
 const makeListSlice = (name, readAction) => createSlice({
-  name: name + '/list',
+  name: `${name}/list`,
   initialState: {
     items: [],
     page: 1,
@@ -50,10 +51,10 @@ const makeListSlice = (name, readAction) => createSlice({
         state.per_page = per_page;
         state.page = 1;
       }
-    }
+    },
   },
   extraReducers: {
-    [readAction.pending]: (state, action) => {
+    [readAction.pending]: (state) => {
       if (state.loading === 'idle') {
         state.loading = 'pending';
         state.error = null;
@@ -76,12 +77,11 @@ const makeListSlice = (name, readAction) => createSlice({
         state.error = action.error;
       }
     },
-  }
+  },
 });
 
-
 const makeNewDialogSlice = (name, createAction) => createSlice({
-  name: name + '/newDialog',
+  name: `${name}/newDialog`,
   initialState: {
     item: null,
     loading: 'idle',
@@ -94,20 +94,20 @@ const makeNewDialogSlice = (name, createAction) => createSlice({
         state.error = null;
       }
     },
-    hide(state, action) {
+    hide(state) {
       if (state.item !== null) {
         state.item = null;
       }
-    }
+    },
   },
   extraReducers: {
-    [createAction.pending]: (state, action) => {
+    [createAction.pending]: (state) => {
       if (state.loading === 'idle') {
         state.loading = 'pending';
         state.error = null;
       }
     },
-    [createAction.fulfilled]: (state, action) => {
+    [createAction.fulfilled]: (state) => {
       if (state.loading === 'pending') {
         state.item = null;
         state.loading = 'idle';
@@ -119,12 +119,11 @@ const makeNewDialogSlice = (name, createAction) => createSlice({
         state.error = action.error;
       }
     },
-  }
+  },
 });
 
-
 const makeEditDialogSlice = (name, editAction, deleteAction) => createSlice({
-  name: name + '/editDialog',
+  name: `${name}/editDialog`,
   initialState: {
     item: null,
     loading: 'idle',
@@ -137,20 +136,20 @@ const makeEditDialogSlice = (name, editAction, deleteAction) => createSlice({
         state.error = null;
       }
     },
-    hide(state, action) {
+    hide(state) {
       if (state.item !== null) {
         state.item = null;
       }
-    }
+    },
   },
   extraReducers: {
-    [editAction.pending]: (state, action) => {
+    [editAction.pending]: (state) => {
       if (state.loading === 'idle') {
         state.loading = 'pending';
         state.error = null;
       }
     },
-    [editAction.fulfilled]: (state, action) => {
+    [editAction.fulfilled]: (state) => {
       if (state.loading === 'pending') {
         state.item = null;
         state.loading = 'idle';
@@ -162,13 +161,13 @@ const makeEditDialogSlice = (name, editAction, deleteAction) => createSlice({
         state.error = action.error;
       }
     },
-    [deleteAction.pending]: (state, action) => {
+    [deleteAction.pending]: (state) => {
       if (state.loading === 'idle') {
         state.loading = 'pending';
         state.error = null;
       }
     },
-    [deleteAction.fulfilled]: (state, action) => {
+    [deleteAction.fulfilled]: (state) => {
       if (state.loading === 'pending') {
         state.item = null;
         state.loading = 'idle';
@@ -180,7 +179,7 @@ const makeEditDialogSlice = (name, editAction, deleteAction) => createSlice({
         state.error = action.error;
       }
     },
-  }
+  },
 });
 
 export const selectPagination = (state) => ({

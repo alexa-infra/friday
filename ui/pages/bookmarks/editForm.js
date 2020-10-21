@@ -6,7 +6,6 @@ import {
   selectEditDialog, updateBookmark, getBookmarks, hideEdit, deleteBookmark,
 } from '../../features/bookmarks';
 
-
 export const FormFields = () => (
   <>
     <div className="form-group">

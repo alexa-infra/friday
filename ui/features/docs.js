@@ -58,7 +58,7 @@ const docsSlice = createSlice({
     },
   },
   extraReducers: {
-    [getDocs.pending]: (state, action) => {
+    [getDocs.pending]: (state) => {
       if (state.loading === 'idle') {
         state.error = null;
         state.loading = 'pending';
@@ -83,7 +83,7 @@ const docsSlice = createSlice({
   },
 });
 
-const setPending = (state, action) => {
+const setPending = (state) => {
   if (state.loading === 'idle') {
     state.error = null;
     state.loading = 'pending';
@@ -107,15 +107,15 @@ const docSlice = createSlice({
     wrap: false,
   },
   reducers: {
-    getNew(state, action) {
+    getNew(state) {
       state.item = {};
     },
-    setWrap(state, action) {
+    setWrap(state) {
       state.wrap = !state.wrap;
     },
   },
   extraReducers: {
-    [getDocs.pending]: (state, action) => {
+    [getDocs.pending]: (state) => {
       state.item = null;
       state.saved = false;
     },
@@ -151,7 +151,7 @@ const docSlice = createSlice({
     },
     [updateDoc.pending]: setPending,
     [updateDoc.rejected]: setError,
-    [updateDoc.fulfilled]: (state, action) => {
+    [updateDoc.fulfilled]: (state) => {
       if (state.loading === 'pending') {
         state.loading = 'idle';
         state.saved = true;
@@ -168,7 +168,7 @@ const docSlice = createSlice({
     },
     [deleteDoc.pending]: setPending,
     [deleteDoc.rejected]: setError,
-    [deleteDoc.fulfilled]: (state, action) => {
+    [deleteDoc.fulfilled]: (state) => {
       if (state.loading === 'pending') {
         state.loading = 'idle';
         state.item = null;

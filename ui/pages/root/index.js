@@ -14,7 +14,6 @@ import Recipes from '../kueche';
 import { NavBar, Alerts, withOnLoad } from '../../components';
 import { selectAuthorized, currentUser } from '../../features/auth';
 
-
 function PrivateRoute({ component: Component, ...rest }) {
   const isAuthenticated = useSelector(selectAuthorized);
   return (
@@ -33,7 +32,6 @@ function PrivateRoute({ component: Component, ...rest }) {
     />
   );
 }
-
 
 let Root = ({ store }) => (
   <Provider store={store}>

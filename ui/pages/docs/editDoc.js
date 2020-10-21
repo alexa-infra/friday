@@ -4,24 +4,22 @@ import { Form, Field } from 'react-final-form';
 import { connect } from 'react-redux';
 import { renderTags } from './tags';
 import {
-  selectCurrent, getDocText, updateDoc, deleteDoc, setWrap
+  selectCurrent, getDocText, updateDoc, deleteDoc, setWrap,
 } from '../../features/docs';
 import withOnLoad from '../../components/withOnLoad';
 
-
 const DocEdit = ({
-  onUpdate, onDelete, item, saved, wrap, onSetWrap
+  onUpdate, onDelete, item, saved, wrap, onSetWrap,
 }) => {
   if (item === null) {
     return saved ? (<Redirect to="/docs" />) : null;
   }
   if (saved) {
-    return <Redirect to={`/docs/${item.id}`} />
+    return <Redirect to={`/docs/${item.id}`} />;
   }
-  const deleteConfirm = (e) => {
-    if (window.confirm('Are you sure you want to delete this item'))
-      onDelete(item);
-  }
+  const deleteConfirm = () => {
+    if (window.confirm('Are you sure you want to delete this item')) onDelete(item);
+  };
 
   return (
     <article className="doc-page edit">
@@ -56,7 +54,8 @@ const DocEdit = ({
               <Field name="tags" component={renderTags} />
             </div>
             <div className="form-group">
-              <label htmlFor="wrap">Wrap</label>{' '}
+              <label htmlFor="wrap">Wrap</label>
+              {' '}
               <input type="checkbox" checked={wrap} name="wrap" onChange={onSetWrap} />
             </div>
             <div className="form-group">

@@ -8,7 +8,6 @@ import {
 import withOnLoad from '../../components/withOnLoad';
 import Pagination from './pagination';
 
-
 const DocsList = ({
   items, tagCloud, tag, filterByTag,
 }) => (

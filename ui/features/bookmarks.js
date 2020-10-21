@@ -7,7 +7,6 @@ import { createAsyncThunk } from './utils';
 
 dayjs.extend(relativeTime);
 
-
 export const getBookmarks = createAsyncThunk(
   'bookmarks/list',
   async (arg, { getState }) => {
@@ -57,7 +56,7 @@ const bookmarksSlice = createSlice({
     setFilter(state, action) {
       state.search = action.payload;
     },
-    showEdit:  {
+    showEdit: {
       reducer(state, action) {
         if (state.editDialog.item === null) {
           state.editDialog.item = action.payload;
@@ -65,11 +64,12 @@ const bookmarksSlice = createSlice({
         }
       },
       prepare(item) {
+        // eslint-disable-next-line no-unused-vars
         const { created, updated, ...rest } = item;
         return { payload: rest };
-      }
+      },
     },
-    hideEdit(state, action) {
+    hideEdit(state) {
       if (state.editDialog.item !== null) {
         state.editDialog.item = null;
       }
@@ -80,14 +80,14 @@ const bookmarksSlice = createSlice({
         state.newDialog.error = null;
       }
     },
-    hideNew(state, action) {
+    hideNew(state) {
       if (state.newDialog.item !== null) {
         state.newDialog.item = null;
       }
     },
   },
   extraReducers: {
-    [getBookmarks.pending]: (state, action) => {
+    [getBookmarks.pending]: (state) => {
       if (state.loading === 'idle') {
         state.loading = 'pending';
         state.error = null;
@@ -109,12 +109,12 @@ const bookmarksSlice = createSlice({
         state.error = action.error;
       }
     },
-    [createBookmark.pending]: (state, action) => {
+    [createBookmark.pending]: (state) => {
       if (state.newDialog.loading === 'idle') {
         state.newDialog.loading = 'pending';
       }
     },
-    [createBookmark.fulfilled]: (state, action) => {
+    [createBookmark.fulfilled]: (state) => {
       if (state.newDialog.loading === 'pending') {
         state.newDialog.item = null;
         state.newDialog.loading = 'idle';
@@ -126,12 +126,12 @@ const bookmarksSlice = createSlice({
         state.newDialog.loading = 'idle';
       }
     },
-    [updateBookmark.pending]: (state, action) => {
+    [updateBookmark.pending]: (state) => {
       if (state.editDialog.loading === 'idle') {
         state.editDialog.loading = 'pending';
       }
     },
-    [updateBookmark.fulfilled]: (state, action) => {
+    [updateBookmark.fulfilled]: (state) => {
       if (state.editDialog.loading === 'pending') {
         state.editDialog.item = null;
         state.editDialog.loading = 'idle';
@@ -143,12 +143,12 @@ const bookmarksSlice = createSlice({
         state.editDialog.loading = 'idle';
       }
     },
-    [deleteBookmark.pending]: (state, action) => {
+    [deleteBookmark.pending]: (state) => {
       if (state.editDialog.loading === 'idle') {
         state.editDialog.loading = 'pending';
       }
     },
-    [deleteBookmark.fulfilled]: (state, action) => {
+    [deleteBookmark.fulfilled]: (state) => {
       if (state.editDialog.loading === 'pending') {
         state.editDialog.item = null;
         state.editDialog.loading = 'idle';

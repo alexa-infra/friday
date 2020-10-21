@@ -1,6 +1,5 @@
 import { wrap } from './utils';
 
-
 const makeDoc = (data) => ({
   name: data.name,
   tags: data.tags,
@@ -60,7 +59,7 @@ export const getDocHtml = wrap((data) => ({
   html: true,
 }));
 
-export const getDocsTagCloud = wrap((data) => ({
+export const getDocsTagCloud = wrap(() => ({
   url: '/api/docs/tags',
   method: 'GET',
 }));

@@ -5,7 +5,6 @@ import {
   nextMonth, prevMonth, showEdit, showNew, selectCalendar,
 } from '../../features/events';
 
-
 const Event = ({ name, icon, onClick }) => (
   <i className={classNames('fa', icon)} title={name} onClick={onClick} />
 );
@@ -38,7 +37,7 @@ const CalendarDay = ({
     })}
     >
       <span className="day">{dayNum}</span>
-      <i className={classNames('fa', 'fa-plus', 'add')} title="Add..." onClick={(e) => onAddNew({ date: day })} />
+      <i className={classNames('fa', 'fa-plus', 'add')} title="Add..." onClick={() => onAddNew({ date: day })} />
       <EventList events={events} onClick={onEventClick} />
     </li>
   );
@@ -51,7 +50,7 @@ const DaysOfWeek = ({ dayNames }) => (
 );
 
 const DaysGrid = ({
-  month, days, events, showEdit, showEditNew,
+  days, events, showEdit, showEditNew,
 }) => (
   <ul className="days-grid">
     {days.map((it) => (

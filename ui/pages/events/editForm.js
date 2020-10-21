@@ -6,7 +6,6 @@ import {
   getEvents, hideEdit, updateEvent, repeatEvent, deleteEvent, selectEditDialog,
 } from '../../features/events';
 
-
 const RepeatInDays = (props) => {
   const { values, repeatIn } = props;
   return (
@@ -22,7 +21,7 @@ const RepeatInDays = (props) => {
   );
 };
 
-export const FormFields = (props) => (
+export const FormFields = () => (
   <>
     <div className="form-group">
       <label htmlFor="date">Date</label>
@@ -55,9 +54,8 @@ let EventForm = (props) => {
     show, hideEdit, item: currentItem, deleteEvent, onSubmit,
   } = props;
   const deleteConfirm = () => {
-    if (window.confirm('Are you sure you want to delete this event?'))
-      deleteEvent(currentItem);
-  }
+    if (window.confirm('Are you sure you want to delete this event?')) deleteEvent(currentItem);
+  };
   return (
     <Modal show={show} onHide={hideEdit}>
       <Form
@@ -65,7 +63,7 @@ let EventForm = (props) => {
         onSubmit={onSubmit}
         initialValues={{ ...currentItem, repeatIn: 21 }}
       >
-        {({ handleSubmit, initialValues, values }) => (
+        {({ handleSubmit, values }) => (
           <form onSubmit={handleSubmit}>
             <Modal.Header closeButton>
               <Modal.Title>Edit event</Modal.Title>

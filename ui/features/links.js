@@ -2,7 +2,6 @@ import { createSlice, createSelector } from '@reduxjs/toolkit';
 import { createAsyncThunk } from './utils';
 import * as api from '../api';
 
-
 export const getLinks = createAsyncThunk('links/list', api.getLinks);
 export const createLink = createAsyncThunk('links/new', api.createLink);
 export const updateLink = createAsyncThunk('links/update', api.updateLink);
@@ -36,7 +35,7 @@ const linksSlice = createSlice({
         state.newDialog.error = null;
       }
     },
-    hideNew(state, action) {
+    hideNew(state) {
       if (state.newDialog.item !== null) {
         state.newDialog.item = null;
       }
@@ -47,12 +46,12 @@ const linksSlice = createSlice({
         state.editDialog.error = null;
       }
     },
-    hideEdit(state, action) {
+    hideEdit(state) {
       if (state.editDialog.item !== null) {
         state.editDialog.item = null;
       }
     },
-    toggleEditMode(state, action) {
+    toggleEditMode(state) {
       state.editMode = !state.editMode;
     },
     filterItems(state, action) {
@@ -60,7 +59,7 @@ const linksSlice = createSlice({
     },
   },
   extraReducers: {
-    [getLinks.pending]: (state, action) => {
+    [getLinks.pending]: (state) => {
       if (state.loading === 'idle') {
         state.items = [];
         state.loading = 'pending';
@@ -84,12 +83,12 @@ const linksSlice = createSlice({
         state.loading = 'pending';
       }
     },
-    [createLink.pending]: (state, action) => {
+    [createLink.pending]: (state) => {
       if (state.newDialog.loading === 'idle') {
         state.newDialog.loading = 'pending';
       }
     },
-    [createLink.fulfilled]: (state, action) => {
+    [createLink.fulfilled]: (state) => {
       if (state.newDialog.loading === 'pending') {
         state.newDialog.item = null;
         state.newDialog.loading = 'idle';
@@ -101,12 +100,12 @@ const linksSlice = createSlice({
         state.newDialog.loading = 'idle';
       }
     },
-    [updateLink.pending]: (state, action) => {
+    [updateLink.pending]: (state) => {
       if (state.editDialog.loading === 'idle') {
         state.editDialog.loading = 'pending';
       }
     },
-    [updateLink.fulfilled]: (state, action) => {
+    [updateLink.fulfilled]: (state) => {
       if (state.editDialog.loading === 'pending') {
         state.editDialog.item = null;
         state.editDialog.loading = 'idle';
@@ -118,12 +117,12 @@ const linksSlice = createSlice({
         state.editDialog.loading = 'idle';
       }
     },
-    [deleteLink.pending]: (state, action) => {
+    [deleteLink.pending]: (state) => {
       if (state.editDialog.loading === 'idle') {
         state.editDialog.loading = 'pending';
       }
     },
-    [deleteLink.fulfilled]: (state, action) => {
+    [deleteLink.fulfilled]: (state) => {
       if (state.editDialog.loading === 'pending') {
         state.editDialog.item = null;
         state.editDialog.loading = 'idle';
