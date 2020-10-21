@@ -1,5 +1,5 @@
 
-JS_DIR := friday-ui/src
+JS_DIR := ui
 JS_SRC := $(shell find $(JS_DIR) -name "*.js")
 JS_DST := $(patsubst $(JS_DIR)/%, .cache/%, $(JS_SRC))
 
@@ -64,7 +64,7 @@ build/bundle.js:
 	    -o $@
 
 build/styles.css: $(CSS_SRC)
-	@npx postcss friday-ui/src/index.scss --use postcss-import postcss-nested autoprefixer -o $@
+	@npx postcss ui/index.scss --use postcss-import postcss-nested autoprefixer -o $@
 
 build/fonts/%: $(FA_DIR)/%
 	@test -d build/fonts || mkdir -p build/fonts
