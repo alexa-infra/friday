@@ -68,6 +68,18 @@ build/styles.css: $(CSS_SRC)
 
 build/fonts/%: $(FA_DIR)/%
 	@test -d build/fonts || mkdir -p build/fonts
-	cp $< $@
+	@cp $< $@
 
-all: build/styles.css build/bundle.js build/app.js $(FA_DST)
+build/index.html: $(JS_DIR)/index.html
+	@test -d build || mkdir -p build
+	@cp $< $@
+
+build/manifest.json: $(JS_DIR)/manifest.json
+	@test -d build || mkdir -p build
+	@cp $< $@
+
+build/favicon.ico: $(JS_DIR)/favicon.ico
+	@test -d build || mkdir -p build
+	@cp $< $@
+
+all: build/styles.css build/bundle.js build/app.js build/index.html build/favicon.ico build/manifest.json $(FA_DST)
