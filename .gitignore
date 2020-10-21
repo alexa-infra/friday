@@ -27,3 +27,4 @@ __pycache__/
 database.sqlite
 local_settings.py
 .mypy_cache/
+*.local
