@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { Form, Field } from 'react-final-form';
 import { renderTags } from './tags';
-import { createDoc, selectCurrent, getNew } from '../../features/docs';
+import { createDoc, selectCurrent, getNew, setWrap } from '../../features/docs';
 import withOnLoad from '../../components/withOnLoad';
 
-const DocNew = ({ onSubmit, item, saved }) => {
+const DocNew = ({ onSubmit, item, saved, wrap, onSetWrap }) => {
   if (item === null) {
     return null;
   }
@@ -38,11 +38,16 @@ const DocNew = ({ onSubmit, item, saved }) => {
               <Field name="tags" component={renderTags} />
             </div>
             <div className="form-group">
+              <label htmlFor="wrap">Wrap</label>
+              {' '}
+              <input type="checkbox" checked={wrap} name="wrap" onChange={onSetWrap} />
+            </div>
+            <div className="form-group">
               <label htmlFor="text">Text</label>
               <Field
                 name="text"
                 component="textarea"
-                wrap="off"
+                wrap={wrap ? 'on' : 'off'}
                 className="form-control"
                 rows={15}
               />
@@ -63,6 +68,7 @@ DocNewContainer = connect(
   (dispatch) => ({
     onSubmit: (data) => dispatch(createDoc(data)),
     onLoad: () => dispatch(getNew()),
+    onSetWrap: () => dispatch(setWrap()),
   }),
 )(DocNewContainer);
 
