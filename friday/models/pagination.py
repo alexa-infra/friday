@@ -6,9 +6,7 @@ def paginate(query, page, per_page):
     session = query.session
     total = (
         session.query(sa.func.count())
-        .select_from(
-            query.order_by(None).subquery()
-        )
+        .select_from(query.order_by(None).subquery())
         .scalar()
     )
 

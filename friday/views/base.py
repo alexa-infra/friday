@@ -38,4 +38,4 @@ class Parser(FlaskParser):
 parser = Parser()
 use_kwargs = partial(parser.use_args, as_kwargs=True)
 use_args = parser.use_args
-query_args = partial(parser.use_args, location='query', as_kwargs=True)
+query_args = partial(parser.use_args, location="query", as_kwargs=True)

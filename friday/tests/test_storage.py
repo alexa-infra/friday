@@ -18,42 +18,54 @@ from friday.storage import (
 from friday.storage import LocalStorage
 
 
-@pytest.mark.parametrize("url,valid", (
-    ("http://google.com", True),
-    ("https://github.com", True),
-    ("ftp://my-server.com", False),
-    ("ftps://my-server.com", False),
-    ("blah-blah-blah", False),
-))
+@pytest.mark.parametrize(
+    "url,valid",
+    (
+        ("http://google.com", True),
+        ("https://github.com", True),
+        ("ftp://my-server.com", False),
+        ("ftps://my-server.com", False),
+        ("blah-blah-blah", False),
+    ),
+)
 def test_is_url(url, valid):
     assert is_url(url) == valid
 
 
-@pytest.mark.parametrize("url,filename", (
-    ("https://google.com/a/index.html", "index.html"),
-    ("blah-blah-blah", None),
-    ("https://google.com/a/index.html?q=123", "index.html"),
-))
+@pytest.mark.parametrize(
+    "url,filename",
+    (
+        ("https://google.com/a/index.html", "index.html"),
+        ("blah-blah-blah", None),
+        ("https://google.com/a/index.html?q=123", "index.html"),
+    ),
+)
 def test_extract_url_filename(url, filename):
     assert extract_url_filename(url) == filename
 
 
-@pytest.mark.parametrize("filename,name,ext", (
-    ("hello-world.txt", "hello-world", ".txt"),
-    ("hello-world", "hello-world", ""),
-    ("hello-world.tar.gz", "hello-world", ".tar.gz"),
-    ("hello-world.txt.zip", "hello-world.txt", ".zip"),
-))
+@pytest.mark.parametrize(
+    "filename,name,ext",
+    (
+        ("hello-world.txt", "hello-world", ".txt"),
+        ("hello-world", "hello-world", ""),
+        ("hello-world.tar.gz", "hello-world", ".tar.gz"),
+        ("hello-world.txt.zip", "hello-world.txt", ".zip"),
+    ),
+)
 def test_get_file_extension(filename, name, ext):
     assert get_file_extension(filename) == (name, ext)
 
 
-@pytest.mark.parametrize("path_a,path_b,valid", (
-    ("/a/b/c/data.txt", "/a/b", True),
-    ("/a/b/c/data.txt", "/a/b/c", True),
-    ("/a/b/c/data.txt", "/x/y/z", False),
-    ("/a/b", "/a/b", False),
-))
+@pytest.mark.parametrize(
+    "path_a,path_b,valid",
+    (
+        ("/a/b/c/data.txt", "/a/b", True),
+        ("/a/b/c/data.txt", "/a/b/c", True),
+        ("/a/b/c/data.txt", "/x/y/z", False),
+        ("/a/b", "/a/b", False),
+    ),
+)
 def test_is_sub_path(path_a, path_b, valid):
     assert is_sub_path(path_a, path_b) == valid
 
