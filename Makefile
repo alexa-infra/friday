@@ -3,11 +3,11 @@ JS_DIR := ui
 JS_SRC := $(shell find $(JS_DIR) -name "*.js")
 JS_DST := $(patsubst $(JS_DIR)/%, .cache/%, $(JS_SRC))
 
-CSS_SRC := $(shell find $(JS_DIR) -name "*.css" -or -name ".scss")
+CSS_SRC := $(shell find $(JS_DIR) -name "*.css" -or -name "*.scss")
 
-FA_DIR := node_modules/font-awesome/fonts
+FA_DIR := node_modules/@fortawesome/fontawesome-free/webfonts
 FA_SRC := $(wildcard $(FA_DIR)/*.ttf) $(wildcard $(FA_DIR)/*.woff) $(wildcard $(FA_DIR)/*.woff2) $(wildcard $(FA_DIR)/*.eot)
-FA_DST := $(patsubst $(FA_DIR)/%, build/fonts/%, $(FA_SRC))
+FA_DST := $(patsubst $(FA_DIR)/%, build/webfonts/%, $(FA_SRC))
 
 
 .cache/%: $(JS_DIR)/%
@@ -66,8 +66,8 @@ build/bundle.js:
 build/styles.css: $(CSS_SRC)
 	@npx postcss ui/index.scss --use postcss-import postcss-nested autoprefixer -o $@
 
-build/fonts/%: $(FA_DIR)/%
-	@test -d build/fonts || mkdir -p build/fonts
+build/webfonts/%: $(FA_DIR)/%
+	@test -d build/webfonts || mkdir -p build/webfonts
 	@cp $< $@
 
 build/index.html: $(JS_DIR)/index.html
