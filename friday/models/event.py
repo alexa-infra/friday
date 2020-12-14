@@ -55,9 +55,8 @@ class Event(Model):
 
     @classmethod
     def get_notrepeated_between(cls, a, b):
-        # pylint: disable=singleton-comparison
         query = (
-            cls.query.filter(Event.repeat == None)  # noqa: E711
+            cls.query.filter(Event.repeat.is_(None))
             .filter(Event.date >= a)
             .filter(Event.date <= b)
         )
@@ -65,8 +64,7 @@ class Event(Model):
 
     @classmethod
     def get_repeated(cls):
-        # pylint: disable=singleton-comparison
-        query = cls.query.filter(Event.repeat != None)  # noqa: E711
+        query = cls.query.filter(Event.repeat.isnot(None))
         return query.all()
 
     @classmethod

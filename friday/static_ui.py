@@ -1,5 +1,5 @@
 import os
-from flask import send_from_directory
+import flask
 
 
 class StaticUI:
@@ -29,7 +29,7 @@ class StaticUI:
                     return "", 404
             else:
                 filename = "index.html"
-            response = send_from_directory(self.ui_dir, filename)
+            response = flask.send_from_directory(self.ui_dir, filename)
             if filename == "service-worker.js":
                 response.headers["Cache-Control"] = "no-cache"
             return response
