@@ -1,9 +1,7 @@
 const requireAccept = ['GET', 'PUT', 'POST', 'PATCH'];
 const requireBody = ['PUT', 'POST', 'PATCH'];
 
-export const wrap = (apiFunc) => (data) => {
-  const params = apiFunc(data);
-
+export const callApi = params => {
   const headers = {};
 
   if (requireAccept.includes(params.method)) {
@@ -48,6 +46,11 @@ export const wrap = (apiFunc) => (data) => {
     }
     return {};
   });
+}
+
+export const wrap = (apiFunc) => (data) => {
+  const params = apiFunc(data);
+  return callApi(params);
 };
 
 export const later = (delay) => new Promise((resolve) => setTimeout(resolve, delay));

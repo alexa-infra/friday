@@ -8,3 +8,4 @@ from .bookmark import Bookmark
 from .doc import Doc
 from .recipe import Recipe
 from .tag import Tag, TagCloud
+from .todo import TodoItem

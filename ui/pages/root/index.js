@@ -10,6 +10,7 @@ import Events from '../events';
 import Links from '../links';
 import Bookmarks from '../bookmarks';
 import Recipes from '../kueche';
+import { TodoList } from '../todo';
 
 import { NavBar, Alerts, withOnLoad } from '../../components';
 import { selectAuthorized, currentUser } from '../../features/auth';
@@ -48,6 +49,7 @@ let Root = ({ store }) => (
             <PrivateRoute path="/bookmarks" component={Bookmarks} />
             <PrivateRoute path="/docs" component={Docs} />
             <PrivateRoute path="/recipes" component={Recipes} />
+            <PrivateRoute path="/todo" component={TodoList} />
             <PrivateRoute path="/" component={Links} />
           </Switch>
         </main>

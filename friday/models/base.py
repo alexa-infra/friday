@@ -1,6 +1,5 @@
 from sqlalchemy.orm import scoped_session
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.engine import Engine
 from sqlalchemy.ext.declarative import as_declarative
 from sqlalchemy.ext.declarative import declared_attr
 from ..utils import camel_to_snake

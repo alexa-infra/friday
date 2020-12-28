@@ -7,6 +7,7 @@ import links from './links';
 import events from './events';
 import bookmarks from './bookmarks';
 import docs from './docs';
+import todo from './todo';
 
 export const reducers = combineReducers({
   links,
@@ -16,6 +17,7 @@ export const reducers = combineReducers({
   bookmarks,
   docs,
   recipes,
+  todo,
 });
 
 export const store = configureStore({
