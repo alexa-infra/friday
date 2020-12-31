@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { selectCurrent, getDocHtml } from '../../features/docs';
 import { TagsViewer } from './tags';
 import withOnLoad from '../../components/withOnLoad';
+import Button from '../../components/button';
 
 const createMarkup = (html) => ({ __html: html });
 
@@ -21,10 +22,10 @@ const DocView = ({ item }) => {
     <div className="doc-page view">
       <div className="controls">
         <Link to={`/docs/${id}/edit`}>
-          <button>Edit</button>
+          <Button>Edit</Button>
         </Link>
         <Link to="/docs">
-          <button>Back</button>
+          <Button>Back</Button>
         </Link>
       </div>
       <div className="header">

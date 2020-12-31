@@ -12,7 +12,7 @@ import { getBookmarks } from '../../features/bookmarks';
 import { withOnLoad } from '../../components';
 
 let BookmarksPage = () => (
-  <div className="bookmarks-page">
+  <div className="bookmarks-page md:w-8/12 md:mx-auto">
     <Controls />
     <List />
     <Pagination />

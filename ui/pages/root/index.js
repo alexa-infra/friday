@@ -41,7 +41,7 @@ let Root = ({ store }) => (
         <header>
           <NavBar />
         </header>
-        <main className="container mt-2">
+        <main className="container mt-2 mx-auto">
           <Alerts />
           <Switch>
             <Route path="/login" component={Login} />

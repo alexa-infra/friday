@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { TagsViewer, TagCloud } from './tags';
+import Button from '../../components/button';
 import {
   selectList, selectCurrentTag, selectDocTags, getDocs, getDocTags, filterByTag,
 } from '../../features/docs';
@@ -11,11 +12,11 @@ import Pagination from './pagination';
 const DocsList = ({
   items, tagCloud, tag, filterByTag,
 }) => (
-  <div className="doc-page row justify-content-center">
+  <div className="doc-page md:w-8/12 md:mx-auto">
     <div className="col col-md-10">
       <div className="controls">
         <Link to="/docs/new">
-          <button>New doc</button>
+          <Button>New doc</Button>
         </Link>
       </div>
       <TagCloud tags={tagCloud} current={tag} onClick={filterByTag} />

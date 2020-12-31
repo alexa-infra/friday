@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
 import classNames from 'classnames';
-import Modal from 'react-bootstrap/Modal';
 import { Form, Field } from 'react-final-form';
 import { connect } from 'react-redux';
+import { Modal, ModalHeader, ModalFooter } from '../../components/modal';
+import Button from '../../components/button';
 import {
   selectList,
   getTodoList,
@@ -23,34 +24,32 @@ import {
 
 export const FormFields = () => (
   <>
-    <div className="form-group">
-      <label htmlFor="name">Name</label>
-      <Field name="name" component="input" type="text" />
-    </div>
-    <div className="form-group">
-      <label htmlFor="description">Description</label>
-      <Field name="description" component="textarea" />
-    </div>
-    <div className="form-group">
-      <label htmlFor="order">Order</label>
-      <Field name="order" component="input" type="number" />
-    </div>
-    <div className="form-group">
-      <label htmlFor="dueto">Due to</label>
-      <Field name="dueto" component="input" type="date" />
-    </div>
-    <div className="form-check">
+    <label htmlFor="name">Name</label>
+    <Field name="name" component="input" type="text" />
+
+    <label htmlFor="description">Description</label>
+    <Field name="description" component="textarea" />
+
+    <label htmlFor="order">Order</label>
+    <Field name="order" component="input" type="number" />
+
+    <label htmlFor="dueto">Due to</label>
+    <Field name="dueto" component="input" type="date" />
+
+    <label htmlFor="done">
       <Field name="done" component="input" type="checkbox" />
-      <label htmlFor="done">Done</label>
-    </div>
-    <div className="form-check">
+      <span>Done</span>
+    </label>
+
+    <label htmlFor="focus">
       <Field name="focus" component="input" type="checkbox" />
-      <label htmlFor="focus">Focus</label>
-    </div>
-    <div className="form-check">
+      <span>Focus</span>
+    </label>
+
+    <label htmlFor="folder">
       <Field name="folder" component="input" type="checkbox" />
-      <label htmlFor="folder">Folder</label>
-    </div>
+      <span>Folder</span>
+    </label>
   </>
 );
 
@@ -59,31 +58,29 @@ const NewTodoDialogBase = props => {
     open: show, onHide, onSubmit, item: data, error
   } = props;
   return (
-    <Modal show={show} onHide={onHide}>
+    <Modal isOpen={show} onRequestClose={onHide} >
       <Form
         enableReinitialize
         onSubmit={onSubmit}
         initialValues={data}
       >
         {({ handleSubmit, submitting, pristine }) => (
-          <form onSubmit={handleSubmit}>
-            <Modal.Header closeButton>
-              <Modal.Title>New TODO</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              {error && (
-                <i>{error.message}</i>
-              )}
-              <FormFields />
-            </Modal.Body>
-            <Modal.Footer>
-              <button
+          <form onSubmit={handleSubmit} className="flex flex-col h-full">
+            <ModalHeader onClose={onHide}>New TODO</ModalHeader>
+
+            {error && (
+              <i>{error.message}</i>
+            )}
+            <FormFields />
+
+            <ModalFooter>
+              <Button
                 type="submit"
                 disabled={submitting || pristine}
               >
                 Save
-              </button>
-            </Modal.Footer>
+              </Button>
+            </ModalFooter>
           </form>
         )}
       </Form>
@@ -104,31 +101,29 @@ const EditTodoDialogBase = props => {
     open: show, onHide, onSubmit, item: data, error
   } = props;
   return (
-    <Modal show={show} onHide={onHide}>
+    <Modal isOpen={show} onRequestClose={onHide}>
       <Form
         enableReinitialize
         onSubmit={onSubmit}
         initialValues={data}
       >
         {({ handleSubmit, submitting, pristine }) => (
-          <form onSubmit={handleSubmit}>
-            <Modal.Header closeButton>
-              <Modal.Title>Edit TODO</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              {error && (
-                <i>{error.message}</i>
-              )}
-              <FormFields />
-            </Modal.Body>
-            <Modal.Footer>
-              <button
+          <form onSubmit={handleSubmit} className="flex flex-col h-full">
+            <ModalHeader onClose={onHide}>Edit TODO</ModalHeader>
+
+            {error && (
+              <i>{error.message}</i>
+            )}
+            <FormFields />
+
+            <ModalFooter>
+              <Button
                 type="submit"
                 disabled={submitting || pristine}
               >
                 Save
-              </button>
-            </Modal.Footer>
+              </Button>
+            </ModalFooter>
           </form>
         )}
       </Form>
@@ -197,33 +192,36 @@ const TodoListBase = ({ list, items, doneItems, onLoad, onShowNew, actions }) =>
   }, []);
   const onShowNewItem = () => onShowNew(list.id);
   return (
-    <div className="todo-page">
+    <div className="todo-page md:w-8/12 md:mx-auto">
       <NewTodoDialog />
       <EditTodoDialog />
-      <div className="">
-        <div className="btn" onClick={onShowNewItem}>
+      <div className="my-2">
+        <Button onClick={onShowNewItem}>
           <i className="fa fa-plus" />
-        </div>
+        </Button>
         {list.is_root === undefined && (
-          <div className="btn-flat" onClick={() => onLoad(list.parent_id ?? 'root')}>
+          <Button onClick={() => onLoad(list.parent_id ?? 'root')}>
             <i className="fas fa-level-up-alt" />
-          </div>
+          </Button>
         )}
-        <div className={classNames("btn", {
-            "btn-primary": list.is_root === true && list.name === "root"
-          })} onClick={() => onLoad('root')}>
+        <Button
+          isActive={list.is_root === true && list.name === "root"}
+          onClick={() => onLoad('root')}
+        >
           Root
-        </div>
-        <div className={classNames("btn", {
-            "btn-primary": list.is_root === true && list.name === "trash"
-          })} onClick={() => onLoad('trash')}>
+        </Button>
+        <Button
+          isActive={list.is_root === true && list.name === "trash"}
+          onClick={() => onLoad('trash')}
+        >
           Trash
-        </div>
-        <div className={classNames("btn", {
-            "btn-primary": list.is_root === true && list.name === "focus"
-          })} onClick={() => onLoad('focus')}>
+        </Button>
+        <Button
+          isActive={list.is_root === true && list.name === "focus"}
+          onClick={() => onLoad('focus')}
+        >
           Focus
-        </div>
+        </Button>
       </div>
       {items.length > 0 && (
         <div className="todo-list">

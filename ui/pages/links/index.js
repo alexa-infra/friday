@@ -8,7 +8,7 @@ import { getLinks } from '../../features/links';
 import { withOnLoad } from '../../components';
 
 let LinksPage = () => (
-  <div className="links-page">
+  <div className="links-page md:w-8/12 md:mx-auto">
     <Controls />
     <List />
     <NewModal />

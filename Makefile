@@ -23,11 +23,8 @@ build/app.js: $(JS_DST)
 		-x react \
 		-x react-dom \
 		-x react-redux \
-		-x react-bootstrap/Navbar \
-		-x react-bootstrap/Nav \
-		-x react-bootstrap/Modal \
+		-x react-modal \
 		-x react-router-dom \
-		-x react-router-bootstrap \
 		-x \@reduxjs/toolkit \
 		-x react-final-form \
 		-x dayjs \
@@ -46,11 +43,8 @@ build/bundle.js:
 	    -r react \
 	    -r react-dom \
 	    -r react-redux \
-	    -r react-bootstrap/Navbar \
-	    -r react-bootstrap/Nav \
-	    -r react-bootstrap/Modal \
+	    -r react-modal \
 	    -r react-router-dom \
-	    -r react-router-bootstrap \
 	    -r @reduxjs/toolkit \
 	    -r react-final-form \
 	    -r dayjs \
@@ -64,7 +58,7 @@ build/bundle.js:
 	    -o $@
 
 build/styles.css: $(CSS_SRC)
-	@npx postcss ui/index.scss --use postcss-import postcss-nested autoprefixer -o $@
+	@npx postcss ui/index.scss -o $@
 
 build/webfonts/%: $(FA_DIR)/%
 	@test -d build/webfonts || mkdir -p build/webfonts

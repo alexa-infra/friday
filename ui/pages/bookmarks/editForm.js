@@ -1,25 +1,24 @@
 import React from 'react';
-import Modal from 'react-bootstrap/Modal';
 import { Form, Field } from 'react-final-form';
 import { connect } from 'react-redux';
 import {
   selectEditDialog, updateBookmark, getBookmarks, hideEdit, deleteBookmark,
 } from '../../features/bookmarks';
+import { Modal, ModalHeader, ModalFooter } from '../../components/modal';
+import Button from '../../components/button';
 
 export const FormFields = () => (
   <>
-    <div className="form-group">
-      <label htmlFor="url">URL</label>
-      <Field name="url" component="input" type="text" />
-    </div>
-    <div className="form-group">
-      <label htmlFor="title">Title</label>
-      <Field name="title" component="input" type="text" />
-    </div>
-    <div className="form-check">
-      <Field name="readed" component="input" type="checkbox" />
-      <label htmlFor="readed">Read</label>
-    </div>
+      <label htmlFor="url" className="flex-1">URL</label>
+      <Field name="url" component="input" type="text" className="flex-grow" />
+
+      <label htmlFor="title" className="flex-1">Title</label>
+      <Field name="title" component="input" type="text" className="flex-grow" />
+
+      <label htmlFor="readed" className="inline-flex items-center">
+        <Field name="readed" component="input" type="checkbox" className="form-checkbox h-5 w-5 text-gray-600" />
+        <span className="ml-2">Read</span>
+      </label>
   </>
 );
 
@@ -28,29 +27,29 @@ let BookmarkForm = (props) => {
     show, hideEdit, item: currentItem, deleteItem, onSubmit,
   } = props;
   return (
-    <Modal show={show} onHide={hideEdit}>
+    <Modal isOpen={show} onRequestClose={hideEdit}>
       <Form
         enableReinitialize
         initialValues={currentItem}
         onSubmit={onSubmit}
       >
         {({ handleSubmit, initialValues }) => (
-          <form onSubmit={handleSubmit}>
-            <Modal.Header closeButton>
-              <Modal.Title>Edit bookmark</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <Field name="id" component="input" type="hidden" />
-              <FormFields />
-            </Modal.Body>
-            <Modal.Footer>
-              <button type="button" onClick={() => deleteItem(initialValues)}>
+          <form onSubmit={handleSubmit} className="flex flex-col h-full">
+            <ModalHeader onClose={hideEdit}>
+              Edit bookmark
+            </ModalHeader>
+
+            <Field name="id" component="input" type="hidden" />
+            <FormFields />
+
+            <ModalFooter>
+              <Button type="button" onClick={() => deleteItem(initialValues)}>
                 Delete
-              </button>
-              <button type="submit">
+              </Button>
+              <Button type="submit">
                 Save
-              </button>
-            </Modal.Footer>
+              </Button>
+            </ModalFooter>
           </form>
         )}
       </Form>

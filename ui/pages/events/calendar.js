@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
+import Button from '../../components/button';
 import {
   nextMonth, prevMonth, showEdit, showNew, selectCalendar,
 } from '../../features/events';
@@ -67,24 +68,24 @@ const DaysGrid = ({
 
 const Caption = ({ month, nextMonth, prevMonth }) => (
   <header className="theme-d4">
-    <button
+    <Button
       type="button"
       onClick={() => prevMonth()}
     >
       Prev
-    </button>
+    </Button>
     {month}
-    <button
+    <Button
       type="button"
       onClick={() => nextMonth()}
     >
       Next
-    </button>
+    </Button>
   </header>
 );
 
 let Calendar = (props) => (
-  <div className="calendar">
+  <div className="calendar md:w-8/12 md:mx-auto">
     <Caption {...props} />
     <DaysOfWeek {...props} />
     <DaysGrid {...props} />

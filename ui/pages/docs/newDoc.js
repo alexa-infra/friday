@@ -5,6 +5,7 @@ import { Form, Field } from 'react-final-form';
 import { renderTags } from './tags';
 import { createDoc, selectCurrent, getNew, setWrap } from '../../features/docs';
 import withOnLoad from '../../components/withOnLoad';
+import Button from '../../components/button';
 
 const DocNew = ({ onSubmit, item, saved, wrap, onSetWrap }) => {
   if (item === null) {
@@ -20,38 +21,34 @@ const DocNew = ({ onSubmit, item, saved, wrap, onSetWrap }) => {
         onSubmit={onSubmit}
       >
         {({ handleSubmit }) => (
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className="flex flex-col">
             <div className="controls">
-              <button type="submit">
+              <Button type="submit">
                 Create
-              </button>
+              </Button>
               <Link to="/docs">
-                <button>Back</button>
+                <Button>Back</Button>
               </Link>
             </div>
-            <div className="form-group">
-              <label htmlFor="name">Name</label>
-              <Field name="name" component="input" type="text" />
-            </div>
-            <div className="form-group">
-              <label htmlFor="tags">Tags</label>
-              <Field name="tags" component={renderTags} />
-            </div>
-            <div className="form-group">
-              <label htmlFor="wrap">Wrap</label>
-              {' '}
+
+            <label htmlFor="name">Name</label>
+            <Field name="name" component="input" type="text" />
+
+            <label htmlFor="tags">Tags</label>
+            <Field name="tags" component={renderTags} />
+
+            <label htmlFor="wrap">
               <input type="checkbox" checked={wrap} name="wrap" onChange={onSetWrap} />
-            </div>
-            <div className="form-group">
-              <label htmlFor="text">Text</label>
-              <Field
-                name="text"
-                component="textarea"
-                wrap={wrap ? 'on' : 'off'}
-                className="form-control"
-                rows={15}
-              />
-            </div>
+              <span className="ml-1">Wrap</span>
+            </label>
+
+            <Field
+              name="text"
+              component="textarea"
+              wrap={wrap ? 'on' : 'off'}
+              className="form-control"
+              rows={15}
+            />
           </form>
         )}
       </Form>

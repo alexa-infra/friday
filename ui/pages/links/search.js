@@ -13,7 +13,7 @@ class SearchBox extends Component {
     const { filter } = this.props;
     return (
       <input
-        className="search w-100"
+        className="search w-full"
         type="text"
         placeholder="Search..."
         ref={(input) => { this.searchInput = input; }}

@@ -1,8 +1,9 @@
 import React from 'react';
-import Modal from 'react-bootstrap/Modal';
 import { Form } from 'react-final-form';
 import { connect } from 'react-redux';
 import { FormFields } from './editForm';
+import { Modal, ModalHeader, ModalFooter } from '../../components/modal';
+import Button from '../../components/button';
 import {
   getLinks, hideNew, createLink, selectNewDialog,
 } from '../../features/links';
@@ -12,23 +13,21 @@ let NewLinkForm = (props) => {
     show, hideEdit, onSubmit, loading,
   } = props;
   return (
-    <Modal show={show} onHide={hideEdit}>
+    <Modal isOpen={show} onRequestClose={hideEdit}>
       <Form
         onSubmit={onSubmit}
       >
         {({ handleSubmit, pristine, submitting }) => (
-          <form onSubmit={handleSubmit}>
-            <Modal.Header closeButton>
-              <Modal.Title>New link</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <FormFields />
-            </Modal.Body>
-            <Modal.Footer>
-              <button type="submit" disabled={pristine || submitting || loading}>
+          <form onSubmit={handleSubmit} className="flex flex-col h-full">
+            <ModalHeader onClose={hideEdit}>
+              New link
+            </ModalHeader>
+            <FormFields />
+            <ModalFooter>
+              <Button type="submit" disabled={pristine || submitting || loading}>
                 Create
-              </button>
-            </Modal.Footer>
+              </Button>
+            </ModalFooter>
           </form>
         )}
       </Form>

@@ -1,21 +1,19 @@
 import React from 'react';
-import Modal from 'react-bootstrap/Modal';
 import { Form, Field } from 'react-final-form';
 import { connect } from 'react-redux';
+import { Modal, ModalHeader, ModalFooter } from '../../components/modal';
+import Button from '../../components/button';
 import {
   getLinks, updateLink, deleteLink, hideEdit, selectEditDialog,
 } from '../../features/links';
 
 export const FormFields = () => (
   <>
-    <div className="form-group">
-      <label htmlFor="url">URL</label>
-      <Field name="url" component="input" type="text" />
-    </div>
-    <div className="form-group">
-      <label htmlFor="title">Title</label>
-      <Field name="title" component="input" type="text" />
-    </div>
+    <label htmlFor="url">URL</label>
+    <Field name="url" component="input" type="text" />
+
+    <label htmlFor="title">Title</label>
+    <Field name="title" component="input" type="text" />
   </>
 );
 
@@ -24,29 +22,25 @@ let LinkForm = (props) => {
     show, hideEdit, deleteLink, item: currentItem, onSubmit, loading,
   } = props;
   return (
-    <Modal show={show} onHide={hideEdit}>
+    <Modal isOpen={show} onRequestClose={hideEdit}>
       <Form
         enableReinitialize
         initialValues={currentItem}
         onSubmit={onSubmit}
       >
         {({ handleSubmit, submitting }) => (
-          <form onSubmit={handleSubmit}>
-            <Modal.Header closeButton>
-              <Modal.Title>Edit</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <Field name="id" component="input" type="hidden" />
-              <FormFields />
-            </Modal.Body>
-            <Modal.Footer>
-              <button type="button" onClick={() => deleteLink(currentItem)} disabled={submitting || loading}>
+          <form onSubmit={handleSubmit} className="flex flex-col h-full">
+            <ModalHeader onClose={hideEdit}>Edit</ModalHeader>
+            <Field name="id" component="input" type="hidden" />
+            <FormFields />
+            <ModalFooter>
+              <Button type="button" onClick={() => deleteLink(currentItem)} disabled={submitting || loading}>
                 Delete
-              </button>
-              <button type="submit" disabled={submitting || loading}>
+              </Button>
+              <Button type="submit" disabled={submitting || loading}>
                 Save
-              </button>
-            </Modal.Footer>
+              </Button>
+            </ModalFooter>
           </form>
         )}
       </Form>

@@ -23,18 +23,14 @@ const LinkEdit = ({ title, showEdit }) => (
 );
 
 let LinkList = ({ items, editMode, showEdit }) => (
-  <div className="row justify-content-center">
-    <div className="col col-md-10">
-      <ul className="link-list">
-        {items.map((it) => (
-          <li key={it.id}>
-            { editMode ? <LinkEdit {...it} showEdit={() => showEdit(it)} />
-              : <Link {...it} /> }
-          </li>
-        ))}
-      </ul>
-    </div>
-  </div>
+  <ul className="link-list flex flex-row flex-wrap justify-center">
+    {items.map((it) => (
+      <li className="m-2" key={it.id}>
+        { editMode ? <LinkEdit {...it} showEdit={() => showEdit(it)} />
+          : <Link {...it} /> }
+      </li>
+    ))}
+  </ul>
 );
 
 LinkList = connect(

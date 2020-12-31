@@ -7,6 +7,7 @@ import {
   selectCurrent, getDocText, updateDoc, deleteDoc, setWrap,
 } from '../../features/docs';
 import withOnLoad from '../../components/withOnLoad';
+import Button from '../../components/button';
 
 const DocEdit = ({
   onUpdate, onDelete, item, saved, wrap, onSetWrap,
@@ -29,45 +30,41 @@ const DocEdit = ({
         initialValues={item}
       >
         {({ handleSubmit }) => (
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className="flex flex-col">
             <div className="controls">
-              <button type="submit">
+              <Button type="submit">
                 Save
-              </button>
-              <button type="button" onClick={deleteConfirm}>
+              </Button>
+              <Button onClick={deleteConfirm}>
                 Delete
-              </button>
+              </Button>
               <Link to={`/docs/${item.id}`}>
-                <button>View</button>
+                <Button>View</Button>
               </Link>
               <Link to="/docs">
-                <button>Back</button>
+                <Button>Back</Button>
               </Link>
             </div>
             <Field name="id" component="input" type="hidden" />
-            <div className="form-group">
-              <label htmlFor="name">Name</label>
-              <Field name="name" component="input" type="text" />
-            </div>
-            <div className="form-group">
-              <label htmlFor="tags">Tags</label>
-              <Field name="tags" component={renderTags} />
-            </div>
-            <div className="form-group">
-              <label htmlFor="wrap">Wrap</label>
-              {' '}
+
+            <label htmlFor="name">Name</label>
+            <Field name="name" component="input" type="text" />
+
+            <label htmlFor="tags">Tags</label>
+            <Field name="tags" component={renderTags} />
+
+            <label htmlFor="wrap">
               <input type="checkbox" checked={wrap} name="wrap" onChange={onSetWrap} />
-            </div>
-            <div className="form-group">
-              <label htmlFor="text">Text</label>
-              <Field
-                name="text"
-                component="textarea"
-                wrap={wrap ? 'on' : 'off'}
-                className="form-control"
-                rows={15}
-              />
-            </div>
+              <span className="ml-1">Wrap</span>
+            </label>
+
+            <Field
+              name="text"
+              component="textarea"
+              wrap={wrap ? 'on' : 'off'}
+              className="form-control"
+              rows={15}
+            />
           </form>
         )}
       </Form>

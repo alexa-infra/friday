@@ -12,40 +12,41 @@ const Bookmark = ({
     title, url, domain, created, readed,
   } = item;
   return (
-    <div className="row bookmark p-1">
-      <div className="col d-flex flex-column flex-nowrap">
-        <div className="title d-flex flex-row flex-wrap">
-          <a className={classNames('mr-1', { done: readed })} href={url}>{title}</a>
-          <div className="site">
-            (
-            <a href={url}>{domain}</a>
-            )
-          </div>
+    <div className="bookmark border-solid border-b-2 border-gray-300 py-2">
+      <div className="title">
+        <a className={classNames('mr-2', { "line-through": readed })} href={url}>{title}</a>
+        <div className="site text-gray-500 inline">
+          (
+          <a href={url}>{domain}</a>
+          )
         </div>
-        <div className="controls">
-          <i title={created.toISOString(true)}>{created.fromNow()}</i>
-          <button
-            type="button"
-            className="link-button"
-            onClick={onEdit}
-          >
-            edit
-          </button>
-          <button
-            type="button"
-            className="link-button"
-            onClick={onMarkRead}
-          >
-            mark as read
-          </button>
-          <button
-            type="button"
-            className="link-button"
-            onClick={onDelete}
-          >
-            remove
-          </button>
-        </div>
+      </div>
+      <div className="controls">
+        <i title={created.toISOString(true)}>{created.fromNow()}</i>
+        <i className="mx-2">|</i>
+        <button
+          type="button"
+          className="link-button"
+          onClick={onEdit}
+        >
+          edit
+        </button>
+        <i className="mx-2">|</i>
+        <button
+          type="button"
+          className="link-button"
+          onClick={onMarkRead}
+        >
+          mark as read
+        </button>
+        <i className="mx-2">|</i>
+        <button
+          type="button"
+          className="link-button"
+          onClick={onDelete}
+        >
+          remove
+        </button>
       </div>
     </div>
   );
@@ -54,18 +55,16 @@ const Bookmark = ({
 let BookmarkList = ({
   items, showEdit, markRead, deleteItem,
 }) => (
-  <div className="bookmarks row justify-content-center">
-    <div className="col col-md-8">
-      {items.map((it) => (
-        <Bookmark
-          key={it.id}
-          item={it}
-          onEdit={() => showEdit(it)}
-          onMarkRead={() => markRead(it)}
-          onDelete={() => deleteItem(it)}
-        />
-      ))}
-    </div>
+  <div className="bookmarks pb-2">
+    {items.map((it) => (
+      <Bookmark
+        key={it.id}
+        item={it}
+        onEdit={() => showEdit(it)}
+        onMarkRead={() => markRead(it)}
+        onDelete={() => deleteItem(it)}
+      />
+    ))}
   </div>
 );
 

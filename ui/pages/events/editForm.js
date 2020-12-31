@@ -1,7 +1,8 @@
 import React from 'react';
-import Modal from 'react-bootstrap/Modal';
 import { Form, Field } from 'react-final-form';
 import { connect } from 'react-redux';
+import { Modal, ModalHeader, ModalFooter } from '../../components/modal';
+import Button from '../../components/button';
 import {
   getEvents, hideEdit, updateEvent, repeatEvent, deleteEvent, selectEditDialog,
 } from '../../features/events';
@@ -9,43 +10,38 @@ import {
 const RepeatInDays = (props) => {
   const { values, repeatIn } = props;
   return (
-    <div className="form-group">
+    <>
       <label htmlFor="repeatIn">Repeat In</label>
       <div className="field">
         <Field name="repeatIn" component="input" type="number" />
-        <button type="button" onClick={() => repeatIn(values)}>
+        <Button type="button" onClick={() => repeatIn(values)}>
           Repeat
-        </button>
+        </Button>
       </div>
-    </div>
+    </>
   );
 };
 
 export const FormFields = () => (
   <>
-    <div className="form-group">
-      <label htmlFor="date">Date</label>
-      <Field name="date" component="input" type="text" disabled />
-    </div>
-    <div className="form-group">
-      <label htmlFor="name">Name</label>
-      <Field name="name" component="input" type="text" />
-    </div>
-    <div className="form-group">
-      <label htmlFor="icon">Icon</label>
-      <Field name="icon" component="input" type="text" />
-    </div>
-    <div className="form-group">
-      <label htmlFor="repeat">Repeat</label>
-      <Field name="repeat" component="select">
-        <option value="none">No repeat</option>
-        <option value="daily">Day</option>
-        <option value="weekly">Week</option>
-        <option value="biweekly">2 Weeks</option>
-        <option value="monthly">Month</option>
-        <option value="annually">Year</option>
-      </Field>
-    </div>
+    <label htmlFor="date">Date</label>
+    <Field name="date" component="input" type="text" disabled />
+
+    <label htmlFor="name">Name</label>
+    <Field name="name" component="input" type="text" />
+
+    <label htmlFor="icon">Icon</label>
+    <Field name="icon" component="input" type="text" />
+
+    <label htmlFor="repeat">Repeat</label>
+    <Field name="repeat" component="select">
+      <option value="none">No repeat</option>
+      <option value="daily">Day</option>
+      <option value="weekly">Week</option>
+      <option value="biweekly">2 Weeks</option>
+      <option value="monthly">Month</option>
+      <option value="annually">Year</option>
+    </Field>
   </>
 );
 
@@ -57,30 +53,28 @@ let EventForm = (props) => {
     if (window.confirm('Are you sure you want to delete this event?')) deleteEvent(currentItem);
   };
   return (
-    <Modal show={show} onHide={hideEdit}>
+    <Modal isOpen={show} onRequestClose={hideEdit}>
       <Form
         enableReinitialize
         onSubmit={onSubmit}
         initialValues={{ ...currentItem, repeatIn: 21 }}
       >
         {({ handleSubmit, values }) => (
-          <form onSubmit={handleSubmit}>
-            <Modal.Header closeButton>
-              <Modal.Title>Edit event</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <Field name="id" component="input" type="hidden" />
-              <FormFields />
-              <RepeatInDays values={values} {...props} />
-            </Modal.Body>
-            <Modal.Footer>
-              <button type="button" onClick={deleteConfirm}>
+          <form onSubmit={handleSubmit} className="flex flex-col h-full">
+            <ModalHeader onClose={hideEdit}>Edit event</ModalHeader>
+
+            <Field name="id" component="input" type="hidden" />
+            <FormFields />
+            <RepeatInDays values={values} {...props} />
+
+            <ModalFooter>
+              <Button type="button" onClick={deleteConfirm}>
                 Delete
-              </button>
-              <button type="submit">
+              </Button>
+              <Button type="submit">
                 Save
-              </button>
-            </Modal.Footer>
+              </Button>
+            </ModalFooter>
           </form>
         )}
       </Form>

@@ -1,10 +1,11 @@
 import React from 'react';
-import Modal from 'react-bootstrap/Modal';
 import { Form } from 'react-final-form';
 import { connect } from 'react-redux';
 import {
   selectNewDialog, createBookmark, getBookmarks, hideNew,
 } from '../../features/bookmarks';
+import { Modal, ModalHeader, ModalFooter } from '../../components/modal';
+import Button from '../../components/button';
 import { FormFields } from './editForm';
 
 let NewBookmarkForm = (props) => {
@@ -12,25 +13,26 @@ let NewBookmarkForm = (props) => {
     show, hideEdit, onSubmit, item: newItem,
   } = props;
   return (
-    <Modal show={show} onHide={hideEdit}>
+    <Modal
+      isOpen={show}
+      onRequestClose={hideEdit}
+    >
       <Form
         enableReinitialize
         onSubmit={onSubmit}
         initialValues={newItem}
       >
         {({ handleSubmit }) => (
-          <form onSubmit={handleSubmit}>
-            <Modal.Header closeButton>
-              <Modal.Title>New bookmark</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <FormFields />
-            </Modal.Body>
-            <Modal.Footer>
-              <button type="submit">
+          <form onSubmit={handleSubmit} className="flex flex-col h-full">
+            <ModalHeader onClose={hideEdit}>
+              New bookmark
+            </ModalHeader>
+            <FormFields />
+            <ModalFooter>
+              <Button type="submit">
                 Save
-              </button>
-            </Modal.Footer>
+              </Button>
+            </ModalFooter>
           </form>
         )}
       </Form>

@@ -6,9 +6,10 @@ const Pagination = ({
   const hasNext = page < pages;
   const hasPrev = page > 1;
   return (
-    <div className="pagination justify-content-center">
+    <div className="pagination text-center">
       <div className="buttons">
         <button
+          className="mx-2"
           type="button"
           onClick={prevPage}
           disabled={!hasPrev}
@@ -17,11 +18,11 @@ const Pagination = ({
         </button>
         <button type="button" disabled>
           {page}
-          {' '}
-          /
+          <i className="mx-2">/</i>
           {pages}
         </button>
         <button
+          className="mx-2"
           type="button"
           onClick={nextPage}
           disabled={!hasNext}
@@ -30,9 +31,7 @@ const Pagination = ({
         </button>
       </div>
       <div>
-        Per page
-        {' '}
-        {' '}
+        Per page:
         <select
           value={per_page}
           onChange={(e) => changePerPage(e.target.value)}
