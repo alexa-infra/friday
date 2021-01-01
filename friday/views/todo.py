@@ -8,6 +8,7 @@
   /todo/trash/items GET
 """
 import datetime
+import flask
 from sqlalchemy import or_
 from . import BaseView, use_args
 from ..models import db
