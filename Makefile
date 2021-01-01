@@ -18,6 +18,7 @@ FA_DST2 := $(patsubst $(FA_DIR)/%, prod/webfonts/%, $(FA_SRC))
 build/app.js: $(JS_DST)
 	@test -d $(dirname $<) || mkdir -p $(dirname $<)
 	@npx browserify \
+		-g [ envify --NODE_ENV development ] \
 		-x react \
 		-x react-dom \
 		-x react-redux \
@@ -61,6 +62,7 @@ build/bundle.js:
 	@test -d build || mkdir -p build
 	@npx browserify \
 	    -t babelify \
+	    -g [ envify --NODE_ENV development ] \
 	    -r react \
 	    -r react-dom \
 	    -r react-redux \
@@ -103,11 +105,17 @@ prod/bundle.js:
 
 build/styles.css: $(CSS_SRC)
 	@test -d build || mkdir -p build
-	@npx postcss ui/index.scss -o $@
+	@npx postcss \
+		--env=development \
+		ui/index.scss \
+		-o $@
 
 prod/styles.css: $(CSS_SRC)
 	@test -d prod || mkdir -p prod
-	@npx postcss --env=production ui/index.scss -o $@
+	@npx postcss \
+		--env=production \
+		ui/index.scss \
+		-o $@
 
 build/webfonts/%: $(FA_DIR)/%
 	@test -d build/webfonts || mkdir -p build/webfonts
