@@ -166,6 +166,11 @@ const TodoListItem = ({item, actions}) => (
         null
       )}
     </span>
+    {item.dueto ? (
+      <span className="text-xs font-bold rounded px-2 py-1 border border-black mr-1">{item.dueto}</span>
+    ) : (
+      null
+    )}
     {!item.done ? (
       <div className="btn-flat" onClick={() => actions.onMarkDelete(item)}>
         <i className={classNames({
@@ -188,7 +193,7 @@ const TodoListItem = ({item, actions}) => (
 
 const TodoListBase = ({ list, items, doneItems, onLoad, onShowNew, actions }) => {
   useEffect(() => {
-    onLoad('root');
+    onLoad('focus');
   }, []);
   const onShowNewItem = () => onShowNew(list.id);
   return (
@@ -251,6 +256,7 @@ const defaultTodo = {
   folder: false,
   order: 0,
   dueto: null,
+  description: '',
 };
 
 const TodoList = connect(
