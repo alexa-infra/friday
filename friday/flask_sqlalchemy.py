@@ -24,7 +24,7 @@ class FlaskSQLAlchemy:
         uri = app.config.setdefault("SQLALCHEMY_DATABASE_URI", "sqlite:///:memory:")
         options = app.config.setdefault("SQLALCHEMY_ENGINE_OPTIONS", {})
 
-        self.engine = create_engine(uri, **options)
+        self.engine = create_engine(uri, future=True, **options)
         db.configure(bind=self.engine)
 
         # pylint: disable=unused-variable
