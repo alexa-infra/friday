@@ -37,23 +37,21 @@ function PrivateRoute({ component: Component, ...rest }) {
 let Root = ({ store }) => (
   <Provider store={store}>
     <Router>
-      <div className="theme-l5">
-        <header>
-          <NavBar />
-        </header>
-        <main className="container mt-2 mx-auto">
-          <Alerts />
-          <Switch>
-            <Route path="/login" component={Login} />
-            <PrivateRoute path="/events" component={Events} />
-            <PrivateRoute path="/bookmarks" component={Bookmarks} />
-            <PrivateRoute path="/docs" component={Docs} />
-            <PrivateRoute path="/recipes" component={Recipes} />
-            <PrivateRoute path="/todo" component={TodoList} />
-            <PrivateRoute path="/" component={Links} />
-          </Switch>
-        </main>
-      </div>
+      <header>
+        <NavBar />
+      </header>
+      <main className="container mt-2 mx-auto">
+        <Alerts />
+        <Switch>
+          <Route path="/login" component={Login} />
+          <PrivateRoute path="/events" component={Events} />
+          <PrivateRoute path="/bookmarks" component={Bookmarks} />
+          <PrivateRoute path="/docs" component={Docs} />
+          <PrivateRoute path="/recipes" component={Recipes} />
+          <PrivateRoute path="/todo" component={TodoList} />
+          <PrivateRoute path="/" component={Links} />
+        </Switch>
+      </main>
     </Router>
   </Provider>
 );

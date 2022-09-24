@@ -140,7 +140,7 @@ const EditTodoDialog = connect(
 )(EditTodoDialogBase);
 
 const TodoListItem = ({item, actions}) => (
-  <div className="todo-list-item border-black border-r border-b">
+  <div className="todo-list-item flex-wrap border-black md:border-r border-b">
     <div className="btn-flat" onClick={() => actions.onDone(item)}>
      <i className={classNames('far', {
        'fa-check-square': item.done,
@@ -155,7 +155,7 @@ const TodoListItem = ({item, actions}) => (
     </div>
     <div className="btn-flat" onClick={() => actions.onEdit(item)}>
       <i className="far fa-file" />
-    </div >
+    </div>
     <span className="todo-title">
       {item.name}
       {item.folder ? (
@@ -229,7 +229,7 @@ const TodoListBase = ({ list, items, doneItems, onLoad, onShowNew, actions }) =>
         </Button>
       </div>
       {items.length > 0 && (
-        <div className="todo-list border-black border-t border-l">
+        <div className="todo-list border-black border-t md:border-l">
           {items.map(it => (
             <TodoListItem key={it.id} item={it} actions={actions} />
           ))}
@@ -238,7 +238,7 @@ const TodoListBase = ({ list, items, doneItems, onLoad, onShowNew, actions }) =>
       {doneItems.length > 0 && (
         <>
           <h2>Inactive</h2>
-          <div className="todo-list border-black border-t border-l">
+          <div className="todo-list border-black border-t md:border-l">
             {doneItems.map(it => (
               <TodoListItem key={it.id} item={it} actions={actions} />
             ))}
