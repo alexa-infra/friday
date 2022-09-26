@@ -7,25 +7,24 @@ const Image = (props) => {
   const left = Math.floor(props.cw / 2 - props.nw / 2);
   const top = Math.floor(props.ch / 2 - props.nh / 2);
   return (
-    <div className="image" style={{ width: props.cw, height: props.ch }}>
+    <div className="relative overflow-hidden" style={{ width: props.cw, height: props.ch }}>
       <img
+        className="absolute max-w-none"
         src={props.url}
         style={{ left, top }}
         width={props.nw}
         height={props.nh}
         alt={props.title}
       />
-      <div className="info">
-        <div className="title">
-          {props.title}
-        </div>
+      <div className="text-white w-full absolute bottom-0 left-0 text-center">
+        {props.title}
       </div>
     </div>
   );
 };
 
 const ImageList = ({ images, height }) => (
-  <div className="image-row" style={{ height }}>
+  <div className="flex w-full" style={{ height }}>
     {images.map((it) => (
       <Image key={`img${it.id}`} {...it} />
     ))}
@@ -90,7 +89,7 @@ class ImageBoard extends React.Component {
     });
 
     return (
-      <div className="image-board" ref={(c) => (this.el = c)}>
+      <div className="w-full" ref={(c) => (this.el = c)}>
         {updatedRows.map((row, idx) => (
           <ImageList key={`row${idx}`} images={row} height={containerHeight} />
         ))}

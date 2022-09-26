@@ -22,7 +22,7 @@ export const LoginForm = () => {
   return (
     <Form onSubmit={onSubmit}>
       {({ handleSubmit, submitting }) => (
-        <form className="login-form flex flex-col" onSubmit={handleSubmit}>
+        <form className="flex flex-col m-2 p-2 bg-gray-200 border border-black rounded text-center" onSubmit={handleSubmit}>
           <label htmlFor="email">Name</label>
           <Field name="email" component="input" type="text" className="form-control" />
 

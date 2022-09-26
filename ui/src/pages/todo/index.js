@@ -139,29 +139,35 @@ const EditTodoDialog = connect(
   })
 )(EditTodoDialogBase);
 
+const ButtonFlat = ({ children, ...rest }) => (
+  <div className="inline-block w-6 h-6 text-center hover:cursor-pointer" {...rest}>
+    {children}
+  </div>
+);
+
 const TodoListItem = ({item, actions}) => (
-  <div className="todo-list-item flex-wrap border-black md:border-r border-b">
-    <div className="btn-flat" onClick={() => actions.onDone(item)}>
+  <div className="flex flex-wrap border-black md:border-r border-b p-2">
+    <ButtonFlat onClick={() => actions.onDone(item)}>
      <i className={classNames('far', {
        'fa-check-square': item.done,
        'fa-square': !item.done,
      })} />
-    </div>
-    <div className="btn-flat" onClick={() => actions.onFocus(item)}>
+    </ButtonFlat>
+    <ButtonFlat onClick={() => actions.onFocus(item)}>
       <i className={classNames("fa-star", {
         "fas": item.focus,
         "far": !item.focus,
       })} />
-    </div>
-    <div className="btn-flat" onClick={() => actions.onEdit(item)}>
+    </ButtonFlat>
+    <ButtonFlat onClick={() => actions.onEdit(item)}>
       <i className="far fa-file" />
-    </div>
-    <span className="todo-title">
+    </ButtonFlat>
+    <span className="flex-grow">
       {item.name}
       {item.folder ? (
-        <div className="btn-flat" onClick={() => actions.onOpen(item)}>
+        <ButtonFlat onClick={() => actions.onOpen(item)}>
           <i className="far fa-folder" />
-        </div>
+        </ButtonFlat>
       ) : (
         null
       )}
@@ -172,21 +178,21 @@ const TodoListItem = ({item, actions}) => (
       null
     )}
     {!item.done ? (
-      <div className="btn-flat" onClick={() => actions.onMarkDelete(item)}>
+      <ButtonFlat onClick={() => actions.onMarkDelete(item)}>
         <i className={classNames({
           'far fa-trash-alt': !item.deleted,
           'fas fa-trash-restore': item.deleted,
         })} />
-      </div>
+      </ButtonFlat>
     ) : (
-      <div className="btn-flat" onClick={() => actions.onDone(item)}>
+      <ButtonFlat onClick={() => actions.onDone(item)}>
         <i className="fas fa-trash-restore" />
-      </div>
+      </ButtonFlat>
     )}
     {(item.done || item.deleted) && (
-      <div className="btn-flat" onClick={() => actions.onDelete(item)}>
+      <ButtonFlat onClick={() => actions.onDelete(item)}>
         <i className="fas fa-times" />
-      </div>
+      </ButtonFlat>
     )}
   </div>
 );
@@ -194,7 +200,7 @@ const TodoListItem = ({item, actions}) => (
 const TodoListBase = ({ list, items, doneItems, onLoad, onShowNew, actions }) => {
   useEffect(() => {
     onLoad('focus');
-  }, []);
+  }, [onLoad]);
   const onShowNewItem = () => onShowNew(list.id);
   return (
     <div className="todo-page md:w-8/12 md:mx-auto">

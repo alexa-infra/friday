@@ -6,14 +6,8 @@ import {
   nextMonth, prevMonth, showEdit, showNew, selectCalendar,
 } from '../../features/events';
 
-const Event = ({ name, icon, onClick }) => (
+const Icon = ({ name, icon, onClick }) => (
   <i className={classNames('fa', icon)} title={name} onClick={onClick} />
-);
-
-const EventList = ({ events, onClick }) => (
-  <ul className="events">
-    {events.map(({ event }) => <Event key={event.id} {...event} onClick={() => onClick(event)} />)}
-  </ul>
 );
 
 const CalendarDay = ({
@@ -29,31 +23,33 @@ const CalendarDay = ({
 
   return (
     <li className={classNames({
-      'theme-l4': themeAnotherMonth,
-      'theme-l3': themeThisMonth,
-      'theme-l2': themeWeekend,
-      theme: themeToday,
-      'hover-theme': true,
-      [`weeks-${numWeeks}`]: true,
-    })}
+      'bg-gray-100': themeAnotherMonth,
+      'bg-gray-200': themeThisMonth,
+      'bg-gray-300': themeWeekend,
+      'bg-gray-500': themeToday,
+    }, 'relative h-24 hover:bg-gray-400 group')}
     >
-      <span className="day">{dayNum}</span>
-      <i className={classNames('fa', 'fa-plus', 'add')} title="Add..." onClick={() => onAddNew({ date: day })} />
-      <EventList events={events} onClick={onEventClick} />
+      <span className="absolute top-1 left-2">{dayNum}</span>
+      <div className="absolute top-1 right-2 hidden group-hover:block">
+        <Icon icon="fa-plus" name="Add..." onClick={() => onAddNew({ date: day })} />
+      </div>
+      <ul className="absolute bottom-1 right-2">
+        {events.map(({ event }) => <Icon key={event.id} {...event} onClick={() => onEventClick(event)} />)}
+      </ul>
     </li>
   );
 };
 
 const DaysOfWeek = ({ dayNames }) => (
-  <ul className="days-of-week theme-d3">
-    {dayNames.map((day) => <li key={day}>{day}</li>)}
+  <ul className="grid grid-cols-7 gap-1 grid-flow-row">
+    {dayNames.map((day) => <li className="text-center py-2 px-0" key={day}>{day}</li>)}
   </ul>
 );
 
 const DaysGrid = ({
   days, events, showEdit, showEditNew,
 }) => (
-  <ul className="days-grid">
+  <ul className="days-grid grid grid-cols-7 gap-1 grid-flow-row">
     {days.map((it) => (
       <CalendarDay
         key={it.day}
@@ -67,14 +63,14 @@ const DaysGrid = ({
 );
 
 const Caption = ({ month, nextMonth, prevMonth }) => (
-  <header className="theme-d4">
+  <header className="text-center">
     <Button
       type="button"
       onClick={() => prevMonth()}
     >
       Prev
     </Button>
-    {month}
+    <span className="px-2">{month}</span>
     <Button
       type="button"
       onClick={() => nextMonth()}
@@ -85,7 +81,7 @@ const Caption = ({ month, nextMonth, prevMonth }) => (
 );
 
 let Calendar = (props) => (
-  <div className="calendar md:w-8/12 md:mx-auto">
+  <div className="md:w-8/12 md:mx-auto">
     <Caption {...props} />
     <DaysOfWeek {...props} />
     <DaysGrid {...props} />

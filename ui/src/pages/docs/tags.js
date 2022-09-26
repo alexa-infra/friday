@@ -4,11 +4,11 @@ import classNames from 'classnames';
 const Tag = ({
   tag, onRemove, onClick, mark, disabled,
 }) => (
-  <div className={classNames('tag', { current: mark })} onClick={onClick}>
+  <div className={classNames('inline-block px-2 py-1 m-1 rounded bg-gray-300', { 'bg-gray-500': mark })} onClick={onClick}>
     {tag}
     {disabled ? null : (
       <i
-        className="fa fa-times delete"
+        className="fa fa-times inline-block mx-1 cursor-pointer"
         onClick={onRemove}
       />
     )}
@@ -20,7 +20,7 @@ const Tags = ({
 }) => {
   let nextId = 1;
   return (
-    <div className="tags">
+    <div className="block">
       {
         tags.map((tag) => (
           <Tag
@@ -105,7 +105,7 @@ class TagInput extends Component {
     return (
       <input
         type="text"
-        className="tag-input"
+        className="tag-input inline outline-0 bg-transparent border-0"
         value={text}
         ref={(el) => { this.el = el; }}
         placeholder={placeholder}
@@ -145,7 +145,7 @@ class TagsEdit extends Component {
     const { tags, placeholder, disabled } = this.props;
     return (
       <div
-        className="tags-container"
+        className="tags-container border"
         onClick={this.setFocus}
         disabled={disabled}
       >

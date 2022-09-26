@@ -1,13 +1,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-/*
-@import './components/alerts/alerts.css';
-@import './pages/kueche.css';
-@import './pages/login/form.css';
-@import './pages/events/calendar.css';
-@import './pages/docs/tags.css';
-@import './pages/docs/docs.css';
-@import './pages/todo/style.css';
-@import './pages/root/root.css';
-*/

@@ -4,6 +4,7 @@ import DocNew from './newDoc';
 import DocEdit from './editDoc';
 import DocView from './viewDoc';
 import DocsList from './listDocs';
+import './github-markdown.css';
 
 const DocsPage = () => (
   <Switch>
