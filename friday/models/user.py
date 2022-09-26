@@ -22,6 +22,10 @@ class User(Model):
             raise Unauthorized
         return user
 
+    @classmethod
+    def identify(cls, user_id):
+        return User.query.filter(User.id == user_id).first()
+
     @property
     def token(self):
         return session.sid

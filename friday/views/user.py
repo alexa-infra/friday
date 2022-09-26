@@ -1,5 +1,6 @@
 from webargs import fields
 from flask import session
+from flask_jwt_extended import create_access_token, get_jwt_identity, set_access_cookies
 from . import BaseView, use_kwargs
 from ..models.user import User as UserModel
 from ..schemas.user import User as UserSchema
@@ -20,10 +21,10 @@ class LoginView(BaseView):
     @use_kwargs(login_args, location="json")
     def post(self, email, password):
         user = UserModel.authenticate(email, password)
-        resp = UserSchema.jsonify(user)
-        session["user_id"] = user.id
-        session.permanent = True
-        return resp, 200
+        access_token = create_access_token(identity=user.id)
+        response = UserSchema.jsonify(user)
+        set_access_cookies(response, access_token)
+        return response, 200
 
 
 class CurrentUser(BaseView):
@@ -32,5 +33,6 @@ class CurrentUser(BaseView):
     route_base = "/users/current"
 
     def get(self):
-        user = UserModel.current_user()
+        user_id = get_jwt_identity()
+        user = UserModel.identify(user_id)
         return UserSchema.jsonify(user), 200

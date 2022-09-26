@@ -6,12 +6,10 @@
 #
 alembic==1.8.1
     # via flask-migrate
-astroid==2.12.9
+astroid==2.12.10
     # via pylint
 asttokens==2.0.8
     # via stack-data
-async-timeout==4.0.2
-    # via redis
 attrs==22.1.0
     # via pytest
 backcall==0.2.0
@@ -24,7 +22,7 @@ black==22.8.0
     # via -r requirements-dev.in
 build==0.8.0
     # via pip-tools
-certifi==2022.9.14
+certifi==2022.9.24
     # via requests
 cffi==1.15.1
     # via pil-lite
@@ -37,21 +35,20 @@ click==8.1.3
     #   pip-tools
 decorator==5.1.1
     # via ipython
-deprecated==1.2.13
-    # via redis
 dill==0.3.5.1
     # via pylint
 executing==1.0.0
     # via stack-data
-fakeredis==1.9.1
-    # via -r requirements.in
 flake8==5.0.4
     # via -r requirements-dev.in
 flask==2.2.2
     # via
     #   -r requirements.in
+    #   flask-jwt-extended
     #   flask-migrate
     #   flask-sqlalchemy
+flask-jwt-extended==4.4.4
+    # via -r requirements.in
 flask-migrate==3.1.0
     # via -r requirements.in
 flask-sqlalchemy==2.5.1
@@ -80,7 +77,7 @@ jinja2==3.1.2
     # via flask
 lazy-object-proxy==1.7.1
     # via astroid
-mako==1.2.2
+mako==1.2.3
     # via alembic
 markdown==3.4.1
     # via -r requirements.in
@@ -112,7 +109,6 @@ packaging==21.3
     #   build
     #   marshmallow
     #   pytest
-    #   redis
     #   webargs
 parso==0.8.3
     # via jedi
@@ -152,7 +148,9 @@ pyflakes==2.5.0
     # via flake8
 pygments==2.13.0
     # via ipython
-pylint==2.15.2
+pyjwt==2.5.0
+    # via flask-jwt-extended
+pylint==2.15.3
     # via -r requirements-dev.in
 pyparsing==3.0.9
     # via packaging
@@ -164,10 +162,6 @@ python-slugify==6.1.2
     # via -r requirements.in
 pyyaml==6.0
     # via bandit
-redis==4.3.4
-    # via
-    #   -r requirements.in
-    #   fakeredis
 requests==2.28.1
     # via
     #   -r requirements.in
@@ -177,12 +171,9 @@ requests-mock==1.10.0
 six==1.16.0
     # via
     #   asttokens
-    #   fakeredis
     #   requests-mock
 smmap==5.0.0
     # via gitdb
-sortedcontainers==2.4.0
-    # via fakeredis
 sqlalchemy==1.4.41
     # via
     #   alembic
@@ -220,13 +211,13 @@ wcwidth==0.2.5
 webargs==8.2.0
     # via -r requirements.in
 werkzeug==2.2.2
-    # via flask
+    # via
+    #   flask
+    #   flask-jwt-extended
 wheel==0.37.1
     # via pip-tools
 wrapt==1.14.1
-    # via
-    #   astroid
-    #   deprecated
+    # via astroid
 
 # The following packages are considered to be unsafe in a requirements file:
 # pip

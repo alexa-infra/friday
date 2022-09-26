@@ -24,11 +24,11 @@ export const callApi = params => {
     }
   }
 
-  const request = new Request(params.url, {
+  const request = new Request('http://localhost:3001' + params.url, {
     method: params.method,
     headers,
     body,
-    credentials: 'same-origin',
+    credentials: 'include',
   });
 
   return fetch(request).then((response) => {
