@@ -6,7 +6,6 @@ from flask import Blueprint
 from flask.views import MethodView, http_method_funcs
 from flask_jwt_extended import jwt_required, get_jwt, create_access_token, get_jwt_identity, set_access_cookies
 from webargs.flaskparser import FlaskParser
-from friday.session import auth_required
 from friday.utils import camel_to_snake
 from typing import Optional, Tuple, Any
 
