@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import DocNew from './newDoc';
 import DocEdit from './editDoc';
 import DocView from './viewDoc';
@@ -7,12 +7,20 @@ import DocsList from './listDocs';
 import './github-markdown.css';
 
 const DocsPage = () => (
-  <Switch>
-    <Route path="/docs/new" component={DocNew} />
-    <Route path="/docs/:id/edit" component={DocEdit} />
-    <Route path="/docs/:id" component={DocView} />
-    <Route path="/docs" component={DocsList} />
-  </Switch>
+  <Routes>
+    <Route path="new" element={
+      <DocNew />
+    } />
+    <Route path=":id/edit" element={
+      <DocEdit />
+    } />
+    <Route path=":id" element={
+      <DocView />
+    } />
+    <Route path="" element={
+      <DocsList />
+    } />
+  </Routes>
 );
 
 export default DocsPage;

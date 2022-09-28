@@ -1,7 +1,7 @@
 import React from 'react';
 import { Provider, useSelector, connect } from 'react-redux';
 import {
-  BrowserRouter as Router, Route, Switch, Redirect,
+  BrowserRouter as Router, Route, Routes, Navigate, useLocation
 } from 'react-router-dom';
 
 import Docs from '../docs';
@@ -15,21 +15,15 @@ import { TodoList } from '../todo';
 import { NavBar, Alerts, withOnLoad } from '../../components';
 import { selectAuthorized, currentUser } from '../../features/auth';
 
-function PrivateRoute({ component: Component, ...rest }) {
+function PrivateRoute({ children }) {
   const isAuthenticated = useSelector(selectAuthorized);
-  return (
-    <Route
-      {...rest}
-      render={({ location }) => (isAuthenticated ? (
-        <Component />
-      ) : (
-        <Redirect
-          to={{
-            pathname: '/login',
-            state: { from: location },
-          }}
-        />
-      ))}
+  const location = useLocation();
+  return isAuthenticated ? children : (
+    <Navigate
+      to={{
+        pathname: '/login',
+        state: { from: location },
+      }}
     />
   );
 }
@@ -42,15 +36,41 @@ let Root = ({ store }) => (
       </header>
       <main className="container mt-2 mx-auto">
         <Alerts />
-        <Switch>
-          <Route path="/login" component={Login} />
-          <PrivateRoute path="/events" component={Events} />
-          <PrivateRoute path="/bookmarks" component={Bookmarks} />
-          <PrivateRoute path="/docs" component={Docs} />
-          <PrivateRoute path="/recipes" component={Recipes} />
-          <PrivateRoute path="/todo" component={TodoList} />
-          <PrivateRoute path="/" component={Links} />
-        </Switch>
+        <Routes>
+          <Route path="/login" element={
+            <Login />
+          } />
+          <Route path="/events" element={
+            <PrivateRoute>
+              <Events />
+            </PrivateRoute>
+          } />
+          <Route path="/bookmarks/*" element={
+            <PrivateRoute>
+              <Bookmarks />
+            </PrivateRoute>
+          } />
+          <Route path="/docs/*" element={
+            <PrivateRoute>
+              <Docs />
+            </PrivateRoute>
+          } />
+          <Route path="/recipes" element={
+            <PrivateRoute>
+              <Recipes />
+            </PrivateRoute>
+          } />
+          <Route path="/todo" element={
+            <PrivateRoute>
+              <TodoList />
+            </PrivateRoute>
+          } />
+          <Route path="/" element={
+            <PrivateRoute>
+              <Links />
+            </PrivateRoute>
+          } />
+        </Routes>
       </main>
     </Router>
   </Provider>

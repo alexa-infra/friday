@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, Field } from 'react-final-form';
-import { useLocation, Redirect } from 'react-router-dom';
+import { useLocation, Navigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, selectLoading, selectAuthorized } from '../../features/auth';
 import Button from '../../components/button';
@@ -16,7 +16,7 @@ export const LoginForm = () => {
   const onSubmit = (values) => dispatch(login(values));
 
   if (isAuthenticated) {
-    return <Redirect to={from} />;
+    return <Navigate to={from} />;
   }
 
   return (

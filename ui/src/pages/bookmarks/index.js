@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Switch, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import BookmarksAddShortcut from './newShortcut';
 import Controls from './controls';
 import List from './list';
@@ -32,10 +32,14 @@ BookmarksPage = connect(
 )(BookmarksPage);
 
 const RouteContainer = () => (
-  <Switch>
-    <Route path="/bookmarks/add" component={BookmarksAddShortcut} />
-    <Route path="/bookmarks" component={BookmarksPage} />
-  </Switch>
+  <Routes>
+    <Route path="add" element={
+      <BookmarksAddShortcut />
+    } />
+    <Route path="" element={
+      <BookmarksPage />
+    } />
+  </Routes>
 );
 
 export default RouteContainer;

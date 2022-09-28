@@ -1,22 +1,28 @@
 import React from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Navigate, useParams } from 'react-router-dom';
 import { Form, Field } from 'react-final-form';
 import { connect } from 'react-redux';
 import { renderTags } from './tags';
 import {
   selectCurrent, getDocText, updateDoc, deleteDoc, setWrap,
 } from '../../features/docs';
-import withOnLoad from '../../components/withOnLoad';
 import Button from '../../components/button';
 
 const DocEdit = ({
-  onUpdate, onDelete, item, saved, wrap, onSetWrap,
+  onUpdate, onDelete, item, saved, wrap, onSetWrap, onLoad
 }) => {
+  const params = useParams();
+  React.useEffect(() => {
+    if (item === null) {
+      onLoad(params.id);
+    }
+  }, [item, params, onLoad]);
+
   if (item === null) {
-    return saved ? (<Redirect to="/docs" />) : null;
+    return saved ? (<Navigate to="/docs" />) : null;
   }
   if (saved) {
-    return <Redirect to={`/docs/${item.id}`} />;
+    return <Navigate to={`/docs/${item.id}`} />;
   }
   const deleteConfirm = () => {
     if (window.confirm('Are you sure you want to delete this item')) onDelete(item);
@@ -72,15 +78,7 @@ const DocEdit = ({
   );
 };
 
-let DocEditContainer = withOnLoad(
-  DocEdit,
-  (props) => {
-    const { match } = props;
-    props.onLoad(match.params.id);
-  },
-);
-
-DocEditContainer = connect(
+const DocEditContainer = connect(
   selectCurrent,
   (dispatch) => ({
     onLoad: (id) => dispatch(getDocText(id)),
@@ -88,6 +86,6 @@ DocEditContainer = connect(
     onDelete: (data) => dispatch(deleteDoc(data)),
     onSetWrap: () => dispatch(setWrap()),
   }),
-)(DocEditContainer);
+)(DocEdit);
 
 export default DocEditContainer;

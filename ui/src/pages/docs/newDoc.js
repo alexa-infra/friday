@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { Form, Field } from 'react-final-form';
 import { renderTags } from './tags';
 import { createDoc, selectCurrent, getNew, setWrap } from '../../features/docs';
@@ -12,7 +12,7 @@ const DocNew = ({ onSubmit, item, saved, wrap, onSetWrap }) => {
     return null;
   }
   if (saved) {
-    return <Redirect to={`/docs/${item.id}`} />;
+    return <Navigate to={`/docs/${item.id}`} />;
   }
 
   return (
