@@ -17,7 +17,7 @@ def add_cors_headers(response):
     headers = {
         'Access-Control-Allow-Origin': 'http://localhost:3000',
         'Access-Control-Allow-Methods': ', '.join(['GET', 'POST', 'PUT', 'DELETE']),
-        'Access-Control-Allow-Headers': ', '.join(['Content-Type', 'Accept']),
+        'Access-Control-Allow-Headers': ', '.join(['Content-Type', 'X-CSRF-TOKEN']),
         'Access-Control-Allow-Credentials': 'true',
     }
     response.headers.extend(headers)
