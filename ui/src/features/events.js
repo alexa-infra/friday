@@ -5,11 +5,17 @@ import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import { createAsyncThunk } from './utils';
 import * as api from '../api';
-import { selectDialog } from './links';
 
 dayjs.extend(customParseFormat);
 dayjs.extend(isSameOrBefore);
 dayjs.extend(isoWeek);
+
+export const selectDialog = (dialog) => ({
+  item: dialog.item,
+  error: dialog.error,
+  loading: dialog.loading === 'pending',
+  show: dialog.item !== null,
+});
 
 function* iterDays(start, end) {
   let it = start;

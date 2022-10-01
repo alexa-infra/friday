@@ -16,6 +16,11 @@ export const FormFields = () => (
         <Field name="readed" component="input" type="checkbox" className="form-checkbox h-5 w-5 text-gray-600" />
         <span className="ml-2">Read</span>
       </label>
+
+      <label htmlFor="favorite" className="inline-flex items-center">
+        <Field name="favorite" component="input" type="checkbox" className="form-checkbox h-5 w-5 text-gray-600" />
+        <span className="ml-2">Favorite</span>
+      </label>
   </>
 );
 

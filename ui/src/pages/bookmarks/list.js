@@ -7,7 +7,7 @@ import { useUpdateBookmarkMutation, useDeleteBookmarkMutation } from '../../api'
 dayjs.extend(relativeTime);
 
 const Bookmark = ({
-  item: {title, url, domain, created, readed}, onEdit, onMarkRead, onDelete,
+  item: {title, url, domain, created, readed, favorite}, onEdit, onMarkRead, onMarkFavorite, onDelete,
 }) => {
   const createdDate = dayjs(created);
   return (
@@ -42,6 +42,17 @@ const Bookmark = ({
         <button
           type="button"
           className="link-button"
+          onClick={onMarkFavorite}
+        >
+          <i className={classNames("fa-star", {
+            "fas": favorite,
+            "far": !favorite,
+          })} />
+        </button>
+        <i className="mx-2">|</i>
+        <button
+          type="button"
+          className="link-button"
           onClick={onDelete}
         >
           remove
@@ -64,6 +75,7 @@ export const BookmarkList = ({
           item={it}
           onEdit={() => showEdit(it)}
           onMarkRead={() => updateItem({...it, readed: !it.readed})}
+          onMarkFavorite={() => updateItem({...it, favorite: !it.favorite})}
           onDelete={() => deleteItem(it)}
         />
       ))}

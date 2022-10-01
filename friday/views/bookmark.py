@@ -45,3 +45,19 @@ class BookmarkItemView(BaseView):
         obj = get_or_404(BookmarkModel, id)
         obj.delete()
         return "", 204
+
+
+class BookmarkFavoriteListView(BaseView):
+    # pylint: disable=no-self-use
+
+    route_base = "/bookmarks/favorite"
+
+    @use_kwargs({**pagination_args, **search_args}, location="query")
+    def get(self, page=1, per_page=10, search=None):
+        query = BookmarkModel.query.filter(BookmarkModel.favorite)
+        if search:
+            search_term = "%{}%".format(search)
+            query = query.filter(BookmarkModel.slug.like(search_term))
+        query = query.order_by(BookmarkModel.created.desc())
+        pagination = paginate(query, page, per_page)
+        return BookmarkSchema.jsonify(pagination), 200

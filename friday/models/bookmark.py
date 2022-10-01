@@ -1,8 +1,6 @@
-from urllib.parse import urlparse
 from sqlalchemy import Column, Integer, Text, DateTime, Boolean
 from sqlalchemy.orm import validates
-from slugify import slugify
-from friday.utils import utcnow
+from friday.utils import utcnow, get_domain, get_slug
 from .base import Model
 
 
@@ -15,15 +13,11 @@ class Bookmark(Model):
     readed = Column(Boolean, nullable=False, default=False)
     slug = Column(Text)
     domain = Column(Text)
+    favorite = Column(Boolean, default=False)
 
     @validates("url")
     def set_domain(self, _key, value):
-        parsed = urlparse(value)
-        netloc = str(parsed.netloc)
-        if netloc.startswith("www."):
-            self.domain = netloc[4:]
-        else:
-            self.domain = netloc
+        self.domain = get_domain(value)
         return value
 
     @validates("title", "domain")
@@ -32,7 +26,5 @@ class Bookmark(Model):
             values = (value, self.domain)
         else:
             values = (self.title, value)
-        values = filter(None, values)
-        txt = " ".join(values)
-        self.slug = slugify(txt, separator=" ")
+        self.slug = get_slug(*values)
         return value

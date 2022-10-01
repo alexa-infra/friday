@@ -87,6 +87,15 @@ export const bookmarkApi = createApi({
         {type: 'bookmark', id: 'PARTIAL-LIST'},
       ],
     }),
+    getFavoriteBookmarks: build.query({
+      query: (params) => ({
+        url: `/api/bookmarks/favorite?${searchParams(params)}`,
+      }),
+      providesTags: (result, error, params) => result ? [
+        ...result.items.map(x => ({type: 'bookmark', id: x.id})),
+        {type: 'bookmark', id: 'PARTIAL-LIST'},
+      ] : [{type: 'bookmark', id: 'PARTIAL-LIST'}],
+    }),
   }),
 });
 
@@ -95,4 +104,5 @@ export const {
   useCreateBookmarkMutation,
   useUpdateBookmarkMutation,
   useDeleteBookmarkMutation,
+  useGetFavoriteBookmarksQuery,
 } = bookmarkApi;
