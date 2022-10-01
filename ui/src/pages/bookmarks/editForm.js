@@ -1,11 +1,8 @@
 import React from 'react';
 import { Form, Field } from 'react-final-form';
-import { connect } from 'react-redux';
-import {
-  selectEditDialog, updateBookmark, getBookmarks, hideEdit, deleteBookmark,
-} from '../../features/bookmarks';
 import { Modal, ModalHeader, ModalFooter } from '../../components/modal';
 import Button from '../../components/button';
+import { useUpdateBookmarkMutation, useDeleteBookmarkMutation } from '../../api';
 
 export const FormFields = () => (
   <>
@@ -22,10 +19,22 @@ export const FormFields = () => (
   </>
 );
 
-let BookmarkForm = (props) => {
-  const {
-    show, hideEdit, item: currentItem, deleteItem, onSubmit,
-  } = props;
+const BookmarkForm = ({ show, hideEdit, item: currentItem }) => {
+  const [onSubmit, updateState] = useUpdateBookmarkMutation();
+  const [deleteItem, deleteState] = useDeleteBookmarkMutation();
+  React.useEffect(() => {
+    if (updateState.isSuccess) {
+      hideEdit();
+      updateState.reset();
+    }
+  }, [updateState, hideEdit]);
+  React.useEffect(() => {
+    if (deleteState.isSuccess) {
+      hideEdit();
+      deleteState.reset();
+    }
+  }, [deleteState, hideEdit]);
+  const loading = updateState.isLoading || deleteState.isLoading;
   return (
     <Modal isOpen={show} onRequestClose={hideEdit}>
       <Form
@@ -33,7 +42,7 @@ let BookmarkForm = (props) => {
         initialValues={currentItem}
         onSubmit={onSubmit}
       >
-        {({ handleSubmit, initialValues }) => (
+        {({ handleSubmit, initialValues, submitting }) => (
           <form onSubmit={handleSubmit} className="flex flex-col h-full">
             <ModalHeader onClose={hideEdit}>
               Edit bookmark
@@ -43,10 +52,10 @@ let BookmarkForm = (props) => {
             <FormFields />
 
             <ModalFooter>
-              <Button type="button" onClick={() => deleteItem(initialValues)}>
+              <Button type="button" onClick={() => deleteItem(initialValues)} disabled={submitting || loading}>
                 Delete
               </Button>
-              <Button type="submit">
+              <Button type="submit" disabled={submitting || loading}>
                 Save
               </Button>
             </ModalFooter>
@@ -56,17 +65,5 @@ let BookmarkForm = (props) => {
     </Modal>
   );
 };
-
-BookmarkForm = connect(
-  selectEditDialog,
-  (dispatch) => {
-    const reloadBookmarks = () => dispatch(getBookmarks());
-    return {
-      hideEdit: () => dispatch(hideEdit()),
-      onSubmit: (item) => dispatch(updateBookmark(item)).then(reloadBookmarks),
-      deleteItem: (item) => dispatch(deleteBookmark(item)).then(reloadBookmarks),
-    };
-  },
-)(BookmarkForm);
 
 export default BookmarkForm;

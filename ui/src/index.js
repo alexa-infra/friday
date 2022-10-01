@@ -11,7 +11,9 @@ const rootEl = document.getElementById('root');
 const root = ReactDOM.createRoot(rootEl);
 Modal.setAppElement(rootEl);
 root.render(
-  <Root store={store} />
+  <React.StrictMode>
+    <Root store={store} />
+  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

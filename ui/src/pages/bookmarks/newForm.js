@@ -1,17 +1,19 @@
 import React from 'react';
 import { Form } from 'react-final-form';
-import { connect } from 'react-redux';
-import {
-  selectNewDialog, createBookmark, getBookmarks, hideNew,
-} from '../../features/bookmarks';
 import { Modal, ModalHeader, ModalFooter } from '../../components/modal';
 import Button from '../../components/button';
 import { FormFields } from './editForm';
+import { useCreateBookmarkMutation } from '../../api';
 
-let NewBookmarkForm = (props) => {
-  const {
-    show, hideEdit, onSubmit, item: newItem,
-  } = props;
+const NewBookmarkForm = ({ show, hideEdit, item: newItem }) => {
+  const [onSubmit, createState] = useCreateBookmarkMutation();
+  React.useEffect(() => {
+    if (createState.isSuccess) {
+      hideEdit();
+      createState.reset();
+    }
+  }, [createState, hideEdit]);
+  const loading = createState.isLoading;
   return (
     <Modal
       isOpen={show}
@@ -29,7 +31,7 @@ let NewBookmarkForm = (props) => {
             </ModalHeader>
             <FormFields />
             <ModalFooter>
-              <Button type="submit">
+              <Button type="submit" disabled={loading}>
                 Save
               </Button>
             </ModalFooter>
@@ -39,16 +41,5 @@ let NewBookmarkForm = (props) => {
     </Modal>
   );
 };
-
-NewBookmarkForm = connect(
-  selectNewDialog,
-  (dispatch) => {
-    const reloadBookmarks = () => dispatch(getBookmarks());
-    return {
-      hideEdit: () => dispatch(hideNew()),
-      onSubmit: (item) => dispatch(createBookmark(item)).then(reloadBookmarks),
-    };
-  },
-)(NewBookmarkForm);
 
 export default NewBookmarkForm;

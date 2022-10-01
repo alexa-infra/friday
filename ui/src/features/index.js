@@ -1,27 +1,31 @@
 import { combineReducers } from 'redux';
 import { configureStore } from '@reduxjs/toolkit';
 import recipes from './recipes';
-import auth from './auth';
 import alerts from './alerts';
 import links from './links';
 import events from './events';
-import bookmarks from './bookmarks';
 import docs from './docs';
 import todo from './todo';
+import { authApi, bookmarkApi } from '../api';
 
 export const reducers = combineReducers({
   links,
   alerts,
-  auth,
   events,
-  bookmarks,
   docs,
   recipes,
   todo,
+  [authApi.reducerPath]: authApi.reducer,
+  [bookmarkApi.reducerPath]: bookmarkApi.reducer,
 });
 
 export const store = configureStore({
   reducer: reducers,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(
+      authApi.middleware,
+      bookmarkApi.middleware,
+    ),
 });
 
 export default store;

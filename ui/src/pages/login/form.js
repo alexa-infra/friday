@@ -1,26 +1,38 @@
 import React from 'react';
 import { Form, Field } from 'react-final-form';
-import { useLocation, Navigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { login, selectLoading, selectAuthorized } from '../../features/auth';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { useCurrentUserQuery, useLoginMutation } from '../../api';
+import * as alerts from '../../features/alerts';
 import Button from '../../components/button';
 
 export const LoginForm = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const { from } = location.state || { from: { pathname: '/' } };
 
-  const isAuthenticated = useSelector(selectAuthorized);
-  const loading = useSelector(selectLoading);
+  const currentUser = useCurrentUserQuery();
+  const [login, loginState] = useLoginMutation();
   const dispatch = useDispatch();
 
-  const onSubmit = (values) => dispatch(login(values));
+  React.useEffect(() => {
+    if (loginState.isSuccess) {
+      dispatch(alerts.success('Logged in'));
+    }
+    if (loginState.error) {
+      dispatch(alerts.error(loginState.error.status));
+    }
+  }, [loginState, dispatch]);
 
-  if (isAuthenticated) {
-    return <Navigate to={from} />;
-  }
+  React.useEffect(() => {
+    if (currentUser.isSuccess) {
+      navigate(from);
+    }
+  }, [currentUser, navigate, from]);
 
+  const loading = currentUser.isFetching || loginState.isFetching;
   return (
-    <Form onSubmit={onSubmit}>
+    <Form onSubmit={login}>
       {({ handleSubmit, submitting }) => (
         <form className="flex flex-col m-2 p-2 bg-gray-200 border border-black rounded text-center" onSubmit={handleSubmit}>
           <label htmlFor="email">Name</label>

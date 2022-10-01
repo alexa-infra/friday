@@ -1,5 +1,5 @@
 import React from 'react';
-import { Provider, useSelector, connect } from 'react-redux';
+import { Provider } from 'react-redux';
 import {
   BrowserRouter as Router, Route, Routes, Navigate, useLocation
 } from 'react-router-dom';
@@ -12,23 +12,26 @@ import Bookmarks from '../bookmarks';
 import Recipes from '../kueche';
 import { TodoList } from '../todo';
 
-import { NavBar, Alerts, withOnLoad } from '../../components';
-import { selectAuthorized, currentUser } from '../../features/auth';
+import { NavBar, Alerts } from '../../components';
+import { useCurrentUserQuery } from '../../api';
 
 function PrivateRoute({ children }) {
-  const isAuthenticated = useSelector(selectAuthorized);
   const location = useLocation();
-  return isAuthenticated ? children : (
+  const { isLoading, isSuccess } = useCurrentUserQuery();
+  if (isLoading) {
+    return null;
+  }
+  return isSuccess ? children : (
     <Navigate
-      to={{
-        pathname: '/login',
-        state: { from: location },
+      to="/login"
+      state={{
+        from: location,
       }}
     />
   );
 }
 
-let Root = ({ store }) => (
+export const Root = ({ store }) => (
   <Provider store={store}>
     <Router>
       <header>
@@ -75,14 +78,5 @@ let Root = ({ store }) => (
     </Router>
   </Provider>
 );
-
-Root = withOnLoad(Root, (props) => props.onLoad());
-
-Root = connect(
-  null,
-  (dispatch) => ({
-    onLoad: () => dispatch(currentUser()),
-  }),
-)(Root);
 
 export default Root;

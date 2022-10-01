@@ -1,16 +1,15 @@
 import React from 'react';
 import classNames from 'classnames';
-import { connect } from 'react-redux';
-import {
-  selectList, getBookmarks, showEdit, markReadBookmark, deleteBookmark,
-} from '../../features/bookmarks';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import { useUpdateBookmarkMutation, useDeleteBookmarkMutation } from '../../api';
+
+dayjs.extend(relativeTime);
 
 const Bookmark = ({
-  item, onEdit, onMarkRead, onDelete,
+  item: {title, url, domain, created, readed}, onEdit, onMarkRead, onDelete,
 }) => {
-  const {
-    title, url, domain, created, readed,
-  } = item;
+  const createdDate = dayjs(created);
   return (
     <div className="bookmark border-solid border-b-2 border-gray-300 py-2">
       <div className="title">
@@ -22,7 +21,7 @@ const Bookmark = ({
         </div>
       </div>
       <div className="controls">
-        <i title={created.toISOString(true)}>{created.fromNow()}</i>
+        <i title={createdDate.toISOString(true)}>{createdDate.fromNow()}</i>
         <i className="mx-2">|</i>
         <button
           type="button"
@@ -52,34 +51,24 @@ const Bookmark = ({
   );
 };
 
-let BookmarkList = ({
-  items, showEdit, markRead, deleteItem,
-}) => (
-  <div className="bookmarks pb-2">
-    {items.map((it) => (
-      <Bookmark
-        key={it.id}
-        item={it}
-        onEdit={() => showEdit(it)}
-        onMarkRead={() => markRead(it)}
-        onDelete={() => deleteItem(it)}
-      />
-    ))}
-  </div>
-);
-
-BookmarkList = connect(
-  (state) => ({
-    items: selectList(state),
-  }),
-  (dispatch) => {
-    const reload = () => dispatch(getBookmarks());
-    return {
-      showEdit: (item) => dispatch(showEdit(item)),
-      markRead: (item) => dispatch(markReadBookmark(item)).then(reload),
-      deleteItem: (item) => dispatch(deleteBookmark(item)).then(reload),
-    };
-  },
-)(BookmarkList);
+export const BookmarkList = ({
+  items, showEdit
+}) => {
+  const [updateItem,] = useUpdateBookmarkMutation();
+  const [deleteItem,] = useDeleteBookmarkMutation();
+  return (
+    <div className="bookmarks pb-2">
+      {items.map((it) => (
+        <Bookmark
+          key={it.id}
+          item={it}
+          onEdit={() => showEdit(it)}
+          onMarkRead={() => updateItem({...it, readed: !it.readed})}
+          onDelete={() => deleteItem(it)}
+        />
+      ))}
+    </div>
+  );
+}
 
 export default BookmarkList;
