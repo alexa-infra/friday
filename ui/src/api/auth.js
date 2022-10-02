@@ -1,17 +1,5 @@
-import { wrap } from './utils';
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQuery } from './base';
-
-export const login = wrap(({ email, password }) => ({
-  url: '/api/users/login',
-  method: 'POST',
-  body: { email, password },
-}));
-
-export const currentUser = wrap(() => ({
-  url: '/api/users/current',
-  method: 'GET',
-}));
 
 export const authApi = createApi({
   baseQuery,

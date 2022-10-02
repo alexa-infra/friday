@@ -1,4 +1,3 @@
-import { wrap } from './utils';
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQuery } from './base';
 
@@ -14,29 +13,6 @@ const searchParams = ({ search, page, per_page }) => {
   params.append('per_page', per_page);
   return params.toString();
 };
-
-export const getBookmarks = wrap((data) => ({
-  url: `/api/bookmarks?${searchParams(data)}`,
-  method: 'GET',
-}));
-
-export const createBookmark = wrap((data) => ({
-  url: '/api/bookmarks',
-  method: 'POST',
-  body: formatData(data),
-}));
-
-export const updateBookmark = wrap((data) => ({
-  url: `/api/bookmarks/${data.id}`,
-  method: 'PUT',
-  body: formatData(data),
-}));
-
-export const deleteBookmark = wrap((data) => ({
-  url: `/api/bookmarks/${data.id}`,
-  method: 'DELETE',
-  body: formatData(data),
-}));
 
 export const bookmarkApi = createApi({
   baseQuery,
