@@ -1,19 +1,21 @@
 import React from 'react';
 import { Form } from 'react-final-form';
-import { connect } from 'react-redux';
 import { FormFields } from './editForm';
 import { Modal, ModalHeader, ModalFooter } from '../../components/modal';
 import Button from '../../components/button';
-import {
-  getEvents, hideNew, createEvent, selectNewDialog,
-} from '../../features/events';
+import { useCreateEventMutation } from '../../api';
 
-let NewEventForm = (props) => {
-  const {
-    show, hideEdit, item: newItem, onSubmit,
-  } = props;
+const NewEventForm = ({ item: newItem, show, hide: onClose }) => {
+  const [onSubmit, saveState] = useCreateEventMutation();
+  const loading = saveState.isFetching;
+  React.useEffect(() => {
+    if (saveState.isSuccess) {
+      saveState.reset();
+      onClose();
+    }
+  }, [saveState, onClose]);
   return (
-    <Modal isOpen={show} onRequestClose={hideEdit}>
+    <Modal isOpen={show} onRequestClose={onClose}>
       <Form
         enableReinitialize
         initialValues={newItem}
@@ -21,12 +23,12 @@ let NewEventForm = (props) => {
       >
         {({ handleSubmit }) => (
           <form onSubmit={handleSubmit} className="flex flex-col h-full">
-            <ModalHeader onClose={hideEdit}>
+            <ModalHeader onClose={onClose}>
               Create event
             </ModalHeader>
             <FormFields />
             <ModalFooter>
-              <Button type="submit">
+              <Button type="submit" disabled={loading}>
                 Create
               </Button>
             </ModalFooter>
@@ -36,17 +38,5 @@ let NewEventForm = (props) => {
     </Modal>
   );
 };
-
-NewEventForm = connect(
-  selectNewDialog,
-  (dispatch) => {
-    const reload = () => dispatch(getEvents());
-    const hide = () => dispatch(hideNew());
-    return {
-      onSubmit: (values) => dispatch(createEvent(values)).then(reload).then(hide),
-      hideEdit: hide,
-    };
-  },
-)(NewEventForm);
 
 export default NewEventForm;

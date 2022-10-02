@@ -1,4 +1,5 @@
-import { wrap } from './utils';
+import { createApi } from "@reduxjs/toolkit/query/react";
+import { baseQuery } from './base';
 
 const formatEventData = ({
   name, icon, date, repeat,
@@ -16,30 +17,75 @@ const searchParams = ({ fromdate, todate }) => {
   return params.toString();
 };
 
-export const getEvents = wrap((data) => ({
-  url: `/api/events?${searchParams(data)}`,
-  method: 'GET',
-}));
+const eventTagType = "event";
 
-export const createEvent = wrap((data) => ({
-  url: '/api/events',
-  method: 'POST',
-  body: formatEventData(data),
-}));
+export const eventApi = createApi({
+  baseQuery,
+  reducerPath: "event",
+  tagTypes: [eventTagType],
+  endpoints: (build) => ({
+    getEvents: build.query({
+      query: (params) => ({
+        url: `/api/events?${searchParams(params)}`,
+      }),
+      providesTags: (result, error, params) => result ? [
+        ...result.map(x => ({type: eventTagType, id: x.id})),
+        {type: eventTagType, id: 'MONTH-LIST'},
+      ] : [{type: eventTagType, id: 'MONTH-LIST'}],
+    }),
+    getEvent: build.query({
+      query: (id) => ({
+        url: `/api/events/${id}`,
+      }),
+      providesTags: (result, error, id) => [{type: eventTagType, id}],
+    }),
+    createEvent: build.mutation({
+      query: (data) => ({
+        url: '/api/events',
+        method: 'POST',
+        body: formatEventData(data),
+      }),
+      invalidatesTags: (result, error, data) => [{type: eventTagType, id: 'MONTH-LIST'}],
+    }),
+    updateEvent: build.mutation({
+      query: (data) => ({
+        url: `/api/events/${data.id}`,
+        method: 'PUT',
+        body: formatEventData(data),
+      }),
+      invalidatesTags: (result, error, data) => [
+        {type: eventTagType, id: data.id},
+        {type: eventTagType, id: 'MONTH-LIST'},
+      ],
+    }),
+    deleteEvent: build.mutation({
+      query: (data) => ({
+        url: `/api/events/${data.id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: (result, error, data) => [
+        {type: eventTagType, id: data.id},
+        {type: eventTagType, id: 'MONTH-LIST'},
+      ],
+    }),
+    repeatEvent: build.mutation({
+      query: (data) => ({
+        url: `/api/events/${data.id}/repeat`,
+        method: 'POST',
+        body: { days: data.repeatIn },
+      }),
+      invalidatesTags: (result, error, data) => [
+        {type: eventTagType, id: data.id},
+        {type: eventTagType, id: 'MONTH-LIST'},
+      ],
+    }),
+  }),
+});
 
-export const updateEvent = wrap((data) => ({
-  url: `/api/events/${data.id}`,
-  method: 'PUT',
-  body: formatEventData(data),
-}));
-
-export const deleteEvent = wrap((data) => ({
-  url: `/api/events/${data.id}`,
-  method: 'DELETE',
-}));
-
-export const repeatEvent = wrap((data) => ({
-  url: `/api/events/${data.id}/repeat`,
-  method: 'POST',
-  body: { days: data.repeatIn },
-}));
+export const {
+  useGetEventsQuery,
+  useCreateEventMutation,
+  useUpdateEventMutation,
+  useDeleteEventMutation,
+  useRepeatEventMutation,
+} = eventApi;

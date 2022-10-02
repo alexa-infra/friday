@@ -1,10 +1,11 @@
 import React from 'react';
 import classNames from 'classnames';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Button from '../../components/button';
 import {
-  nextMonth, prevMonth, showEdit, showNew, selectCalendar,
+  nextMonth, prevMonth, selectCalendar, selectMonth
 } from '../../features/events';
+import { useGetEventsQuery } from '../../api';
 
 const Icon = ({ name, icon, onClick }) => (
   <i className={classNames('fa', icon)} title={name} onClick={onClick} />
@@ -47,7 +48,7 @@ const DaysOfWeek = ({ dayNames }) => (
 );
 
 const DaysGrid = ({
-  days, events, showEdit, showEditNew,
+  days, events, showEdit, showNew,
 }) => (
   <ul className="days-grid grid grid-cols-7 gap-1 grid-flow-row">
     {days.map((it) => (
@@ -56,46 +57,53 @@ const DaysGrid = ({
         {...it}
         events={events.filter((x) => x.date === it.day)}
         onEventClick={showEdit}
-        onAddNew={showEditNew}
+        onAddNew={showNew}
       />
     ))}
   </ul>
 );
 
-const Caption = ({ month, nextMonth, prevMonth }) => (
-  <header className="text-center">
-    <Button
-      type="button"
-      onClick={() => prevMonth()}
-    >
-      Prev
-    </Button>
-    <span className="px-2">{month}</span>
-    <Button
-      type="button"
-      onClick={() => nextMonth()}
-    >
-      Next
-    </Button>
-  </header>
-);
+const Caption = () => {
+  const dispatch = useDispatch();
+  const { month } = useSelector(selectMonth);
+  return (
+    <header className="text-center">
+      <Button
+        type="button"
+        onClick={() => dispatch(prevMonth())}
+      >
+        Prev
+      </Button>
+      <span className="px-2">{month.format('YYYY-MM')}</span>
+      <Button
+        type="button"
+        onClick={() => dispatch(nextMonth())}
+      >
+        Next
+      </Button>
+    </header>
+  );
+}
 
-let Calendar = (props) => (
-  <div className="md:w-8/12 md:mx-auto">
-    <Caption {...props} />
-    <DaysOfWeek {...props} />
-    <DaysGrid {...props} />
-  </div>
-);
-
-Calendar = connect(
-  selectCalendar,
-  (dispatch) => ({
-    showEdit: (item) => dispatch(showEdit(item)),
-    showEditNew: (item) => dispatch(showNew(item)),
-    nextMonth: () => dispatch(nextMonth()),
-    prevMonth: () => dispatch(prevMonth()),
-  }),
-)(Calendar);
+const Calendar = ({ showEdit, showNew }) => {
+  const { firstDay, lastDay } = useSelector(selectMonth);
+  const { days, dayNames } = useSelector(selectCalendar);
+  const { data: events, isLoading } = useGetEventsQuery({
+    fromdate: firstDay.format('YYYY-MM-DD'),
+    todate: lastDay.format('YYYY-MM-DD'),
+  });
+  return (
+    <div className="md:w-8/12 md:mx-auto">
+      <Caption />
+      <DaysOfWeek dayNames={dayNames} />
+      <DaysGrid
+        showEdit={showEdit}
+        showNew={showNew}
+        days={days}
+        events={isLoading ? [] : events}
+      />
+    </div>
+  );
+}
 
 export default Calendar;

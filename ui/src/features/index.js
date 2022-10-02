@@ -2,19 +2,20 @@ import { combineReducers } from 'redux';
 import { configureStore } from '@reduxjs/toolkit';
 import recipes from './recipes';
 import alerts from './alerts';
-import events from './events';
+import calendar from './events';
 import docs from './docs';
 import todo from './todo';
-import { authApi, bookmarkApi } from '../api';
+import { authApi, bookmarkApi, eventApi } from '../api';
 
 export const reducers = combineReducers({
   alerts,
-  events,
+  calendar,
   docs,
   recipes,
   todo,
   [authApi.reducerPath]: authApi.reducer,
   [bookmarkApi.reducerPath]: bookmarkApi.reducer,
+  [eventApi.reducerPath]: eventApi.reducer,
 });
 
 export const store = configureStore({
@@ -23,6 +24,7 @@ export const store = configureStore({
     getDefaultMiddleware().concat(
       authApi.middleware,
       bookmarkApi.middleware,
+      eventApi.middleware,
     ),
 });
 

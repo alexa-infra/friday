@@ -1,20 +1,16 @@
 import React from 'react';
 import { Form, Field } from 'react-final-form';
-import { connect } from 'react-redux';
 import { Modal, ModalHeader, ModalFooter } from '../../components/modal';
 import Button from '../../components/button';
-import {
-  getEvents, hideEdit, updateEvent, repeatEvent, deleteEvent, selectEditDialog,
-} from '../../features/events';
+import { useUpdateEventMutation, useDeleteEventMutation, useRepeatEventMutation } from '../../api';
 
-const RepeatInDays = (props) => {
-  const { values, repeatIn } = props;
+const RepeatInDays = ({ repeatEvent, disabled }) => {
   return (
     <>
       <label htmlFor="repeatIn">Repeat In</label>
       <div className="field">
         <Field name="repeatIn" component="input" type="number" />
-        <Button type="button" onClick={() => repeatIn(values)}>
+        <Button type="button" onClick={repeatEvent} disabled={disabled}>
           Repeat
         </Button>
       </div>
@@ -45,15 +41,33 @@ export const FormFields = () => (
   </>
 );
 
-let EventForm = (props) => {
-  const {
-    show, hideEdit, item: currentItem, deleteEvent, onSubmit,
-  } = props;
+const EventForm = ({ item: currentItem, show, hide: onClose }) => {
+  const [onSubmit, saveState] = useUpdateEventMutation();
+  const [deleteEvent, deleteState] = useDeleteEventMutation();
+  const [repeatEvent, repeatState] = useRepeatEventMutation();
   const deleteConfirm = () => {
     if (window.confirm('Are you sure you want to delete this event?')) deleteEvent(currentItem);
   };
+  const loading = deleteState.isFetching || saveState.isFetching || repeatEvent.isFetching;
+  React.useEffect(() => {
+    if (deleteState.isSuccess) {
+      deleteState.reset();
+      onClose();
+    }
+  }, [deleteState, onClose]);
+  React.useEffect(() => {
+    if (saveState.isSuccess) {
+      saveState.reset();
+      onClose();
+    }
+  }, [saveState, onClose]);
+  React.useEffect(() => {
+    if (repeatState.isSuccess) {
+      repeatState.reset();
+    }
+  }, [repeatState]);
   return (
-    <Modal isOpen={show} onRequestClose={hideEdit}>
+    <Modal isOpen={show} onRequestClose={onClose}>
       <Form
         enableReinitialize
         onSubmit={onSubmit}
@@ -61,17 +75,17 @@ let EventForm = (props) => {
       >
         {({ handleSubmit, values }) => (
           <form onSubmit={handleSubmit} className="flex flex-col h-full">
-            <ModalHeader onClose={hideEdit}>Edit event</ModalHeader>
+            <ModalHeader onClose={onClose}>Edit event</ModalHeader>
 
             <Field name="id" component="input" type="hidden" />
             <FormFields />
-            <RepeatInDays values={values} {...props} />
+            <RepeatInDays repeatEvent={() => repeatEvent(values)} disabled={loading} />
 
             <ModalFooter>
-              <Button type="button" onClick={deleteConfirm}>
+              <Button type="button" onClick={deleteConfirm} disabled={loading}>
                 Delete
               </Button>
-              <Button type="submit">
+              <Button type="submit" disabled={loading}>
                 Save
               </Button>
             </ModalFooter>
@@ -81,18 +95,5 @@ let EventForm = (props) => {
     </Modal>
   );
 };
-
-EventForm = connect(
-  selectEditDialog,
-  (dispatch) => {
-    const reload = () => dispatch(getEvents());
-    return {
-      onSubmit: (item) => dispatch(updateEvent(item)).then(reload),
-      repeatIn: (item) => dispatch(repeatEvent(item)).then(reload),
-      deleteEvent: (item) => dispatch(deleteEvent(item)).then(reload),
-      hideEdit: () => dispatch(hideEdit()),
-    };
-  },
-)(EventForm);
 
 export default EventForm;
