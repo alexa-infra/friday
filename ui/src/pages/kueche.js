@@ -1,7 +1,27 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { withOnLoad } from '../components';
-import { getRecipes } from '../features/recipes';
+import { useGetRecipeListQuery } from '../api';
+
+const getRandomElement = (arr) => {
+  const idx = Math.floor(Math.random() * arr.length);
+  return arr[idx];
+};
+
+const shuffle = (arr) => arr
+  .map((a) => ({ sort: Math.random(), value: a }))
+  .sort((a, b) => a.sort - b.sort)
+  .map((a) => a.value);
+
+const convert = (it) => {
+  const title = getRandomElement(it.names);
+  const img = getRandomElement(it.images);
+  return {
+    ...it,
+    ...img,
+    title,
+  };
+};
+
+const remap = (items) => shuffle(items.map(convert));
 
 const Image = (props) => {
   const left = Math.floor(props.cw / 2 - props.nw / 2);
@@ -31,88 +51,73 @@ const ImageList = ({ images, height }) => (
   </div>
 );
 
-class ImageBoard extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      containerWidth: 0,
-    };
-    this.handleResize = this.handleResize.bind(this);
-  }
+const ImageBoard = ({ images, desiredWidth }) => {
+  const ref = React.useRef();
+  const [containerWidth, setContainerWidth] = React.useState(0);
+  React.useEffect(() => {
+    const handleResize = () => {
+      setContainerWidth(Math.floor(ref.current.clientWidth));
+    }
+    window.addEventListener('resize', handleResize);
+    handleResize();
+    return () => window.removeEventListener('resize', handleResize, false);
+  }, []);
 
-  componentDidMount() {
-    this.setState({ containerWidth: Math.floor(this.el.clientWidth) });
-    window.addEventListener('resize', this.handleResize);
-  }
+  const nColumns = Math.round(containerWidth / desiredWidth);
+  const containerHeight = Math.floor(containerWidth / nColumns);
+  const cellWidth = containerHeight;
+  const cellHeight = containerHeight;
 
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.handleResize, false);
-  }
+  const rows = images.reduce((acc, it, idx) => {
+    const rowIdx = Math.floor(idx / nColumns);
+    acc[rowIdx] = acc[rowIdx] ? [...acc[rowIdx], it] : [it];
+    return acc;
+  }, []);
 
-  handleResize() {
-    this.setState({ containerWidth: Math.floor(this.el.clientWidth) });
-  }
-
-  render() {
-    const { images, desiredWidth } = this.props;
-
-    const { containerWidth } = this.state;
-    const nColumns = Math.round(containerWidth / desiredWidth);
-    const containerHeight = Math.floor(containerWidth / nColumns);
-    const cellWidth = containerHeight;
-    const cellHeight = containerHeight;
-
-    const rows = images.reduce((acc, it, idx) => {
-      const rowIdx = Math.floor(idx / nColumns);
-      acc[rowIdx] = acc[rowIdx] ? [...acc[rowIdx], it] : [it];
-      return acc;
-    }, []);
-
-    const updatedRows = rows.map((row) => {
-      const rescaledRow = row.map((it) => {
-        const { width: w, height: h } = it;
-        let nh = Math.floor(cellWidth * h / w);
-        let nw = cellWidth;
-        if (nh < cellHeight) {
-          nw = Math.floor(cellHeight * w / h);
-          nh = cellHeight;
-        }
-        return {
-          ...it,
-          nw,
-          nh,
-          cw: cellWidth,
-          ch: cellHeight,
-        };
-      });
-      return rescaledRow;
+  const updatedRows = rows.map((row) => {
+    const rescaledRow = row.map((it) => {
+      const { width: w, height: h } = it;
+      let nh = Math.floor(cellWidth * h / w);
+      let nw = cellWidth;
+      if (nh < cellHeight) {
+        nw = Math.floor(cellHeight * w / h);
+        nh = cellHeight;
+      }
+      return {
+        ...it,
+        nw,
+        nh,
+        cw: cellWidth,
+        ch: cellHeight,
+      };
     });
+    return rescaledRow;
+  });
 
-    return (
-      <div className="w-full" ref={(c) => (this.el = c)}>
-        {updatedRows.map((row, idx) => (
-          <ImageList key={`row${idx}`} images={row} height={containerHeight} />
-        ))}
-      </div>
-    );
-  }
+  return (
+    <div className="w-full" ref={ref}>
+      {updatedRows.map((row, idx) => (
+        <ImageList key={`row${idx}`} images={row} height={containerHeight} />
+      ))}
+    </div>
+  );
 }
 
-let App = ({ items }) => (
-  <div className="App row">
-    <div className="col">
-      <ImageBoard images={items} desiredWidth={200} />
+const App = () => {
+  const { data } = useGetRecipeListQuery();
+  const [items, setItems] = React.useState([]);
+  React.useEffect(() => {
+    if (data) {
+      setItems(remap(data));
+    }
+  }, [data]);
+  return (
+    <div className="App row">
+      <div className="col">
+        <ImageBoard images={items} desiredWidth={200} />
+      </div>
     </div>
-  </div>
-);
-
-App = withOnLoad(App, (props) => props.onLoad());
-
-App = connect(
-  (state) => state.recipes,
-  (dispatch) => ({
-    onLoad: () => dispatch(getRecipes()),
-  }),
-)(App);
+  );
+}
 
 export default App;
