@@ -1,28 +1,20 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { selectCurrent, getDocHtml } from '../../features/docs';
 import { TagsViewer } from './tags';
 import Button from '../../components/button';
+import { useGetDocQuery, useGetDocHtmlQuery } from '../../api';
 
 const createMarkup = (html) => ({ __html: html });
 
-const DocView = ({ item, loadHtml }) => {
+const DocView = () => {
   const params = useParams();
-  React.useEffect(() => {
-    if (item === null) {
-      loadHtml(params.id);
-    }
-  }, [item, params, loadHtml]);
-
-  if (item === null) {
+  const { data, isLoading } = useGetDocQuery(params.id);
+  const { data: html, isLoading: htmlIsLoading } = useGetDocHtmlQuery(params.id);
+  if (isLoading || htmlIsLoading) {
     return null;
   }
 
-  const {
-    id, name, html, tags,
-  } = item;
-  if (html === undefined) return null;
+  const { id, name, tags } = data;
 
   return (
     <div className="doc-page view">
@@ -46,11 +38,4 @@ const DocView = ({ item, loadHtml }) => {
   );
 };
 
-const DocViewContainer = connect(
-  selectCurrent,
-  (dispatch) => ({
-    loadHtml: (id) => dispatch(getDocHtml(id)),
-  }),
-)(DocView);
-
-export default DocViewContainer;
+export default DocView;

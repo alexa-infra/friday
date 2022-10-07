@@ -16,7 +16,7 @@ const BookmarksPage = () => {
 
   const [params, setParams] = React.useState({
     search: null,
-    page: 0,
+    page: 1,
     pages: 0,
     per_page: 10,
   });

@@ -1,20 +1,26 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { Link, Navigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Form, Field } from 'react-final-form';
 import { renderTags } from './tags';
-import { createDoc, selectCurrent, getNew, setWrap } from '../../features/docs';
-import withOnLoad from '../../components/withOnLoad';
 import Button from '../../components/button';
+import { useCreateDocMutation, usePutDocTextMutation } from '../../api';
 
-const DocNew = ({ onSubmit, item, saved, wrap, onSetWrap }) => {
-  if (item === null) {
-    return null;
+const DocNew = () => {
+  const navigate = useNavigate();
+  const [wrap, setWrap] = React.useState(false);
+  const [create, createState] = useCreateDocMutation();
+  const [putText, putTextState] = usePutDocTextMutation();
+  React.useEffect(() => {
+    if (createState.isSuccess && putTextState.isSuccess) {
+      createState.reset();
+      putTextState.reset();
+      navigate(`/docs/${createState.data.id}`);
+    }
+  }, [createState, putTextState, navigate]);
+  const onSubmit = async (values) => {
+    const data = await create(values).unwrap();
+    await putText({ id: data.id, text: values.text }).unwrap();
   }
-  if (saved) {
-    return <Navigate to={`/docs/${item.id}`} />;
-  }
-
   return (
     <article className="doc-page new">
       <Form
@@ -38,7 +44,7 @@ const DocNew = ({ onSubmit, item, saved, wrap, onSetWrap }) => {
             <Field name="tags" component={renderTags} />
 
             <label htmlFor="wrap">
-              <input type="checkbox" checked={wrap} name="wrap" onChange={onSetWrap} />
+              <input type="checkbox" checked={wrap} name="wrap" onChange={() => setWrap(!wrap)} />
               <span className="ml-1">Wrap</span>
             </label>
 
@@ -56,17 +62,4 @@ const DocNew = ({ onSubmit, item, saved, wrap, onSetWrap }) => {
   );
 };
 
-let DocNewContainer = withOnLoad(
-  DocNew, (props) => props.onLoad(),
-);
-
-DocNewContainer = connect(
-  selectCurrent,
-  (dispatch) => ({
-    onSubmit: (data) => dispatch(createDoc(data)),
-    onLoad: () => dispatch(getNew()),
-    onSetWrap: () => dispatch(setWrap()),
-  }),
-)(DocNewContainer);
-
-export default DocNewContainer;
+export default DocNew;
