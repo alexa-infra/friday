@@ -43,7 +43,7 @@ export const bookmarkApi = createApi({
       query: ({ id, url, title, readed, favorite }) => ({
         url: `/api/bookmarks/${id}`,
         method: 'PUT',
-        body: { url, title, readed },
+        body: { url, title, readed, favorite },
       }),
       invalidatesTags: (result, error, data) => [
         {type: tagType, id: data.id},
