@@ -1,6 +1,6 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import classNames from 'classnames';
-import { connect } from 'react-redux';
 import { dismiss, Alerts } from '../../features/alerts';
 
 const Alert = ({ item, onDismissAlert }) => {
@@ -18,34 +18,30 @@ const Alert = ({ item, onDismissAlert }) => {
         {' '}
         {message}
       </div>
-      <button type="button" className="cursor-pointer text-white bg-transparent opacity-50 hover:opacity-75" onClick={onDismissAlert}>
+      <button type="button" className="cursor-pointer text-white bg-transparent opacity-50 hover:opacity-75" onClick={() => onDismissAlert(item)}>
         <span>&times;</span>
       </button>
     </div>
   );
 };
 
-let AlertList = ({ items, dismissAlert }) => (
-  <div className="flex flex-col flex-nowrap">
-    {
-      items.map((it) => (
-        <Alert
-          key={it.id}
-          item={it}
-          onDismissAlert={() => dismissAlert(it)}
-        />
-      ))
-    }
-  </div>
-);
-
-AlertList = connect(
-  (state) => ({
-    items: state.alerts,
-  }),
-  (dispatch) => ({
-    dismissAlert: (item) => dispatch(dismiss(item.id)),
-  }),
-)(AlertList);
+const AlertList = () => {
+  const items = useSelector(state => state.alerts);
+  const dispatch = useDispatch();
+  const onDismissAlert = (item) => dispatch(dismiss(item.id));
+  return (
+    <div className="flex flex-col flex-nowrap">
+      {
+        items.map((it) => (
+          <Alert
+            key={it.id}
+            item={it}
+            onDismissAlert={onDismissAlert}
+          />
+        ))
+      }
+    </div>
+  );
+}
 
 export default AlertList;
