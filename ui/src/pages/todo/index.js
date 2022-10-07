@@ -1,25 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 import { Form, Field } from 'react-final-form';
-import { connect } from 'react-redux';
 import { Modal, ModalHeader, ModalFooter } from '../../components/modal';
 import Button from '../../components/button';
-import {
-  selectList,
-  getTodoList,
-  selectCreateItem,
-  selectEditItem,
-  showCreateTodo,
-  showEditTodo,
-  hideCreateTodo,
-  hideEditTodo,
-  createTodoItem,
-  markDone,
-  markFocus,
-  markDeleted,
-  changeTodoItem,
-  removeTodoItem,
-} from '../../features/todo';
+import { useGetTodoQuery, useGetTodoListQuery, usePatchTodoMutation, useDeleteTodoMutation, useCreateTodoMutation, useUpdateTodoMutation } from '../../api';
 
 
 export const FormFields = () => (
@@ -53,30 +37,34 @@ export const FormFields = () => (
   </>
 );
 
-const NewTodoDialogBase = props => {
-  const {
-    open: show, onHide, onSubmit, item: data, error
-  } = props;
+const NewTodoDialog = ({ show, hide, data }) => {
+  const [create, createState] = useCreateTodoMutation();
+  React.useEffect(() => {
+    if (createState.isSuccess) {
+      createState.reset();
+      hide();
+    }
+  }, [createState, hide]);
   return (
-    <Modal isOpen={show} onRequestClose={onHide} >
+    <Modal isOpen={show} onRequestClose={hide} >
       <Form
         enableReinitialize
-        onSubmit={onSubmit}
+        onSubmit={create}
         initialValues={data}
       >
         {({ handleSubmit, submitting, pristine }) => (
           <form onSubmit={handleSubmit} className="flex flex-col h-full">
-            <ModalHeader onClose={onHide}>New TODO</ModalHeader>
+            <ModalHeader onClose={hide}>New TODO</ModalHeader>
 
-            {error && (
-              <i>{error.message}</i>
+            {createState.error && (
+              <i>{createState.error.message}</i>
             )}
             <FormFields />
 
             <ModalFooter>
               <Button
                 type="submit"
-                disabled={submitting || pristine}
+                disabled={submitting || pristine || createState.isFetching}
               >
                 Save
               </Button>
@@ -86,40 +74,36 @@ const NewTodoDialogBase = props => {
       </Form>
     </Modal>
   );
-};
+}
 
-const NewTodoDialog = connect(
-  selectCreateItem,
-  dispatch => ({
-    onHide: () => dispatch(hideCreateTodo()),
-    onSubmit: data => dispatch(createTodoItem(data)),
-  })
-)(NewTodoDialogBase);
-
-const EditTodoDialogBase = props => {
-  const {
-    open: show, onHide, onSubmit, item: data, error
-  } = props;
+const EditTodoDialog = ({ show, hide, data }) => {
+  const [update, updateState] = useUpdateTodoMutation();
+  React.useEffect(() => {
+    if (updateState.isSuccess) {
+      updateState.reset();
+      hide();
+    }
+  }, [updateState, hide]);
   return (
-    <Modal isOpen={show} onRequestClose={onHide}>
+    <Modal isOpen={show} onRequestClose={hide}>
       <Form
         enableReinitialize
-        onSubmit={onSubmit}
+        onSubmit={update}
         initialValues={data}
       >
         {({ handleSubmit, submitting, pristine }) => (
           <form onSubmit={handleSubmit} className="flex flex-col h-full">
-            <ModalHeader onClose={onHide}>Edit TODO</ModalHeader>
+            <ModalHeader onClose={hide}>Edit TODO</ModalHeader>
 
-            {error && (
-              <i>{error.message}</i>
+            {updateState.error && (
+              <i>{updateState.error.message}</i>
             )}
             <FormFields />
 
             <ModalFooter>
               <Button
                 type="submit"
-                disabled={submitting || pristine}
+                disabled={submitting || pristine || update.isFetching}
               >
                 Save
               </Button>
@@ -129,15 +113,7 @@ const EditTodoDialogBase = props => {
       </Form>
     </Modal>
   );
-};
-
-const EditTodoDialog = connect(
-  selectEditItem,
-  dispatch => ({
-    onHide: () => dispatch(hideEditTodo()),
-    onSubmit: data => dispatch(changeTodoItem(data)),
-  })
-)(EditTodoDialogBase);
+}
 
 const ButtonFlat = ({ children, ...rest }) => (
   <div className="inline-block w-6 h-6 text-center hover:cursor-pointer" {...rest}>
@@ -197,46 +173,80 @@ const TodoListItem = ({item, actions}) => (
   </div>
 );
 
-const TodoListBase = ({ list, items, doneItems, onLoad, onShowNew, actions }) => {
-  useEffect(() => {
-    onLoad('focus');
-  }, [onLoad]);
-  const onShowNewItem = () => onShowNew(list.id);
+const defaultTodo = {
+  done: false,
+  focus: false,
+  deleted: false,
+  folder: false,
+  order: 0,
+  dueto: null,
+  description: '',
+};
+
+export const TodoList = () => {
+  const [currentId, setCurrentId] = React.useState('focus');
+  const { data: list, isLoading: listIsLoading } = useGetTodoQuery(currentId);
+  const { data: items, isLoading: itemIsLoading } = useGetTodoListQuery(currentId);
+  const [patch, ] = usePatchTodoMutation();
+  const [remove, ] = useDeleteTodoMutation();
+  const [newItem, setNewItem] = React.useState(null);
+  const [editItem, setEditItem] = React.useState(null);
+  const actions = {
+    onDone: item => patch({id: item.id, done: !item.done}),
+    onFocus: item => patch({id: item.id, focus: !item.focus}),
+    onMarkDelete: item => patch({id: item.id, deleted: !item.deleted}),
+    onEdit: item => setEditItem(item),
+    onOpen: item => setCurrentId(item.id),
+    onDelete: item => remove(item),
+  };
+  if (listIsLoading || itemIsLoading) {
+    return null;
+  }
+  const activeItems = items.filter(x => !x.done && !x.deleted);
+  const doneItems = items.filter(x => x.done || x.deleted);
   return (
     <div className="todo-page md:w-8/12 md:mx-auto">
-      <NewTodoDialog />
-      <EditTodoDialog />
+      <NewTodoDialog
+        data={newItem}
+        show={newItem !== null}
+        hide={() => setNewItem(null)}
+      />
+      <EditTodoDialog
+        data={editItem}
+        show={editItem !== null}
+        hide={() => setEditItem(null)}
+      />
       <div className="my-2">
-        <Button onClick={onShowNewItem}>
+        <Button onClick={() => setNewItem({ parent_id: currentId, ...defaultTodo })}>
           <i className="fa fa-plus" />
         </Button>
         {list.is_root === undefined && (
-          <Button onClick={() => onLoad(list.parent_id ?? 'root')}>
+          <Button onClick={() => setCurrentId(list.parent_id ?? 'root')}>
             <i className="fas fa-level-up-alt" />
           </Button>
         )}
         <Button
           isActive={list.is_root === true && list.name === "root"}
-          onClick={() => onLoad('root')}
+          onClick={() => setCurrentId('root')}
         >
           Root
         </Button>
         <Button
           isActive={list.is_root === true && list.name === "trash"}
-          onClick={() => onLoad('trash')}
+          onClick={() => setCurrentId('trash')}
         >
           Trash
         </Button>
         <Button
           isActive={list.is_root === true && list.name === "focus"}
-          onClick={() => onLoad('focus')}
+          onClick={() => setCurrentId('focus')}
         >
           Focus
         </Button>
       </div>
-      {items.length > 0 && (
+      {activeItems.length > 0 && (
         <div className="todo-list border-black border-t md:border-l">
-          {items.map(it => (
+          {activeItems.map(it => (
             <TodoListItem key={it.id} item={it} actions={actions} />
           ))}
         </div>
@@ -254,31 +264,3 @@ const TodoListBase = ({ list, items, doneItems, onLoad, onShowNew, actions }) =>
     </div>
   );
 }
-
-const defaultTodo = {
-  done: false,
-  focus: false,
-  deleted: false,
-  folder: false,
-  order: 0,
-  dueto: null,
-  description: '',
-};
-
-const TodoList = connect(
-  selectList,
-  dispatch => ({
-    onLoad: listid => dispatch(getTodoList(listid)),
-    onShowNew: listid => dispatch(showCreateTodo({ parent_id: listid, ...defaultTodo })),
-    actions: {
-      onDone: item => dispatch(markDone(item)),
-      onFocus: item => dispatch(markFocus(item)),
-      onMarkDelete: item => dispatch(markDeleted(item)),
-      onEdit: item => dispatch(showEditTodo(item)),
-      onOpen: item => dispatch(getTodoList(item.id)),
-      onDelete: item => dispatch(removeTodoItem(item)),
-    }
-  })
-)(TodoListBase);
-
-export { NewTodoDialog, TodoList };

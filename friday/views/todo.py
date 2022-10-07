@@ -29,8 +29,8 @@ class TodoItemCreate(BaseView):
 
     @use_args(TodoItemSchema(), location="json")
     def post(self, args):  # pylint: disable=no-self-use
-        if args['parent_id']:
-            parent = get_or_404(TodoItemModel, args['parent_id'])
+        if args["parent_id"]:
+            parent = get_or_404(TodoItemModel, args["parent_id"])
             if not parent.folder:
                 flask.abort(400)
         obj = TodoItemModel.create(**args)
@@ -54,8 +54,8 @@ class TodoItemCRUD(BaseView):
     @use_args(TodoItemSchema(), location="json")
     def put(self, args, itemid):  # pylint: disable=no-self-use
         obj = get_or_404(TodoItemModel, itemid)
-        if args['parent_id']:
-            parent = get_or_404(TodoItemModel, args['parent_id'])
+        if args["parent_id"]:
+            parent = get_or_404(TodoItemModel, args["parent_id"])
             if not parent.folder:
                 flask.abort(400)
         obj.update(**args)
@@ -64,8 +64,8 @@ class TodoItemCRUD(BaseView):
     @use_args(TodoItemSchema(partial=True), location="json")
     def patch(self, args, itemid):  # pylint: disable=no-self-use
         obj = get_or_404(TodoItemModel, itemid)
-        if 'parent_id' in args and args['parent_id']:
-            parent = get_or_404(TodoItemModel, args['parent_id'])
+        if "parent_id" in args and args["parent_id"]:
+            parent = get_or_404(TodoItemModel, args["parent_id"])
             if not parent.folder:
                 flask.abort(400)
         obj.update(**args)
@@ -130,3 +130,41 @@ class TodoTrashItems(BaseView):
             .all()
         )
         return TodoItemSchema.jsonify(items), 200
+
+
+def make_root_list(listid):
+    return {
+        "id": listid,
+        "created": None,
+        "updated": None,
+        "deleted": False,
+        "parent_id": None,
+        "name": listid,
+        "description": "",
+        "order": 0,
+        "dueto": None,
+        "done": False,
+        "focus": False,
+        "is_root": True,
+    }
+
+
+class TodoRoot(BaseView):
+    route_base = "/todo/root"
+
+    def get(self):  # pylint: disable=no-self-use
+        return flask.jsonify(make_root_list("root")), 200
+
+
+class TodoFocus(BaseView):
+    route_base = "/todo/focus"
+
+    def get(self):  # pylint: disable=no-self-use
+        return flask.jsonify(make_root_list("focus")), 200
+
+
+class TodoTrash(BaseView):
+    route_base = "/todo/trash"
+
+    def get(self):  # pylint: disable=no-self-use
+        return flask.jsonify(make_root_list("trash")), 200

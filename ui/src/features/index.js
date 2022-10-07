@@ -4,18 +4,17 @@ import recipes from './recipes';
 import alerts from './alerts';
 import calendar from './events';
 import docs from './docs';
-import todo from './todo';
-import { authApi, bookmarkApi, eventApi } from '../api';
+import { authApi, bookmarkApi, eventApi, todoApi } from '../api';
 
 export const reducers = combineReducers({
   alerts,
   calendar,
   docs,
   recipes,
-  todo,
   [authApi.reducerPath]: authApi.reducer,
   [bookmarkApi.reducerPath]: bookmarkApi.reducer,
   [eventApi.reducerPath]: eventApi.reducer,
+  [todoApi.reducerPath]: todoApi.reducer,
 });
 
 export const store = configureStore({
@@ -25,6 +24,7 @@ export const store = configureStore({
       authApi.middleware,
       bookmarkApi.middleware,
       eventApi.middleware,
+      todoApi.middleware,
     ),
 });
 
