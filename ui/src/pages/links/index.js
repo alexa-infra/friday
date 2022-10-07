@@ -12,7 +12,7 @@ const filterTerm = (term) => (item) => {
 };
 
 const LinksPage = () => {
-  const { data, isLoading } = useGetFavoriteBookmarksQuery({ page: 0, per_page: 50 });
+  const { data, isLoading } = useGetFavoriteBookmarksQuery({ page: 0, per_page: 100 });
   const [filter, setFilter] = React.useState('');
   const [filteredData, setFilteredData] = React.useState([]);
   React.useEffect(() => {

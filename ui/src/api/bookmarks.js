@@ -32,15 +32,15 @@ export const bookmarkApi = createApi({
       providesTags: (result, error, id) => [{type: tagType, id}],
     }),
     createBookmark: build.mutation({
-      query: ({ url, title, readed }) => ({
+      query: ({ url, title, readed, favorite }) => ({
         url: '/api/bookmarks',
         method: 'POST',
-        body: { url, title, readed },
+        body: { url, title, readed, favorite },
       }),
       invalidatesTags: (result, error, data) => [{type: tagType, id: 'PARTIAL-LIST'}],
     }),
     updateBookmark: build.mutation({
-      query: ({ id, url, title, readed }) => ({
+      query: ({ id, url, title, readed, favorite }) => ({
         url: `/api/bookmarks/${id}`,
         method: 'PUT',
         body: { url, title, readed },
