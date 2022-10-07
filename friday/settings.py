@@ -10,6 +10,7 @@ UI_DIR = os.environ.get("UI_PATH", os.path.join(ROOT_DIR, "../build"))
 STORAGE_PATH = os.environ.get("STORAGE_PATH", os.path.join(ROOT_DIR, "../images2"))
 REDIS_URL = os.environ.get("REDIS_URL", ":fake:")
 SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL", "sqlite:///database.sqlite")
+APP_URL = os.environ.get("APP_URL", "http://localhost:8000")
 
 DEBUG = False
 

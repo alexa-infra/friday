@@ -1,7 +1,7 @@
 import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const baseQuery = fetchBaseQuery({
-  baseUrl: 'http://localhost:3001',
+  baseUrl: process.env.REACT_APP_SERVER_URL,
   credentials: 'include',
   prepareHeaders: (headers, args) => {
     const csrfToken = getCookie('csrf_access_token');

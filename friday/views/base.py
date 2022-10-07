@@ -3,6 +3,7 @@ from datetime import timedelta
 from datetime import timezone
 from functools import partial
 from flask import Blueprint
+from flask import current_app
 from flask.views import MethodView, http_method_funcs
 from flask_jwt_extended import jwt_required, get_jwt, create_access_token, get_jwt_identity, set_access_cookies
 from webargs.flaskparser import FlaskParser
@@ -15,8 +16,8 @@ api = Blueprint("api", __name__)
 @api.after_request
 def add_cors_headers(response):
     headers = {
-        'Access-Control-Allow-Origin': 'http://localhost:3000',
-        'Access-Control-Allow-Methods': ', '.join(['GET', 'POST', 'PUT', 'DELETE']),
+        'Access-Control-Allow-Origin': current_app.config["APP_URL"],
+        'Access-Control-Allow-Methods': ', '.join(['GET', 'POST', 'PUT', 'PATCH', 'DELETE']),
         'Access-Control-Allow-Headers': ', '.join(['Content-Type', 'X-CSRF-TOKEN']),
         'Access-Control-Allow-Credentials': 'true',
     }
