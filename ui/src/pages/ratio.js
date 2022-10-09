@@ -2,7 +2,7 @@ import * as React from 'react';
 
 const Text = ({ idx, values, target, onChange, setTarget }) => (
   <input
-    className="disabled:bg-gray-100"
+    className="disabled:bg-gray-100 flex-1 min-w-0"
     type="text"
     value={values[idx]}
     onChange={e => onChange(idx, e.target.value)}
@@ -39,37 +39,20 @@ export function Ratio() {
   }, [values, target]);
   const props = { values, target, onChange, setTarget };
   return (
-    <table className="mx-auto mt-4">
-      <tr>
-        <td>
-          <Check idx={0} {...props} />
-          <Text idx={0} {...props} />
-        </td>
-        <td></td>
-        <td>
-          <Text idx={1} {...props} />
-          <Check idx={1} {...props} />
-        </td>
-      </tr>
-      <tr>
-        <td></td>
-        <td>
-          <span>&times;</span>
-        </td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>
-          <Check idx={2} {...props} />
-          <Text idx={2} {...props} />
-        </td>
-        <td></td>
-        <td>
-          <Text idx={3} {...props} />
-          <Check idx={3} {...props} />
-        </td>
-      </tr>
-    </table>
+    <div className="mx-auto mt-4 max-w-2xl">
+      <div className="flex flex-row items-center">
+        <Check idx={0} {...props} />
+        <Text idx={0} {...props} />
+        <Text idx={1} {...props} />
+        <Check idx={1} {...props} />
+      </div>
+      <div className="flex flex-row items-center">
+        <Check idx={2} {...props} />
+        <Text idx={2} {...props} />
+        <Text idx={3} {...props} />
+        <Check idx={3} {...props} />
+      </div>
+    </div>
   );
 }
 
