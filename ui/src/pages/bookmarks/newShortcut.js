@@ -10,7 +10,7 @@ const BookmarksAddShortcut = ({ showEditNew }) => {
     return <Navigate to="/bookmarks" />;
   }
   return <Navigate to="/bookmarks" state={{
-    newItem: { title, url },
+    newItem: { title, url, readed: false, favorite: false },
   }} />;
 }
 
