@@ -38,6 +38,9 @@ const NavBarComponent = () => (
     <NavItem>
       <Link to="/recipes">Recipes</Link>
     </NavItem>
+    <NavItem>
+      <Link to="/ratio">Ratio</Link>
+    </NavItem>
   </NavBar>
 );
 

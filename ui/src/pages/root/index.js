@@ -11,6 +11,7 @@ import Links from '../links';
 import Bookmarks from '../bookmarks';
 import Recipes from '../kueche';
 import { TodoList } from '../todo';
+import Ratio from '../ratio';
 
 import { NavBar, Alerts } from '../../components';
 import { useCurrentUserQuery } from '../../api';
@@ -66,6 +67,11 @@ export const Root = ({ store }) => (
           <Route path="/todo" element={
             <PrivateRoute>
               <TodoList />
+            </PrivateRoute>
+          } />
+          <Route path="/ratio" element={
+            <PrivateRoute>
+              <Ratio />
             </PrivateRoute>
           } />
           <Route path="/" element={
