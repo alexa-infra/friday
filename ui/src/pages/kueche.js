@@ -6,10 +6,11 @@ const getRandomElement = (arr) => {
   return arr[idx];
 };
 
-const shuffle = (arr) => arr
-  .map((a) => ({ sort: Math.random(), value: a }))
-  .sort((a, b) => a.sort - b.sort)
-  .map((a) => a.value);
+const shuffle = (arr) =>
+  arr
+    .map((a) => ({ sort: Math.random(), value: a }))
+    .sort((a, b) => a.sort - b.sort)
+    .map((a) => a.value);
 
 const convert = (it) => {
   const title = getRandomElement(it.names);
@@ -27,7 +28,10 @@ const Image = (props) => {
   const left = Math.floor(props.cw / 2 - props.nw / 2);
   const top = Math.floor(props.ch / 2 - props.nh / 2);
   return (
-    <div className="relative overflow-hidden" style={{ width: props.cw, height: props.ch }}>
+    <div
+      className="relative overflow-hidden"
+      style={{ width: props.cw, height: props.ch }}
+    >
       <img
         className="absolute max-w-none"
         src={props.url}
@@ -57,7 +61,7 @@ const ImageBoard = ({ images, desiredWidth }) => {
   React.useEffect(() => {
     const handleResize = () => {
       setContainerWidth(Math.floor(ref.current.clientWidth));
-    }
+    };
     window.addEventListener('resize', handleResize);
     handleResize();
     return () => window.removeEventListener('resize', handleResize, false);
@@ -77,10 +81,10 @@ const ImageBoard = ({ images, desiredWidth }) => {
   const updatedRows = rows.map((row) => {
     const rescaledRow = row.map((it) => {
       const { width: w, height: h } = it;
-      let nh = Math.floor(cellWidth * h / w);
+      let nh = Math.floor((cellWidth * h) / w);
       let nw = cellWidth;
       if (nh < cellHeight) {
-        nw = Math.floor(cellHeight * w / h);
+        nw = Math.floor((cellHeight * w) / h);
         nh = cellHeight;
       }
       return {
@@ -101,7 +105,7 @@ const ImageBoard = ({ images, desiredWidth }) => {
       ))}
     </div>
   );
-}
+};
 
 export const RecipesPage = () => {
   const { data } = useGetRecipeListQuery();
@@ -118,4 +122,4 @@ export const RecipesPage = () => {
       </div>
     </div>
   );
-}
+};

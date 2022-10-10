@@ -1,7 +1,12 @@
 import React from 'react';
 
 export const Pagination = ({
-  page, pages, per_page, prevPage, nextPage, changePerPage,
+  page,
+  pages,
+  per_page,
+  prevPage,
+  nextPage,
+  changePerPage,
 }) => {
   const hasNext = page < pages;
   const hasPrev = page > 1;

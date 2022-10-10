@@ -1,10 +1,10 @@
-import { createApi } from "@reduxjs/toolkit/query/react";
+import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQuery } from './base';
 
 export const authApi = createApi({
   baseQuery,
-  reducerPath: "auth",
-  tagTypes: ["auth"],
+  reducerPath: 'auth',
+  tagTypes: ['auth'],
   endpoints: (build) => ({
     login: build.mutation({
       query: ({ email, password }) => ({
@@ -12,13 +12,14 @@ export const authApi = createApi({
         method: 'POST',
         body: { email, password },
       }),
-      invalidatesTags: (results, error, data) => error ? [] : [{type: "auth", id: "LOGIN"}],
+      invalidatesTags: (results, error, data) =>
+        error ? [] : [{ type: 'auth', id: 'LOGIN' }],
     }),
     currentUser: build.query({
       query: () => ({
         url: '/api/users/current',
       }),
-      providesTags: (results, error, data) => [{type: "auth", id: "LOGIN"}],
+      providesTags: (results, error, data) => [{ type: 'auth', id: 'LOGIN' }],
     }),
   }),
 });

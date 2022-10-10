@@ -1,9 +1,7 @@
-import { createApi } from "@reduxjs/toolkit/query/react";
+import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQuery } from './base';
 
-const formatEventData = ({
-  name, icon, date, repeat,
-}) => ({
+const formatEventData = ({ name, icon, date, repeat }) => ({
   name,
   icon,
   repeat: repeat === 'none' ? null : repeat,
@@ -17,27 +15,33 @@ const searchParams = ({ fromdate, todate }) => {
   return params.toString();
 };
 
-const eventTagType = "event";
+const eventTagType = 'event';
 
 export const eventApi = createApi({
   baseQuery,
-  reducerPath: "event",
+  reducerPath: 'event',
   tagTypes: [eventTagType],
   endpoints: (build) => ({
     getEvents: build.query({
       query: (params) => ({
         url: `/api/events?${searchParams(params)}`,
       }),
-      providesTags: (result, error, params) => result ? [
-        ...result.map(x => ({type: eventTagType, id: x.id})),
-        {type: eventTagType, id: 'MONTH-LIST'},
-      ] : [{type: eventTagType, id: 'MONTH-LIST'}],
+      providesTags: (result, error, params) =>
+        result
+          ? [
+              ...result.map((x) => ({
+                type: eventTagType,
+                id: x.id,
+              })),
+              { type: eventTagType, id: 'MONTH-LIST' },
+            ]
+          : [{ type: eventTagType, id: 'MONTH-LIST' }],
     }),
     getEvent: build.query({
       query: (id) => ({
         url: `/api/events/${id}`,
       }),
-      providesTags: (result, error, id) => [{type: eventTagType, id}],
+      providesTags: (result, error, id) => [{ type: eventTagType, id }],
     }),
     createEvent: build.mutation({
       query: (data) => ({
@@ -45,7 +49,9 @@ export const eventApi = createApi({
         method: 'POST',
         body: formatEventData(data),
       }),
-      invalidatesTags: (result, error, data) => [{type: eventTagType, id: 'MONTH-LIST'}],
+      invalidatesTags: (result, error, data) => [
+        { type: eventTagType, id: 'MONTH-LIST' },
+      ],
     }),
     updateEvent: build.mutation({
       query: (data) => ({
@@ -54,8 +60,8 @@ export const eventApi = createApi({
         body: formatEventData(data),
       }),
       invalidatesTags: (result, error, data) => [
-        {type: eventTagType, id: data.id},
-        {type: eventTagType, id: 'MONTH-LIST'},
+        { type: eventTagType, id: data.id },
+        { type: eventTagType, id: 'MONTH-LIST' },
       ],
     }),
     deleteEvent: build.mutation({
@@ -64,8 +70,8 @@ export const eventApi = createApi({
         method: 'DELETE',
       }),
       invalidatesTags: (result, error, data) => [
-        {type: eventTagType, id: data.id},
-        {type: eventTagType, id: 'MONTH-LIST'},
+        { type: eventTagType, id: data.id },
+        { type: eventTagType, id: 'MONTH-LIST' },
       ],
     }),
     repeatEvent: build.mutation({
@@ -75,8 +81,8 @@ export const eventApi = createApi({
         body: { days: data.repeatIn },
       }),
       invalidatesTags: (result, error, data) => [
-        {type: eventTagType, id: data.id},
-        {type: eventTagType, id: 'MONTH-LIST'},
+        { type: eventTagType, id: data.id },
+        { type: eventTagType, id: 'MONTH-LIST' },
       ],
     }),
   }),

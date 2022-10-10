@@ -15,15 +15,11 @@ export const Modal = ({ children, ...rest }) => (
 
 export const ModalHeader = ({ children, onClose }) => (
   <div className="flex flex-row justify-between border-b border-gray-100">
-    <span className="font-bold text-gray-700 text-lg">
-      {children}
-    </span>
+    <span className="font-bold text-gray-700 text-lg">{children}</span>
     <i className="fa fa-times-circle" onClick={onClose} />
   </div>
 );
 
 export const ModalFooter = ({ children }) => (
-  <div className="flex flex-row justify-end">
-    {children}
-  </div>
+  <div className="flex flex-row justify-end">{children}</div>
 );

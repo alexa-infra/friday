@@ -34,12 +34,25 @@ export const LoginPage = () => {
   return (
     <Form onSubmit={login}>
       {({ handleSubmit, submitting }) => (
-        <form className="flex flex-col m-2 p-2 bg-gray-200 border border-black rounded text-center" onSubmit={handleSubmit}>
+        <form
+          className="flex flex-col m-2 p-2 bg-gray-200 border border-black rounded text-center"
+          onSubmit={handleSubmit}
+        >
           <label htmlFor="email">Name</label>
-          <Field name="email" component="input" type="text" className="form-control" />
+          <Field
+            name="email"
+            component="input"
+            type="text"
+            className="form-control"
+          />
 
           <label htmlFor="password">Password</label>
-          <Field name="password" component="input" type="password" className="form-control" />
+          <Field
+            name="password"
+            component="input"
+            type="password"
+            className="form-control"
+          />
 
           <div className="buttons">
             <Button type="submit" disabled={submitting || loading}>

@@ -63,11 +63,13 @@ export const eventsSlice = createSlice({
 export const selectMonth = createSelector(
   (state) => state.calendar.month,
   (monthStr) => {
-    const month = monthStr ? dayjs(monthStr, 'YYYY-MM') : dayjs().startOf('month');
+    const month = monthStr
+      ? dayjs(monthStr, 'YYYY-MM')
+      : dayjs().startOf('month');
     const firstDay = month.startOf('month').startOf('isoWeek');
     const lastDay = month.endOf('month').endOf('isoWeek');
     return { month, firstDay, lastDay };
-  }
+  },
 );
 
 const { setMonth } = eventsSlice.actions;

@@ -1,32 +1,37 @@
-import { createApi } from "@reduxjs/toolkit/query/react";
+import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQuery } from './base';
 
+const isRootList = (listid) =>
+  listid === 'root' || listid === 'focus' || listid === 'trash';
 
-const isRootList = listid => listid === 'root' || listid === 'focus' || listid === 'trash';
-
-const todoTagType = "todo";
+const todoTagType = 'todo';
 
 export const todoApi = createApi({
   baseQuery,
-  reducerPath: "todo",
+  reducerPath: 'todo',
   tagTypes: [todoTagType],
   endpoints: (build) => ({
     getTodo: build.query({
       query: (id) => ({
         url: `/api/todo/${id}`,
       }),
-      providesTags: (result, error, id) => result ? [
-        {type: todoTagType, id },
-      ] : [],
+      providesTags: (result, error, id) =>
+        result ? [{ type: todoTagType, id }] : [],
     }),
     getTodoList: build.query({
       query: (id) => ({
         url: `/api/todo/${id}/items`,
       }),
-      providesTags: (result, error, id) => result ? [
-        ...result.map(x => ({type: todoTagType, id: x.id})),
-        {type: todoTagType, id: 'LIST'},
-      ] : [],
+      providesTags: (result, error, id) =>
+        result
+          ? [
+              ...result.map((x) => ({
+                type: todoTagType,
+                id: x.id,
+              })),
+              { type: todoTagType, id: 'LIST' },
+            ]
+          : [],
     }),
     createTodo: build.mutation({
       query: ({ parent_id, ...rest }) => ({
@@ -38,7 +43,7 @@ export const todoApi = createApi({
         },
       }),
       invalidatesTags: (result, error, data) => [
-        {type: todoTagType, id: 'LIST'},
+        { type: todoTagType, id: 'LIST' },
       ],
     }),
     updateTodo: build.mutation({
@@ -51,8 +56,8 @@ export const todoApi = createApi({
         },
       }),
       invalidatesTags: (result, error, data) => [
-        {type: todoTagType, id: data.id},
-        {type: todoTagType, id: 'LIST'},
+        { type: todoTagType, id: data.id },
+        { type: todoTagType, id: 'LIST' },
       ],
     }),
     patchTodo: build.mutation({
@@ -62,8 +67,8 @@ export const todoApi = createApi({
         body: rest,
       }),
       invalidatesTags: (result, error, data) => [
-        {type: todoTagType, id: data.id},
-        {type: todoTagType, id: 'LIST'},
+        { type: todoTagType, id: data.id },
+        { type: todoTagType, id: 'LIST' },
       ],
     }),
     deleteTodo: build.mutation({
@@ -72,8 +77,8 @@ export const todoApi = createApi({
         method: 'DELETE',
       }),
       invalidatesTags: (result, error, data) => [
-        {type: todoTagType, id: data.id},
-        {type: todoTagType, id: 'LIST'},
+        { type: todoTagType, id: data.id },
+        { type: todoTagType, id: 'LIST' },
       ],
     }),
   }),
