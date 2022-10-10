@@ -1,8 +1,7 @@
 import { combineReducers } from 'redux';
 import { configureStore } from '@reduxjs/toolkit';
-import { alertsSlice } from './alerts';
-import { eventsSlice } from './events';
-import { authApi, bookmarkApi, eventApi, todoApi, recipeApi, tagApi, docApi } from '../api';
+import { alertsSlice, eventsSlice } from './slices';
+import { authApi, bookmarkApi, eventApi, todoApi, recipeApi, tagApi, docApi } from './api';
 
 const reducers = combineReducers({
   alerts: alertsSlice.reducer,

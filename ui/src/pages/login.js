@@ -3,7 +3,7 @@ import { Form, Field } from 'react-final-form';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useCurrentUserQuery, useLoginMutation } from '../api';
-import * as alerts from '../features/alerts';
+import * as alerts from '../slices/alerts';
 import { Button } from '../components';
 
 export const LoginPage = () => {

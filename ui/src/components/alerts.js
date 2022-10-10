@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import classNames from 'classnames';
-import { dismiss, Alerts } from '../features/alerts';
+import { dismiss, Alerts } from '../slices';
 
 const Alert = ({ item, onDismissAlert }) => {
   const { message, type } = item;

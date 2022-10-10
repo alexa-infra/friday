@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '../../components';
 import {
   nextMonth, prevMonth, selectCalendar, selectMonth
-} from '../../features/events';
+} from '../../slices';
 import { useGetEventsQuery } from '../../api';
 
 const Icon = ({ name, icon, onClick }) => (

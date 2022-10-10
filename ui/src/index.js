@@ -5,7 +5,7 @@ import '@fortawesome/fontawesome-free/css/all.css';
 import { reportWebVitals } from './reportWebVitals';
 import Modal from 'react-modal';
 import { Root } from './pages';
-import { store } from './features';
+import { store } from './store';
 
 const rootEl = document.getElementById('root');
 const root = ReactDOM.createRoot(rootEl);
