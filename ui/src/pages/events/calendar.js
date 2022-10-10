@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { useSelector, useDispatch } from 'react-redux';
-import Button from '../../components/button';
+import { Button } from '../../components';
 import {
   nextMonth, prevMonth, selectCalendar, selectMonth
 } from '../../features/events';
@@ -85,7 +85,7 @@ const Caption = () => {
   );
 }
 
-const Calendar = ({ showEdit, showNew }) => {
+export const Calendar = ({ showEdit, showNew }) => {
   const { firstDay, lastDay } = useSelector(selectMonth);
   const { days, dayNames } = useSelector(selectCalendar);
   const { data: events, isLoading } = useGetEventsQuery({
@@ -105,5 +105,3 @@ const Calendar = ({ showEdit, showNew }) => {
     </div>
   );
 }
-
-export default Calendar;

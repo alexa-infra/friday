@@ -44,7 +44,7 @@ const getDaysOfWeek = () => {
   return days.map((day) => day.format('ddd'));
 };
 
-const eventsSlice = createSlice({
+export const eventsSlice = createSlice({
   name: 'calendar',
   initialState: {
     month: dayjs().format('YYYY-MM'),
@@ -59,8 +59,6 @@ const eventsSlice = createSlice({
     },
   },
 });
-
-export default eventsSlice.reducer;
 
 export const selectMonth = createSelector(
   (state) => state.calendar.month,

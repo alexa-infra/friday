@@ -1,11 +1,11 @@
 import React from 'react';
 import { Form } from 'react-final-form';
-import { Modal, ModalHeader, ModalFooter } from '../../components/modal';
-import Button from '../../components/button';
+import { Modal, ModalHeader, ModalFooter } from '../../components';
+import { Button } from '../../components';
 import { FormFields } from './editForm';
 import { useCreateBookmarkMutation } from '../../api';
 
-const NewBookmarkForm = ({ show, hideEdit, item: newItem }) => {
+export const BookmarkNewForm = ({ show, hideEdit, item: newItem }) => {
   const [onSubmit, createState] = useCreateBookmarkMutation();
   React.useEffect(() => {
     if (createState.isSuccess) {
@@ -41,5 +41,3 @@ const NewBookmarkForm = ({ show, hideEdit, item: newItem }) => {
     </Modal>
   );
 };
-
-export default NewBookmarkForm;

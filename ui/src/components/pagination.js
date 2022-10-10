@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Pagination = ({
+export const Pagination = ({
   page, pages, per_page, prevPage, nextPage, changePerPage,
 }) => {
   const hasNext = page < pages;
@@ -45,5 +45,3 @@ const Pagination = ({
     </div>
   );
 };
-
-export default Pagination;

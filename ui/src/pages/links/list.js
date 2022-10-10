@@ -10,7 +10,7 @@ const Link = ({ id, url, title }) => (
   </a>
 );
 
-const LinkList = ({ items }) => (
+export const LinkList = ({ items }) => (
   <ul className="link-list flex flex-row flex-wrap justify-center">
     {items.map((it) => (
       <li className="m-2" key={it.id}>
@@ -19,5 +19,3 @@ const LinkList = ({ items }) => (
     ))}
   </ul>
 );
-
-export default LinkList;

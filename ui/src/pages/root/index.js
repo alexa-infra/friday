@@ -4,16 +4,16 @@ import {
   BrowserRouter as Router, Route, Routes, Navigate, useLocation
 } from 'react-router-dom';
 
-import Docs from '../docs';
-import Login from '../login';
-import Events from '../events';
-import Links from '../links';
-import Bookmarks from '../bookmarks';
-import Recipes from '../kueche';
-import { TodoList } from '../todo';
-import Ratio from '../ratio';
+import { DocsPage } from '../docs';
+import { LoginPage } from '../login';
+import { EventsPage } from '../events';
+import { LinksPage } from '../links';
+import { BookmarksPage } from '../bookmarks';
+import { RecipesPage } from '../kueche';
+import { TodoPage } from '../todo';
+import { RatioPage } from '../ratio';
 
-import { NavBar, Alerts } from '../../components';
+import { NavBar, AlertList } from '../../components';
 import { useCurrentUserQuery } from '../../api';
 
 function PrivateRoute({ children }) {
@@ -39,44 +39,44 @@ export const Root = ({ store }) => (
         <NavBar />
       </header>
       <main className="container mt-2 mx-auto">
-        <Alerts />
+        <AlertList />
         <Routes>
           <Route path="/login" element={
-            <Login />
+            <LoginPage />
           } />
           <Route path="/events" element={
             <PrivateRoute>
-              <Events />
+              <EventsPage />
             </PrivateRoute>
           } />
           <Route path="/bookmarks/*" element={
             <PrivateRoute>
-              <Bookmarks />
+              <BookmarksPage />
             </PrivateRoute>
           } />
           <Route path="/docs/*" element={
             <PrivateRoute>
-              <Docs />
+              <DocsPage />
             </PrivateRoute>
           } />
           <Route path="/recipes" element={
             <PrivateRoute>
-              <Recipes />
+              <RecipesPage />
             </PrivateRoute>
           } />
           <Route path="/todo" element={
             <PrivateRoute>
-              <TodoList />
+              <TodoPage />
             </PrivateRoute>
           } />
           <Route path="/ratio" element={
             <PrivateRoute>
-              <Ratio />
+              <RatioPage />
             </PrivateRoute>
           } />
           <Route path="/" element={
             <PrivateRoute>
-              <Links />
+              <LinksPage />
             </PrivateRoute>
           } />
         </Routes>
@@ -84,5 +84,3 @@ export const Root = ({ store }) => (
     </Router>
   </Provider>
 );
-
-export default Root;

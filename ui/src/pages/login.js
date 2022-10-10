@@ -2,11 +2,11 @@ import React from 'react';
 import { Form, Field } from 'react-final-form';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { useCurrentUserQuery, useLoginMutation } from '../../api';
-import * as alerts from '../../features/alerts';
-import Button from '../../components/button';
+import { useCurrentUserQuery, useLoginMutation } from '../api';
+import * as alerts from '../features/alerts';
+import { Button } from '../components';
 
-export const LoginForm = () => {
+export const LoginPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { from } = location.state || { from: { pathname: '/' } };

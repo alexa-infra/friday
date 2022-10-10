@@ -19,7 +19,7 @@ const Check = ({ idx, values, target, onChange, setTarget }) => (
   />
 );
 
-export function Ratio() {
+export function RatioPage() {
   const [target, setTarget] = React.useState(3);
   const [values, setValues] = React.useState(['', '', '', '']);
   const onChange = React.useCallback((idx, value) => {
@@ -55,5 +55,3 @@ export function Ratio() {
     </div>
   );
 }
-
-export default Ratio;

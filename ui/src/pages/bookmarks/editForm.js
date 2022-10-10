@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Field } from 'react-final-form';
-import { Modal, ModalHeader, ModalFooter } from '../../components/modal';
-import Button from '../../components/button';
+import { Modal, ModalHeader, ModalFooter } from '../../components';
+import { Button } from '../../components';
 import { useUpdateBookmarkMutation, useDeleteBookmarkMutation } from '../../api';
 
 export const FormFields = () => (
@@ -24,7 +24,7 @@ export const FormFields = () => (
   </>
 );
 
-const BookmarkForm = ({ show, hideEdit, item: currentItem }) => {
+export const BookmarkEditForm = ({ show, hideEdit, item: currentItem }) => {
   const [onSubmit, updateState] = useUpdateBookmarkMutation();
   const [deleteItem, deleteState] = useDeleteBookmarkMutation();
   React.useEffect(() => {
@@ -70,5 +70,3 @@ const BookmarkForm = ({ show, hideEdit, item: currentItem }) => {
     </Modal>
   );
 };
-
-export default BookmarkForm;

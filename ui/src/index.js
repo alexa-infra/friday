@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import '@fortawesome/fontawesome-free/css/all.css';
-import reportWebVitals from './reportWebVitals';
+import { reportWebVitals } from './reportWebVitals';
 import Modal from 'react-modal';
 import { Root } from './pages';
 import { store } from './features';

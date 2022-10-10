@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 
-const BookmarksAddShortcut = ({ showEditNew }) => {
+export const BookmarksAddShortcut = ({ showEditNew }) => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const title = searchParams.get('title');
@@ -13,5 +13,3 @@ const BookmarksAddShortcut = ({ showEditNew }) => {
     newItem: { title, url, readed: false, favorite: false },
   }} />;
 }
-
-export default BookmarksAddShortcut;

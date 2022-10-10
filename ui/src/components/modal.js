@@ -27,5 +27,3 @@ export const ModalFooter = ({ children }) => (
     {children}
   </div>
 );
-
-export default Modal;

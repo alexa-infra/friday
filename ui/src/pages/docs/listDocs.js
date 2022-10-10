@@ -2,7 +2,7 @@ import React from 'react';
 import dayjs from 'dayjs';
 import { Link, NavLink } from 'react-router-dom';
 import { TagsViewer, TagCloud } from './tags';
-import Button from '../../components/button';
+import { Button } from '../../components';
 import { Pagination } from '../../components';
 import { useGetDocsQuery, useGetTagListQuery } from '../../api';
 
@@ -40,7 +40,7 @@ const DocItem = ({ id, tags, name, created, updated }) => {
   );
 }
 
-const DocsList = () => {
+export const DocsList = () => {
   const { data: tagCloud, isLoading: tagsIsLoading } = useGetTagListQuery();
   const [params, setParams] = React.useState({
     tag: null,
@@ -106,5 +106,3 @@ const DocsList = () => {
     </div>
   );
 }
-
-export default DocsList;

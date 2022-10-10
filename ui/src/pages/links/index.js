@@ -1,6 +1,6 @@
 import React from 'react';
-import Search from './search';
-import List from './list';
+import { SearchBox } from './search';
+import { LinkList } from './list';
 import { useGetFavoriteBookmarksQuery } from '../../api';
 
 
@@ -11,7 +11,7 @@ const filterTerm = (term) => (item) => {
   return ~searchField(item.title).indexOf(term);
 };
 
-const LinksPage = () => {
+export const LinksPage = () => {
   const { data, isLoading } = useGetFavoriteBookmarksQuery({ page: 0, per_page: 100 });
   const [filter, setFilter] = React.useState('');
   const [filteredData, setFilteredData] = React.useState([]);
@@ -22,10 +22,8 @@ const LinksPage = () => {
   }, [data, filter, setFilteredData]);
   return (
     <div className="links-page md:w-8/12 md:mx-auto">
-      <Search filter={filter} setFilter={setFilter} />
-      <List items={isLoading ? [] : filteredData} />
+      <SearchBox filter={filter} setFilter={setFilter} />
+      <LinkList items={isLoading ? [] : filteredData} />
     </div>
   );
 }
-
-export default LinksPage;

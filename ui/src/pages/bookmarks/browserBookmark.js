@@ -13,8 +13,6 @@ const bookmarkHtml = `<a href="${bookmarkScript}">Bookmark</a>`;
 
 const createMarkup = (html) => ({ __html: html });
 
-const BrowserBookmark = () => (
+export const BrowserBookmark = () => (
   <div dangerouslySetInnerHTML={createMarkup(bookmarkHtml)} />
 );
-
-export default BrowserBookmark;

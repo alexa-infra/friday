@@ -9,7 +9,7 @@ export const Alerts = {
 
 let alertId = 0;
 
-const alertsSlice = createSlice({
+export const alertsSlice = createSlice({
   name: 'alerts',
   initialState: [],
   reducers: {
@@ -32,8 +32,6 @@ const alertsSlice = createSlice({
     },
   },
 });
-
-export default alertsSlice.reducer;
 
 export const { add, dismiss } = alertsSlice.actions;
 

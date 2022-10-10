@@ -1,12 +1,12 @@
 import React from 'react';
 import classNames from 'classnames';
 import { Form, Field } from 'react-final-form';
-import { Modal, ModalHeader, ModalFooter } from '../../components/modal';
-import Button from '../../components/button';
+import { Modal, ModalHeader, ModalFooter } from '../../components';
+import { Button } from '../../components';
 import { useGetTodoQuery, useGetTodoListQuery, usePatchTodoMutation, useDeleteTodoMutation, useCreateTodoMutation, useUpdateTodoMutation } from '../../api';
 
 
-export const FormFields = () => (
+const FormFields = () => (
   <>
     <label htmlFor="name">Name</label>
     <Field name="name" component="input" type="text" />
@@ -173,7 +173,7 @@ const TodoListItem = ({item, actions}) => (
   </div>
 );
 
-const defaultTodo = {
+const emptyTodo = {
   done: false,
   focus: false,
   deleted: false,
@@ -183,7 +183,7 @@ const defaultTodo = {
   description: '',
 };
 
-export const TodoList = () => {
+export const TodoPage = () => {
   const [currentId, setCurrentId] = React.useState('focus');
   const { data: list, isLoading: listIsLoading } = useGetTodoQuery(currentId);
   const { data: items, isLoading: itemIsLoading } = useGetTodoListQuery(currentId);
@@ -217,7 +217,7 @@ export const TodoList = () => {
         hide={() => setEditItem(null)}
       />
       <div className="my-2">
-        <Button onClick={() => setNewItem({ parent_id: currentId, ...defaultTodo })}>
+        <Button onClick={() => setNewItem({ parent_id: currentId, ...emptyTodo })}>
           <i className="fa fa-plus" />
         </Button>
         {list.is_root === undefined && (

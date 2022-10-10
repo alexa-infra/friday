@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-const SearchBox = ({ setFilter, filter }) => (
+export const SearchBox = ({ setFilter, filter }) => (
   <div className="flex flex-row">
     <div className="flex-grow">
       <input
@@ -14,5 +14,3 @@ const SearchBox = ({ setFilter, filter }) => (
     </div>
   </div>
 );
-
-export default SearchBox;

@@ -1,8 +1,8 @@
 import React from 'react';
-import Button from '../../components/button';
+import { Button } from '../../components';
 
 
-const Controls = ({ search: initSearch, doSearch, showEditNew }) => {
+export const Controls = ({ search: initSearch, doSearch, showEditNew }) => {
   const [search, setSearch] = React.useState(initSearch);
   React.useEffect(() => {
     setSearch(initSearch);
@@ -33,5 +33,3 @@ const Controls = ({ search: initSearch, doSearch, showEditNew }) => {
     </div>
   );
 }
-
-export default Controls;

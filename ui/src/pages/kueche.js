@@ -103,7 +103,7 @@ const ImageBoard = ({ images, desiredWidth }) => {
   );
 }
 
-const App = () => {
+export const RecipesPage = () => {
   const { data } = useGetRecipeListQuery();
   const [items, setItems] = React.useState([]);
   React.useEffect(() => {
@@ -119,5 +119,3 @@ const App = () => {
     </div>
   );
 }
-
-export default App;

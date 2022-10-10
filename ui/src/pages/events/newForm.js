@@ -2,10 +2,10 @@ import React from 'react';
 import { Form } from 'react-final-form';
 import { FormFields } from './editForm';
 import { Modal, ModalHeader, ModalFooter } from '../../components/modal';
-import Button from '../../components/button';
+import { Button } from '../../components';
 import { useCreateEventMutation } from '../../api';
 
-const NewEventForm = ({ item: newItem, show, hide: onClose }) => {
+export const EventNewForm = ({ item: newItem, show, hide: onClose }) => {
   const [onSubmit, saveState] = useCreateEventMutation();
   const loading = saveState.isFetching;
   React.useEffect(() => {
@@ -38,5 +38,3 @@ const NewEventForm = ({ item: newItem, show, hide: onClose }) => {
     </Modal>
   );
 };
-
-export default NewEventForm;

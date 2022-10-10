@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { TagsViewer } from './tags';
-import Button from '../../components/button';
+import { Button } from '../../components';
 import { useGetDocQuery, useGetDocHtmlQuery } from '../../api';
 
 const createMarkup = (html) => ({ __html: html });
 
-const DocView = () => {
+export const DocView = () => {
   const params = useParams();
   const { data, isLoading } = useGetDocQuery(params.id);
   const { data: html, isLoading: htmlIsLoading } = useGetDocHtmlQuery(params.id);
@@ -37,5 +37,3 @@ const DocView = () => {
     </div>
   );
 };
-
-export default DocView;

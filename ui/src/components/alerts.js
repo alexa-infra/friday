@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import classNames from 'classnames';
-import { dismiss, Alerts } from '../../features/alerts';
+import { dismiss, Alerts } from '../features/alerts';
 
 const Alert = ({ item, onDismissAlert }) => {
   const { message, type } = item;
@@ -25,7 +25,7 @@ const Alert = ({ item, onDismissAlert }) => {
   );
 };
 
-const AlertList = () => {
+export const AlertList = () => {
   const items = useSelector(state => state.alerts);
   const dispatch = useDispatch();
   const onDismissAlert = (item) => dispatch(dismiss(item.id));
@@ -43,5 +43,3 @@ const AlertList = () => {
     </div>
   );
 }
-
-export default AlertList;

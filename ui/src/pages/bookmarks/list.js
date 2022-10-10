@@ -82,5 +82,3 @@ export const BookmarkList = ({
     </div>
   );
 }
-
-export default BookmarkList;

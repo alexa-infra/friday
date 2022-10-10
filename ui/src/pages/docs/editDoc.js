@@ -2,10 +2,10 @@ import React from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { Form, Field } from 'react-final-form';
 import { renderTags } from './tags';
-import Button from '../../components/button';
+import { Button } from '../../components';
 import { useGetDocQuery, useGetDocTextQuery, useUpdateDocMutation, usePutDocTextMutation, useDeleteDocMutation } from '../../api';
 
-const DocEdit = () => {
+export const DocEdit = () => {
   const [wrap, setWrap] = React.useState(false);
   const navigate = useNavigate();
   const params = useParams();
@@ -88,5 +88,3 @@ const DocEdit = () => {
     </article>
   );
 };
-
-export default DocEdit;

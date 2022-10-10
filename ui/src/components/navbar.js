@@ -9,7 +9,7 @@ const NavItem = ({ children }) => (
 );
 
 
-const NavBar = ({ children }) => (
+const NavBarBase = ({ children }) => (
   <nav className="w-full bg-white px-2 py-3 navbar-expand-lg shadow-lg">
     <ul className="flex flex-row flex-wrap list-none">
       { children }
@@ -18,8 +18,8 @@ const NavBar = ({ children }) => (
 );
 
 
-const NavBarComponent = () => (
-  <NavBar>
+export const NavBar = () => (
+  <NavBarBase>
     <NavItem>
       <Link to="/">Home</Link>
     </NavItem>
@@ -41,7 +41,5 @@ const NavBarComponent = () => (
     <NavItem>
       <Link to="/ratio">Ratio</Link>
     </NavItem>
-  </NavBar>
+  </NavBarBase>
 );
-
-export default NavBarComponent;

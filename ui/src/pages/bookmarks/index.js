@@ -1,16 +1,16 @@
 import React from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
-import BookmarksAddShortcut from './newShortcut';
-import Controls from './controls';
-import List from './list';
+import { BookmarksAddShortcut } from './newShortcut';
+import { Controls } from './controls';
+import { BookmarkList } from './list';
 import { Pagination } from '../../components';
-import BrowserBookmark from './browserBookmark';
-import EditForm from './editForm';
-import NewForm from './newForm';
+import { BrowserBookmark } from './browserBookmark';
+import { BookmarkEditForm } from './editForm';
+import { BookmarkNewForm } from './newForm';
 import { useGetBookmarksQuery } from '../../api';
 
 
-const BookmarksPage = () => {
+const Bookmarks = () => {
   const location = useLocation();
   const { newItem: initNewItem } = location.state || { newItem: null };
 
@@ -68,7 +68,7 @@ const BookmarksPage = () => {
         doSearch={setFilter}
         showEditNew={() => setNewItem({})}
       />
-      <List
+      <BookmarkList
         items={isLoading ? [] : data.items}
         showEdit={setEditItem}
       />
@@ -79,12 +79,12 @@ const BookmarksPage = () => {
         changePerPage={changePerPage}
       />
       <BrowserBookmark />
-      <EditForm
+      <BookmarkEditForm
         show={editItem !== null}
         hideEdit={() => setEditItem(null)}
         item={editItem}
       />
-      <NewForm
+      <BookmarkNewForm
         show={newItem !== null}
         hideEdit={() => setNewItem(null)}
         item={newItem}
@@ -93,15 +93,13 @@ const BookmarksPage = () => {
   );
 }
 
-const RouteContainer = () => (
+export const BookmarksPage = () => (
   <Routes>
     <Route path="add" element={
       <BookmarksAddShortcut />
     } />
     <Route path="" element={
-      <BookmarksPage />
+      <Bookmarks />
     } />
   </Routes>
 );
-
-export default RouteContainer;

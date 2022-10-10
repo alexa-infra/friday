@@ -1,12 +1,12 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import DocNew from './newDoc';
-import DocEdit from './editDoc';
-import DocView from './viewDoc';
-import DocsList from './listDocs';
+import { DocNew } from './newDoc';
+import { DocEdit } from './editDoc';
+import { DocView } from './viewDoc';
+import { DocsList } from './listDocs';
 import './github-markdown.css';
 
-const DocsPage = () => (
+export const DocsPage = () => (
   <Routes>
     <Route path="new" element={
       <DocNew />
@@ -22,5 +22,3 @@ const DocsPage = () => (
     } />
   </Routes>
 );
-
-export default DocsPage;

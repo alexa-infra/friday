@@ -2,10 +2,10 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Form, Field } from 'react-final-form';
 import { renderTags } from './tags';
-import Button from '../../components/button';
+import { Button } from '../../components';
 import { useCreateDocMutation, usePutDocTextMutation } from '../../api';
 
-const DocNew = () => {
+export const DocNew = () => {
   const navigate = useNavigate();
   const [wrap, setWrap] = React.useState(false);
   const [create, createState] = useCreateDocMutation();
@@ -61,5 +61,3 @@ const DocNew = () => {
     </article>
   );
 };
-
-export default DocNew;

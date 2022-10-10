@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Field } from 'react-final-form';
-import { Modal, ModalHeader, ModalFooter } from '../../components/modal';
-import Button from '../../components/button';
+import { Modal, ModalHeader, ModalFooter } from '../../components';
+import { Button } from '../../components';
 import { useUpdateEventMutation, useDeleteEventMutation, useRepeatEventMutation } from '../../api';
 
 const RepeatInDays = ({ repeatEvent, disabled }) => {
@@ -41,7 +41,7 @@ export const FormFields = () => (
   </>
 );
 
-const EventForm = ({ item: currentItem, show, hide: onClose }) => {
+export const EventEditForm = ({ item: currentItem, show, hide: onClose }) => {
   const [onSubmit, saveState] = useUpdateEventMutation();
   const [deleteEvent, deleteState] = useDeleteEventMutation();
   const [repeatEvent, repeatState] = useRepeatEventMutation();
@@ -95,5 +95,3 @@ const EventForm = ({ item: currentItem, show, hide: onClose }) => {
     </Modal>
   );
 };
-
-export default EventForm;

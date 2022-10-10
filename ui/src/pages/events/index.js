@@ -1,9 +1,9 @@
 import React from 'react';
-import Calendar from './calendar';
-import EditEventModal from './editForm';
-import NewEventModal from './newForm';
+import { Calendar } from './calendar';
+import { EventEditForm } from './editForm';
+import { EventNewForm } from './newForm';
 
-const EventsPage = () => {
+export const EventsPage = () => {
   const [editItem, showEditItem] = React.useState(null);
   const [newItem, showNewItem] = React.useState(null);
   const showEdit = it => showEditItem(it);
@@ -17,12 +17,12 @@ const EventsPage = () => {
           showEdit={showEdit}
           showNew={showNew}
         />
-        <EditEventModal
+        <EventEditForm
           item={editItem}
           show={editItem !== null}
           hide={hideEdit}
         />
-        <NewEventModal
+        <EventNewForm
           item={newItem}
           show={newItem !== null}
           hide={hideNew}
@@ -31,5 +31,3 @@ const EventsPage = () => {
     </div>
   );
 }
-
-export default EventsPage;
