@@ -6,12 +6,22 @@ import { useCurrentUserQuery, useLoginMutation } from '../api';
 import * as alerts from '../slices/alerts';
 import { Button } from '../components';
 
-export const LoginPage = () => {
+const useCurrentUser = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { from } = location.state || { from: { pathname: '/' } };
 
   const currentUser = useCurrentUserQuery();
+  React.useEffect(() => {
+    if (currentUser.isSuccess) {
+      navigate(from);
+    }
+  }, [currentUser, navigate, from]);
+
+  return currentUser;
+};
+
+const useLogin = () => {
   const [login, loginState] = useLoginMutation();
   const dispatch = useDispatch();
 
@@ -24,12 +34,32 @@ export const LoginPage = () => {
     }
   }, [loginState, dispatch]);
 
-  React.useEffect(() => {
-    if (currentUser.isSuccess) {
-      navigate(from);
-    }
-  }, [currentUser, navigate, from]);
+  return [login, loginState];
+};
 
+const FormFields = () => (
+  <>
+    <label htmlFor="email">Name</label>
+    <Field
+      name="email"
+      component="input"
+      type="text"
+      className="form-control"
+    />
+
+    <label htmlFor="password">Password</label>
+    <Field
+      name="password"
+      component="input"
+      type="password"
+      className="form-control"
+    />
+  </>
+);
+
+export const LoginPage = () => {
+  const currentUser = useCurrentUser();
+  const [login, loginState] = useLogin();
   const loading = currentUser.isFetching || loginState.isFetching;
   return (
     <Form onSubmit={login}>
@@ -38,21 +68,7 @@ export const LoginPage = () => {
           className="flex flex-col m-2 p-2 bg-gray-200 border border-black rounded text-center"
           onSubmit={handleSubmit}
         >
-          <label htmlFor="email">Name</label>
-          <Field
-            name="email"
-            component="input"
-            type="text"
-            className="form-control"
-          />
-
-          <label htmlFor="password">Password</label>
-          <Field
-            name="password"
-            component="input"
-            type="password"
-            className="form-control"
-          />
+          <FormFields />
 
           <div className="buttons">
             <Button type="submit" disabled={submitting || loading}>

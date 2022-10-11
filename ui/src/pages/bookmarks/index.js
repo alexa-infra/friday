@@ -9,11 +9,14 @@ import { BookmarkEditForm } from './editForm';
 import { BookmarkNewForm } from './newForm';
 import { useGetBookmarksQuery } from '../../api';
 
-
-const Bookmarks = () => {
+const useNewItem = () => {
   const location = useLocation();
   const { newItem: initNewItem } = location.state || { newItem: null };
+  const [newItem, setNewItem] = React.useState(initNewItem);
+  return [newItem, setNewItem];
+}
 
+const usePagination = () => {
   const [params, setParams] = React.useState({
     search: null,
     page: 1,
@@ -40,7 +43,17 @@ const Bookmarks = () => {
       ...x,
       per_page,
     }));
+  const methods = {
+    setFilter,
+    nextPage,
+    prevPage,
+    changePerPage,
+  };
+  return [params, setParams, methods];
+}
 
+const useQuery = () => {
+  const [params, setParams, methods] = usePagination();
   const { data, isLoading } = useGetBookmarksQuery({
     search: params.search,
     page: params.page,
@@ -57,26 +70,27 @@ const Bookmarks = () => {
       }));
     }
   }, [data, setParams]);
+  return [isLoading ? [] : data.items, params, methods];
+}
 
+const Bookmarks = () => {
+  const [data, params, methods] = useQuery();
   const [editItem, setEditItem] = React.useState(null);
-  const [newItem, setNewItem] = React.useState(initNewItem);
-
+  const [newItem, setNewItem] = useNewItem();
   return (
     <div className="bookmarks-page md:w-8/12 md:mx-auto">
       <Controls
         {...params}
-        doSearch={setFilter}
+        doSearch={methods.setFilter}
         showEditNew={() => setNewItem({})}
       />
       <BookmarkList
-        items={isLoading ? [] : data.items}
+        items={data}
         showEdit={setEditItem}
       />
       <Pagination
         {...params}
-        nextPage={nextPage}
-        prevPage={prevPage}
-        changePerPage={changePerPage}
+        {...methods}
       />
       <BrowserBookmark />
       <BookmarkEditForm
