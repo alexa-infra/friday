@@ -2,6 +2,8 @@ import re
 from datetime import datetime
 import random
 import bcrypt
+from urllib.parse import urlparse
+from slugify import slugify
 from markdown.extensions import Extension
 from markdown.inlinepatterns import SimpleTagPattern
 
@@ -43,3 +45,17 @@ def get_random_string(
 def camel_to_snake(name: str) -> str:
     s1 = re.sub("(.)([A-Z][a-z]+)", r"\1_\2", name)
     return re.sub("([a-z0-9])([A-Z])", r"\1_\2", s1).lower()
+
+
+def get_domain(url):
+    parsed = urlparse(url)
+    netloc = str(parsed.netloc)
+    if netloc.startswith("www."):
+        netloc = netloc[4:]
+    return netloc
+
+
+def get_slug(*values):
+    values = filter(None, values)
+    txt = " ".join(values)
+    return slugify(txt, separator=" ")

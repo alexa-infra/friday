@@ -1,17 +1,47 @@
+from datetime import datetime
+from datetime import timedelta
+from datetime import timezone
 from functools import partial
 from flask import Blueprint
+from flask import current_app
 from flask.views import MethodView, http_method_funcs
+from flask_jwt_extended import jwt_required, get_jwt, create_access_token, get_jwt_identity, set_access_cookies
 from webargs.flaskparser import FlaskParser
-from friday.session import auth_required
 from friday.utils import camel_to_snake
 from typing import Optional, Tuple, Any
 
 api = Blueprint("api", __name__)
 
 
+@api.after_request
+def add_cors_headers(response):
+    headers = {
+        'Access-Control-Allow-Origin': current_app.config["APP_URL"],
+        'Access-Control-Allow-Methods': ', '.join(['GET', 'POST', 'PUT', 'PATCH', 'DELETE']),
+        'Access-Control-Allow-Headers': ', '.join(['Content-Type', 'X-CSRF-TOKEN']),
+        'Access-Control-Allow-Credentials': 'true',
+    }
+    response.headers.extend(headers)
+    return response
+
+
+@api.after_request
+def refresh_expiring_jwts(response):
+    try:
+        exp_timestamp = get_jwt()["exp"]
+        now = datetime.now(timezone.utc)
+        target_timestamp = datetime.timestamp(now + timedelta(days=10))
+        if target_timestamp > exp_timestamp:
+            access_token = create_access_token(identity=get_jwt_identity())
+            set_access_cookies(response, access_token)
+        return response
+    except (RuntimeError, KeyError):
+        return response
+
+
 class BaseView(MethodView):
     route_base: Optional[str] = None
-    decorators: Optional[Tuple[Any]] = (auth_required,)
+    decorators: Optional[Tuple[Any]] = (jwt_required(),)
 
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)

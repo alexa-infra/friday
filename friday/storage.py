@@ -156,6 +156,7 @@ class Storage:
         path = app.config.get("STORAGE_PATH", None)
         if not path:
             raise ValueError("'STORAGE_PATH' is missing")
+        app.extensions["storage"] = self
         self.storage = LocalStorage(path)
         self._register_static_route(app)
         return self
@@ -167,7 +168,7 @@ class Storage:
                 filename = self.storage.get_path(filename)
             except StorageError:
                 return "Not found", 404
-            return send_file(filename, conditional=True, cache_timeout=31536000)
+            return send_file(filename, conditional=True)
 
     def upload(self, path, file, name=None, overwrite=False):
         if not name:

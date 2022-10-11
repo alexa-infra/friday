@@ -7,7 +7,6 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.orm import joinedload
 from PilLite import Image
 from friday.utils import utcnow
-from .. import storage
 from .base import Model
 from .tag import TagMixin
 from typing import TYPE_CHECKING
@@ -49,6 +48,10 @@ class Recipe(Model, TagMixin):
             self.names = value
 
 
+def get_storage():
+    return current_app.extensions["storage"]
+
+
 class RecipeImage(Model):
     filename = Column(Text, primary_key=True)
     _height = Column("height", Integer, nullable=False)
@@ -58,6 +61,7 @@ class RecipeImage(Model):
 
     @classmethod
     def create(cls, commit=True, url=None, recipe=None, **kwargs):
+        storage = get_storage()
         filename = storage.upload(recipe.name, url)
 
         with closing(storage.get(filename)) as f:
@@ -82,18 +86,21 @@ class RecipeImage(Model):
 
     @property
     def url(self):
+        storage = get_storage()
         size = current_app.config.get("RECIPE_THUMBNAIL_SIZE", 300)
         thumbnail_path = os.path.join(f"thumbnails-{size}", self.filename)
         if not storage.exists(thumbnail_path):
             wh = self._thumbnail_size(size)
             self._make_thumbnail(thumbnail_path, wh)
-        return storage.get_url(thumbnail_path)
+        return storage.get_url(thumbnail_path, external=True)
 
     @property
     def original_url(self):
+        storage = get_storage()
         return storage.get_url(self.filename)
 
     def _make_thumbnail(self, filename, size):
+        storage = get_storage()
         with closing(storage.get(self.filename)) as f:
             img = Image.open(f)
             if size != img.size:
