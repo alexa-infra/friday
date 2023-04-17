@@ -8,3 +8,4 @@ pip-tools
 mypy
 sqlalchemy-stubs
 black
+isort

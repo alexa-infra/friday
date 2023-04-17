@@ -1,2 +1,5 @@
 [flake8]
-exclude=.git,__pycache__,friday/migrations/,friday-ui,local/,site-packages/
+max-line-length = 100
+# required for compatibility with Black:
+extend-ignore = E203
+exclude = .venv,friday/migrations,local,ui
