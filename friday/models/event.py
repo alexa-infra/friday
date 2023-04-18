@@ -1,7 +1,9 @@
-from datetime import timedelta
 import enum
-from sqlalchemy import Column, Integer, Text, Enum, Date
+from datetime import timedelta
+
+from sqlalchemy import Column, Date, Enum, Integer, Text
 from sqlalchemy.orm import validates
+
 from .base import Model
 
 
@@ -56,9 +58,7 @@ class Event(Model):
     @classmethod
     def get_notrepeated_between(cls, a, b):
         query = (
-            cls.query.filter(Event.repeat.is_(None))
-            .filter(Event.date >= a)
-            .filter(Event.date <= b)
+            cls.query.filter(Event.repeat.is_(None)).filter(Event.date >= a).filter(Event.date <= b)
         )
         return query.all()
 
@@ -72,10 +72,7 @@ class Event(Model):
         not_repeated = cls.get_notrepeated_between(a, b)
         repeated = cls.get_repeated()
         matched = [
-            (dt, event)
-            for event in repeated
-            for dt in iter_days(a, b)
-            if event.check_date(dt)
+            (dt, event) for event in repeated for dt in iter_days(a, b) if event.check_date(dt)
         ]
         allmatches = [(x.date, x) for x in not_repeated] + matched
         return list(map(lambda it: dict(date=it[0], event=it[1]), allmatches))

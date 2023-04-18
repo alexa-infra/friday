@@ -1,9 +1,14 @@
-from flask import request, abort
-from . import BaseView, use_args, use_kwargs
-from ..models import Doc as DocModel, Tag as TagModel, DocTag
+from flask import abort, request
+
+from ..models import Doc as DocModel
+from ..models import DocTag
+from ..models import Tag as TagModel
 from ..models import paginate
-from ..schemas import Doc as DocSchema, Tag as TagSchema, TagCloud
-from .utils import tag_args, pagination_args, get_or_404
+from ..schemas import Doc as DocSchema
+from ..schemas import Tag as TagSchema
+from ..schemas import TagCloud
+from .base import BaseView, use_args, use_kwargs
+from .utils import get_or_404, pagination_args, tag_args
 
 
 class DocListView(BaseView):

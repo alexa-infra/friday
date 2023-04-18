@@ -1,8 +1,10 @@
 from __future__ import with_statement
+
+import logging
+from logging.config import fileConfig
+
 from alembic import context
 from sqlalchemy import engine_from_config, pool
-from logging.config import fileConfig
-import logging
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -19,9 +21,7 @@ logger = logging.getLogger("alembic.env")
 # target_metadata = mymodel.Base.metadata
 from flask import current_app
 
-config.set_main_option(
-    "sqlalchemy.url", current_app.config.get("SQLALCHEMY_DATABASE_URI")
-)
+config.set_main_option("sqlalchemy.url", current_app.config.get("SQLALCHEMY_DATABASE_URI"))
 from friday.models import metadata
 
 # other values from the config, defined by the needs of env.py,
@@ -78,7 +78,7 @@ def run_migrations_online():
         connection=connection,
         target_metadata=metadata,
         process_revision_directives=process_revision_directives,
-        **current_app.extensions["migrate"].configure_args
+        **current_app.extensions["migrate"].configure_args,
     )
 
     try:

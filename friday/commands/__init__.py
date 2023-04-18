@@ -1,5 +1,6 @@
 from click import CommandCollection
-from .user import user
+
 from .recipe import recipe_group
+from .user import user
 
 commands = CommandCollection(sources=[user, recipe_group])

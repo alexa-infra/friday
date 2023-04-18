@@ -1,10 +1,9 @@
-from webargs import fields
-from flask import session
 from flask_jwt_extended import create_access_token, get_jwt_identity, set_access_cookies
-from . import BaseView, use_kwargs
+from webargs import fields
+
 from ..models.user import User as UserModel
 from ..schemas.user import User as UserSchema
-
+from .base import BaseView, use_kwargs
 
 login_args = {
     "email": fields.Str(required=True),

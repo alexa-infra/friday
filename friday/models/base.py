@@ -1,9 +1,7 @@
-from sqlalchemy.orm import scoped_session
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.orm import as_declarative
 from sqlalchemy.ext.declarative import declared_attr
-from ..utils import camel_to_snake
+from sqlalchemy.orm import as_declarative, scoped_session, sessionmaker
 
+from ..utils import camel_to_snake
 
 session_factory = sessionmaker()
 db = scoped_session(session_factory)
@@ -12,7 +10,7 @@ db = scoped_session(session_factory)
 @as_declarative()
 class Model:
     """Mixin that adds convenience methods for CRUD (create, read, update, delete)
-       operations."""
+    operations."""
 
     query = db.query_property()
 

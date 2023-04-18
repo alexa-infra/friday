@@ -1,5 +1,6 @@
 from flask import jsonify
-from .exceptions import NotFound, Unauthorized, Forbidden
+
+from .exceptions import Forbidden, NotFound, Unauthorized
 
 
 class Errors:  # pylint: disable=too-few-public-methods

@@ -1,8 +1,10 @@
-from sqlalchemy import Column, Integer, Text, DateTime
-from sqlalchemy.orm import validates
 from flask import session
-from friday.utils import utcnow, make_password_hash, check_password_hash
+from sqlalchemy import Column, DateTime, Integer, Text
+from sqlalchemy.orm import validates
+
 from friday.exceptions import Unauthorized
+from friday.utils import check_password_hash, make_password_hash, utcnow
+
 from .base import Model
 
 

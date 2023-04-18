@@ -7,15 +7,15 @@ import requests
 import requests_mock
 
 from friday.storage import (
-    is_url,
+    LocalStorage,
+    download_url,
     extract_url_filename,
     get_file_extension,
     is_sub_path,
+    is_url,
     rmdirs,
     unique_path,
-    download_url,
 )
-from friday.storage import LocalStorage
 
 
 @pytest.mark.parametrize(

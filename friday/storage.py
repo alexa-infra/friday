@@ -1,17 +1,16 @@
 import errno
 import os
+import re
 import shutil
 import sys
-
-import re
 import tempfile
 import uuid
 from urllib.parse import urlparse
 
 import requests
+from flask import send_file, url_for
 from werkzeug.datastructures import FileStorage
 from werkzeug.utils import secure_filename
-from flask import url_for, send_file
 
 URL_REGEXP = re.compile(r"^(http|https)://")
 

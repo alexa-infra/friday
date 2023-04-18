@@ -1,13 +1,14 @@
 import os
+
 from flask import Flask
-from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
+from flask_migrate import Migrate
+
 from .errors import Errors
-from .storage import Storage
-from .static_ui import StaticUI
 from .flask_sqlalchemy import FlaskSQLAlchemy
 from .models import db
-
+from .static_ui import StaticUI
+from .storage import Storage
 
 migrate = Migrate()
 errors = Errors()

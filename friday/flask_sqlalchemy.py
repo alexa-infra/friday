@@ -4,8 +4,8 @@ from sqlalchemy import create_engine
 
 if TYPE_CHECKING:
     from flask import Flask
-    from sqlalchemy.orm import scoped_session
     from sqlalchemy.engine import Engine
+    from sqlalchemy.orm import scoped_session
 
 
 class FlaskSQLAlchemy:

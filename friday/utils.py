@@ -1,12 +1,12 @@
+import random
 import re
 from datetime import datetime
-import random
-import bcrypt
 from urllib.parse import urlparse
-from slugify import slugify
+
+import bcrypt
 from markdown.extensions import Extension
 from markdown.inlinepatterns import SimpleTagPattern
-
+from slugify import slugify
 
 DEL_RE = r"(~~)(.*?)~~"
 

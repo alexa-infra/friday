@@ -1,8 +1,8 @@
 import click
 from flask.cli import AppGroup
+
 from friday.models import User
 from friday.utils import get_random_string
-
 
 user = AppGroup("user")
 

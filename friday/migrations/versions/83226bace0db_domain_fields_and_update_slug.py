@@ -6,12 +6,13 @@ Create Date: 2018-05-25 09:53:44.609128
 
 """
 from urllib.parse import urlparse
-from alembic import op
-import sqlalchemy as sa
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, Session as BaseSession
-from slugify import slugify
 
+import sqlalchemy as sa
+from alembic import op
+from slugify import slugify
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import Session as BaseSession
+from sqlalchemy.orm import sessionmaker
 
 # revision identifiers, used by Alembic.
 revision = "83226bace0db"
@@ -34,7 +35,15 @@ class Bookmark(Base):
 
     @property
     def _slug(self):
-        txt = " ".join(filter(None, [self.title, self._domain,]))
+        txt = " ".join(
+            filter(
+                None,
+                [
+                    self.title,
+                    self._domain,
+                ],
+            )
+        )
         return slugify(txt, separator=" ")
 
     @property

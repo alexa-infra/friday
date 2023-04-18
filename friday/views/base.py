@@ -1,14 +1,19 @@
-from datetime import datetime
-from datetime import timedelta
-from datetime import timezone
+from datetime import datetime, timedelta, timezone
 from functools import partial
-from flask import Blueprint
-from flask import current_app
+from typing import Any, Optional, Tuple
+
+from flask import Blueprint, current_app
 from flask.views import MethodView, http_method_funcs
-from flask_jwt_extended import jwt_required, get_jwt, create_access_token, get_jwt_identity, set_access_cookies
+from flask_jwt_extended import (
+    create_access_token,
+    get_jwt,
+    get_jwt_identity,
+    jwt_required,
+    set_access_cookies,
+)
 from webargs.flaskparser import FlaskParser
+
 from friday.utils import camel_to_snake
-from typing import Optional, Tuple, Any
 
 api = Blueprint("api", __name__)
 
@@ -16,10 +21,10 @@ api = Blueprint("api", __name__)
 @api.after_request
 def add_cors_headers(response):
     headers = {
-        'Access-Control-Allow-Origin': current_app.config["APP_URL"],
-        'Access-Control-Allow-Methods': ', '.join(['GET', 'POST', 'PUT', 'PATCH', 'DELETE']),
-        'Access-Control-Allow-Headers': ', '.join(['Content-Type', 'X-CSRF-TOKEN']),
-        'Access-Control-Allow-Credentials': 'true',
+        "Access-Control-Allow-Origin": current_app.config["APP_URL"],
+        "Access-Control-Allow-Methods": ", ".join(["GET", "POST", "PUT", "PATCH", "DELETE"]),
+        "Access-Control-Allow-Headers": ", ".join(["Content-Type", "X-CSRF-TOKEN"]),
+        "Access-Control-Allow-Credentials": "true",
     }
     response.headers.extend(headers)
     return response
@@ -46,9 +51,7 @@ class BaseView(MethodView):
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
         if not hasattr(cls, "methods") or not cls.methods:
-            methods = [
-                method.upper() for method in http_method_funcs if hasattr(cls, method)
-            ]
+            methods = [method.upper() for method in http_method_funcs if hasattr(cls, method)]
             if methods:
                 cls.methods = methods
         name = camel_to_snake(cls.__name__)

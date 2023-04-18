@@ -5,9 +5,8 @@ Revises: b32856085022
 Create Date: 2018-12-06 14:38:58.332888
 
 """
-from alembic import op
 import sqlalchemy as sa
-
+from alembic import op
 
 # revision identifiers, used by Alembic.
 revision = "e5aec2143b83"
@@ -33,15 +32,24 @@ def upgrade():
         sa.Column("height", sa.Integer(), nullable=False),
         sa.Column("width", sa.Integer(), nullable=False),
         sa.Column("recipe_id", sa.Integer(), nullable=False),
-        sa.ForeignKeyConstraint(["recipe_id"], ["recipe.id"],),
+        sa.ForeignKeyConstraint(
+            ["recipe_id"],
+            ["recipe.id"],
+        ),
         sa.PrimaryKeyConstraint("filename"),
     )
     op.create_table(
         "recipe_tag",
         sa.Column("tag_id", sa.Integer(), nullable=False),
         sa.Column("recipe_id", sa.Integer(), nullable=False),
-        sa.ForeignKeyConstraint(["recipe_id"], ["recipe.id"],),
-        sa.ForeignKeyConstraint(["tag_id"], ["tag.id"],),
+        sa.ForeignKeyConstraint(
+            ["recipe_id"],
+            ["recipe.id"],
+        ),
+        sa.ForeignKeyConstraint(
+            ["tag_id"],
+            ["tag.id"],
+        ),
         sa.PrimaryKeyConstraint("tag_id", "recipe_id"),
     )
     # ### end Alembic commands ###

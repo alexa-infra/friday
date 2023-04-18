@@ -1,6 +1,6 @@
-from . import BaseView, use_args
 from ..models import Recipe as RecipeModel
 from ..schemas import Recipe as RecipeSchema
+from .base import BaseView, use_args
 from .utils import get_or_404
 
 

@@ -1,11 +1,11 @@
-from sqlalchemy import Column, Integer, Text, DateTime, ForeignKey, func
-from sqlalchemy.orm import defer, joinedload
-from sqlalchemy.orm import relationship
 from markdown import Markdown
-from friday.utils import utcnow, MarkdownStrikeExt
-from .base import db, Model
-from .tag import Tag, TagMixin
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, Text, func
+from sqlalchemy.orm import defer, joinedload, relationship
 
+from friday.utils import MarkdownStrikeExt, utcnow
+
+from .base import Model, db
+from .tag import Tag, TagMixin
 
 md = Markdown(extensions=["markdown.extensions.tables", MarkdownStrikeExt()])
 

@@ -1,8 +1,8 @@
-from . import BaseView, use_args, use_kwargs
 from ..models import Bookmark as BookmarkModel
 from ..models import paginate
 from ..schemas import Bookmark as BookmarkSchema
-from .utils import pagination_args, search_args, get_or_404
+from .base import BaseView, use_args, use_kwargs
+from .utils import get_or_404, pagination_args, search_args
 
 
 class BookmarkListView(BaseView):

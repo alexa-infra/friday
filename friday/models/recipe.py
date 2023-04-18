@@ -1,15 +1,17 @@
 import os
 from contextlib import closing
 from io import BytesIO
+from typing import TYPE_CHECKING
+
 from flask import current_app
-from sqlalchemy import Column, Integer, Text, DateTime, ForeignKey
-from sqlalchemy.orm import relationship
-from sqlalchemy.orm import joinedload
 from PilLite import Image
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, Text
+from sqlalchemy.orm import joinedload, relationship
+
 from friday.utils import utcnow
+
 from .base import Model
 from .tag import TagMixin
-from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .tag import Tag

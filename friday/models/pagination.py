@@ -1,14 +1,11 @@
 import math
+
 import sqlalchemy as sa
 
 
 def paginate(query, page, per_page):
     session = query.session
-    total = (
-        session.query(sa.func.count())
-        .select_from(query.order_by(None).subquery())
-        .scalar()
-    )
+    total = session.query(sa.func.count()).select_from(query.order_by(None).subquery()).scalar()
 
     if (page - 1) * per_page >= total:
         page = 1

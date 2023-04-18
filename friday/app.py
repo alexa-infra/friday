@@ -1,6 +1,6 @@
 import os
-from friday import make_app
 
+from friday import make_app
 
 app = make_app()
 

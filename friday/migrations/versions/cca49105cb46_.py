@@ -6,11 +6,13 @@ Create Date: 2018-05-22 18:21:55.058824
 
 """
 from urllib.parse import unquote
-from alembic import op
+
 import sqlalchemy as sa
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, Session as BaseSession
+from alembic import op
 from slugify import slugify
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import Session as BaseSession
+from sqlalchemy.orm import sessionmaker
 
 Session = sessionmaker()
 Base = declarative_base()
@@ -28,7 +30,15 @@ class Bookmark(Base):
     def _slug(self):
         unquoted_url = unquote(self.url)
         clean_url = unquoted_url.strip("http://").strip("https://")
-        txt = " ".join(filter(None, [clean_url, self.title,]))
+        txt = " ".join(
+            filter(
+                None,
+                [
+                    clean_url,
+                    self.title,
+                ],
+            )
+        )
         return slugify(txt, separator=" ")
 
 

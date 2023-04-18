@@ -5,9 +5,8 @@ Revises: 813e984baf91
 Create Date: 2018-05-03 09:16:19.763812
 
 """
-from alembic import op
 import sqlalchemy as sa
-
+from alembic import op
 
 # revision identifiers, used by Alembic.
 revision = "3dbc4aebf445"
@@ -26,9 +25,7 @@ def upgrade():
         sa.Column("date", sa.Date(), nullable=False),
         sa.Column(
             "repeat",
-            sa.Enum(
-                "daily", "weekly", "biweekly", "monthly", "annually", name="repeat"
-            ),
+            sa.Enum("daily", "weekly", "biweekly", "monthly", "annually", name="repeat"),
             nullable=True,
         ),
         sa.PrimaryKeyConstraint("id"),

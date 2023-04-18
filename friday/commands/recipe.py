@@ -1,9 +1,9 @@
 import click
 from flask.cli import AppGroup
+
 from friday import storage
 from friday.models import Recipe, RecipeImage
 from friday.schemas import Recipe as RecipeSchema
-
 
 recipe_group = AppGroup("recipe")
 
@@ -14,7 +14,11 @@ recipe_group = AppGroup("recipe")
 @click.option("--tag", "-t", multiple=True)
 def make_recipe(itemname, name, tag):
     """Create new recipe"""
-    r = Recipe.create(name=itemname, namesList=name, tagsList=tag,)
+    r = Recipe.create(
+        name=itemname,
+        namesList=name,
+        tagsList=tag,
+    )
     click.echo(RecipeSchema.jsonify(r).get_data())
 
 
@@ -41,7 +45,9 @@ def update_recipe(itemid, itemname, name, tag):
         click.echo("Not found")
         return
     r.update(
-        name=itemname, namesList=name, tagsList=tag,
+        name=itemname,
+        namesList=name,
+        tagsList=tag,
     )
     click.echo(RecipeSchema.jsonify(r).get_data())
 

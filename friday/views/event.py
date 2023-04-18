@@ -1,10 +1,12 @@
 from datetime import timedelta
-from webargs import fields
-from . import BaseView, use_args, use_kwargs
-from ..models.event import Event as EventModel
-from ..schemas.event import Event as EventSchema, EventMatch
-from .utils import get_or_404
 
+from webargs import fields
+
+from ..models.event import Event as EventModel
+from ..schemas.event import Event as EventSchema
+from ..schemas.event import EventMatch
+from .base import BaseView, use_args, use_kwargs
+from .utils import get_or_404
 
 eventlist_args = {
     "fromdate": fields.Date(required=False),

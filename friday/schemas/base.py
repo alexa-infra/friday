@@ -1,5 +1,6 @@
-from marshmallow import Schema
 from flask import jsonify
+from marshmallow import Schema
+
 from ..models import Pagination
 
 

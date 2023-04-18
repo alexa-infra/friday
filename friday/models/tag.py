@@ -1,6 +1,7 @@
+from slugify import slugify
 from sqlalchemy import Column, Integer, Text
 from sqlalchemy.ext.hybrid import hybrid_property
-from slugify import slugify
+
 from .base import Model
 
 

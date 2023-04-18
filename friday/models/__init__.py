@@ -1,11 +1,11 @@
 # flake8: noqa
 # pylint: disable=cyclic-import
-from .base import db, Model, metadata
-from .user import User
-from .event import Event, Repeat
+from .base import Model, db, metadata
 from .bookmark import Bookmark
-from .tag import Tag
 from .doc import Doc, DocTag
+from .event import Event, Repeat
+from .pagination import Pagination, paginate
 from .recipe import Recipe, RecipeImage
-from .pagination import paginate, Pagination
+from .tag import Tag
 from .todo import TodoItem
+from .user import User

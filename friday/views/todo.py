@@ -8,14 +8,15 @@
   /todo/trash/items GET
 """
 import datetime
+
 import flask
 from sqlalchemy import or_
-from . import BaseView, use_args
-from ..models import db
-from ..models import TodoItem as TodoItemModel
-from ..schemas import TodoItem as TodoItemSchema
-from .utils import get_or_404
 
+from ..models import TodoItem as TodoItemModel
+from ..models import db
+from ..schemas import TodoItem as TodoItemSchema
+from .base import BaseView, use_args
+from .utils import get_or_404
 
 five_days = datetime.timedelta(days=5)
 

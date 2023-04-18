@@ -1,6 +1,8 @@
-from sqlalchemy import Column, Integer, Text, DateTime, Boolean
+from sqlalchemy import Boolean, Column, DateTime, Integer, Text
 from sqlalchemy.orm import validates
-from friday.utils import utcnow, get_domain, get_slug
+
+from friday.utils import get_domain, get_slug, utcnow
+
 from .base import Model
 
 

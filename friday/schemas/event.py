@@ -1,6 +1,8 @@
 from marshmallow import fields
 from marshmallow.validate import OneOf
+
 from friday.models import Repeat
+
 from . import BaseSchema
 
 

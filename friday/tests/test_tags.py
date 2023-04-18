@@ -1,7 +1,9 @@
 import pytest
+
 from friday.models import Doc as DocModel
 from friday.models import Tag as TagModel
 from friday.models.doc import DocTag
+
 from .common import assertCountEqual
 
 
