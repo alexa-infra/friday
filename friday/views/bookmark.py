@@ -1,8 +1,8 @@
-from ..models import Bookmark as BookmarkModel
+from ..models import Bookmark as BookmarkModel, Tag as TagModel, BookmarkTag
 from ..models import paginate
-from ..schemas import Bookmark as BookmarkSchema
+from ..schemas import Bookmark as BookmarkSchema, TagCloud
 from .base import BaseView, use_args, use_kwargs
-from .utils import get_or_404, pagination_args, search_args
+from .utils import get_or_404, pagination_args, search_args, tag_args
 
 
 class BookmarkListView(BaseView):
@@ -10,9 +10,13 @@ class BookmarkListView(BaseView):
 
     route_base = "/bookmarks"
 
-    @use_kwargs({**pagination_args, **search_args}, location="query")
-    def get(self, page=1, per_page=10, search=None):
-        query = BookmarkModel.query
+    @use_kwargs({**pagination_args, **tag_args, **search_args}, location="query")
+    def get(self, page=1, per_page=10, search=None, tag=None):
+        query = BookmarkModel.query_list()
+        if tag:
+            query = query.join(BookmarkTag)
+            query = query.join(TagModel)
+            query = query.filter(TagModel.name == tag)
         if search:
             search_term = "%{}%".format(search)
             query = query.filter(BookmarkModel.slug.like(search_term))
@@ -61,3 +65,13 @@ class BookmarkFavoriteListView(BaseView):
         query = query.order_by(BookmarkModel.created.desc())
         pagination = paginate(query, page, per_page)
         return BookmarkSchema.jsonify(pagination), 200
+
+
+class BookmarkTagCloudView(BaseView):
+    # pylint: disable=no-self-use
+
+    route_base = "/bookmarks/tags"
+
+    def get(self):
+        objects = BookmarkModel.tag_cloud()
+        return TagCloud.jsonify(objects), 200

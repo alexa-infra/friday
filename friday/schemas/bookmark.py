@@ -12,3 +12,4 @@ class Bookmark(BaseSchema):
     readed = fields.Bool(required=False)
     domain = fields.Str(dump_only=True)
     favorite = fields.Bool(required=True)
+    tags = fields.List(fields.Str(), required=True, attribute="tagsList")
