@@ -3,6 +3,7 @@ import { Form, Field } from 'react-final-form';
 import { Modal, ModalHeader, ModalFooter } from '../../components';
 import { Button } from '../../components';
 import { useUpdateBookmarkMutation, useDeleteBookmarkMutation } from '../../api';
+import { renderTags } from '../docs/tags';
 
 export const FormFields = () => (
   <>
@@ -11,6 +12,9 @@ export const FormFields = () => (
 
       <label htmlFor="title" className="flex-1">Title</label>
       <Field name="title" component="input" type="text" className="flex-grow" />
+
+      <label htmlFor="tags">Tags</label>
+      <Field name="tags" component={renderTags} />
 
       <label htmlFor="readed" className="inline-flex items-center">
         <Field name="readed" component="input" type="checkbox" className="form-checkbox h-5 w-5 text-gray-600" />

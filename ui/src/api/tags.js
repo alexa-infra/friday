@@ -3,12 +3,12 @@ import { baseQuery } from './base';
 
 const tagType = 'tag';
 
-export const tagApi = createApi({
+export const docTagApi = createApi({
   baseQuery,
-  reducerPath: 'tag',
+  reducerPath: 'doctag',
   tagTypes: [tagType],
   endpoints: (build) => ({
-    getTagList: build.query({
+    getDocTagList: build.query({
       query: () => ({
         url: `/api/docs/tags`,
       }),
@@ -23,4 +23,25 @@ export const tagApi = createApi({
   }),
 });
 
-export const { useGetTagListQuery } = tagApi;
+export const bookmarkTagApi = createApi({
+  baseQuery,
+  reducerPath: 'bookmarktag',
+  tagTypes: [tagType],
+  endpoints: (build) => ({
+    getBookmarkTagList: build.query({
+      query: () => ({
+        url: `/api/bookmarks/tags`,
+      }),
+      providesTags: (result, error, data) =>
+        result
+          ? [
+              ...result.map((x) => ({ type: tagType, id: x.id })),
+              { type: tagType, id: 'LIST' },
+            ]
+          : [],
+    }),
+  }),
+});
+
+export const { useGetDocTagListQuery } = docTagApi;
+export const { useGetBookmarkTagListQuery } = bookmarkTagApi;

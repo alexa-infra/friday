@@ -7,7 +7,8 @@ import { Pagination } from '../../components';
 import { BrowserBookmark } from './browserBookmark';
 import { BookmarkEditForm } from './editForm';
 import { BookmarkNewForm } from './newForm';
-import { useGetBookmarksQuery } from '../../api';
+import { useGetBookmarksQuery, useGetBookmarkTagListQuery } from '../../api';
+import { TagCloud } from '../docs/tags';
 
 const useNewItem = () => {
   const location = useLocation();
@@ -19,6 +20,7 @@ const useNewItem = () => {
 const usePagination = () => {
   const [params, setParams] = React.useState({
     search: null,
+    tag: null,
     page: 1,
     pages: 0,
     per_page: 10,
@@ -27,6 +29,11 @@ const usePagination = () => {
     setParams(x => ({
       ...x,
       search,
+    }));
+  const setTag = tag =>
+    setParams(x => ({
+      ...x,
+      tag,
     }));
   const nextPage = () =>
     setParams(x => ({
@@ -45,6 +52,7 @@ const usePagination = () => {
     }));
   const methods = {
     setFilter,
+    setTag,
     nextPage,
     prevPage,
     changePerPage,
@@ -56,6 +64,7 @@ const useQuery = () => {
   const [params, setParams, methods] = usePagination();
   const { data, isLoading } = useGetBookmarksQuery({
     search: params.search,
+    tag: params.tag,
     page: params.page,
     per_page: params.per_page,
   });
@@ -77,13 +86,15 @@ const Bookmarks = () => {
   const [data, params, methods] = useQuery();
   const [editItem, setEditItem] = React.useState(null);
   const [newItem, setNewItem] = useNewItem();
+  const { data: tagCloud, isLoading: tagsIsLoading } = useGetBookmarkTagListQuery();
   return (
     <div className="bookmarks-page md:w-8/12 md:mx-auto">
       <Controls
         {...params}
         doSearch={methods.setFilter}
-        showEditNew={() => setNewItem({})}
+        showEditNew={() => setNewItem({title: '', url: '', readed: false, favorite: false, tags: []})}
       />
+      <TagCloud tags={tagsIsLoading ? [] : tagCloud} current={params.tag} onClick={methods.setTag} />
       <BookmarkList
         items={data}
         showEdit={setEditItem}

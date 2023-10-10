@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import { configureStore } from '@reduxjs/toolkit';
 import { alertsSlice, eventsSlice } from './slices';
-import { authApi, bookmarkApi, eventApi, todoApi, recipeApi, tagApi, docApi } from './api';
+import { authApi, bookmarkApi, eventApi, todoApi, recipeApi, docTagApi, bookmarkTagApi, docApi } from './api';
 
 const reducers = combineReducers({
   alerts: alertsSlice.reducer,
@@ -11,7 +11,8 @@ const reducers = combineReducers({
   [eventApi.reducerPath]: eventApi.reducer,
   [todoApi.reducerPath]: todoApi.reducer,
   [recipeApi.reducerPath]: recipeApi.reducer,
-  [tagApi.reducerPath]: tagApi.reducer,
+  [docTagApi.reducerPath]: docTagApi.reducer,
+  [bookmarkTagApi.reducerPath]: bookmarkTagApi.reducer,
   [docApi.reducerPath]: docApi.reducer,
 });
 
@@ -24,7 +25,8 @@ export const store = configureStore({
       eventApi.middleware,
       todoApi.middleware,
       recipeApi.middleware,
-      tagApi.middleware,
+      docTagApi.middleware,
+      bookmarkTagApi.middleware,
       docApi.middleware,
     ),
 });

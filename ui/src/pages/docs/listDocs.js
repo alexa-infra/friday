@@ -4,7 +4,7 @@ import { Link, NavLink } from 'react-router-dom';
 import { TagsViewer, TagCloud } from './tags';
 import { Button } from '../../components';
 import { Pagination } from '../../components';
-import { useGetDocsQuery, useGetTagListQuery } from '../../api';
+import { useGetDocsQuery, useGetDocTagListQuery } from '../../api';
 
 const DocItem = ({ id, tags, name, created, updated }) => {
   const createdDate = dayjs(created);
@@ -41,7 +41,7 @@ const DocItem = ({ id, tags, name, created, updated }) => {
 }
 
 export const DocsList = () => {
-  const { data: tagCloud, isLoading: tagsIsLoading } = useGetTagListQuery();
+  const { data: tagCloud, isLoading: tagsIsLoading } = useGetDocTagListQuery();
   const [params, setParams] = React.useState({
     tag: null,
     page: 1,

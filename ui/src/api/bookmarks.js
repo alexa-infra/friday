@@ -1,9 +1,10 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQuery } from './base';
 
-const searchParams = ({ search, page, per_page }) => {
+const searchParams = ({ search, tag, page, per_page }) => {
   const params = new URLSearchParams();
   if (search) params.append('search', search);
+  if (tag) params.append('tag', tag);
   params.append('page', page);
   params.append('per_page', per_page);
   return params.toString();
@@ -38,20 +39,20 @@ export const bookmarkApi = createApi({
       providesTags: (result, error, id) => [{ type: tagType, id }],
     }),
     createBookmark: build.mutation({
-      query: ({ url, title, readed, favorite }) => ({
+      query: ({ url, title, readed, favorite, tags }) => ({
         url: '/api/bookmarks',
         method: 'POST',
-        body: { url, title, readed, favorite },
+        body: { url, title, readed, favorite, tags },
       }),
       invalidatesTags: (result, error, data) => [
         { type: tagType, id: 'PARTIAL-LIST' },
       ],
     }),
     updateBookmark: build.mutation({
-      query: ({ id, url, title, readed, favorite }) => ({
+      query: ({ id, url, title, readed, favorite, tags }) => ({
         url: `/api/bookmarks/${id}`,
         method: 'PUT',
-        body: { url, title, readed, favorite },
+        body: { url, title, readed, favorite, tags },
       }),
       invalidatesTags: (result, error, data) => [
         { type: tagType, id: data.id },

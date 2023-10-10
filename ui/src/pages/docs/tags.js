@@ -4,7 +4,7 @@ import classNames from 'classnames';
 const Tag = ({
   tag, onRemove, onClick, mark, disabled,
 }) => (
-  <div className={classNames('inline-block px-2 py-1 m-1 rounded bg-gray-300', { 'bg-gray-500': mark })} onClick={onClick}>
+  <div className={classNames('inline-block px-2 py-1 m-1 rounded', { 'bg-gray-500': mark, 'bg-gray-300': !mark, })} onClick={onClick}>
     {tag}
     {disabled ? null : (
       <i
@@ -28,7 +28,7 @@ const Tags = ({
             tag={tag.name}
             disabled={disabled}
             onRemove={() => (remove ? remove(tag.value) : null)}
-            onClick={() => (onClick ? onClick(tag.value) : null)}
+            onClick={() => (onClick ? onClick(!tag.mark ? tag.value : null) : null)}
             mark={tag.mark}
           />
         ))

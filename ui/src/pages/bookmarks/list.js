@@ -3,22 +3,24 @@ import classNames from 'classnames';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useUpdateBookmarkMutation, useDeleteBookmarkMutation } from '../../api';
+import { TagsViewer } from '../docs/tags';
 
 dayjs.extend(relativeTime);
 
 const Bookmark = ({
-  item: {title, url, domain, created, readed, favorite}, onEdit, onMarkRead, onMarkFavorite, onDelete,
+  item: {title, url, domain, created, readed, favorite, tags}, onEdit, onMarkRead, onMarkFavorite, onDelete,
 }) => {
   const createdDate = dayjs(created);
   return (
     <div className="bookmark border-solid border-b-2 border-gray-300 py-2">
-      <div className="title">
+      <div className="title flex flex-row flex-wrap items-center">
         <a className={classNames('mr-2', { "line-through": readed })} href={url}>{title}</a>
         <div className="site text-gray-500 inline">
           (
           <a href={url}>{domain}</a>
           )
         </div>
+        <TagsViewer tags={tags} />
       </div>
       <div className="controls">
         <i title={createdDate.toISOString(true)}>{createdDate.fromNow()}</i>
